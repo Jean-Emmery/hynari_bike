@@ -7,6 +7,9 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.0.0-beta.3/dist/axentix.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body class="layout-sidenav-fixed">
@@ -17,10 +20,16 @@
         continue.</strong
       >
     </noscript>
-    <div id="app">
+    <main>
+      <div id="app">
 
-    </div>
+      </div>
+    </main>
+
     <!-- built files will be auto injected -->
     <script src="https://cdn.jsdelivr.net/npm/axentix@2.0.0-beta.3/dist/axentix.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
   </body>
 </html>

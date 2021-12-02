@@ -34,6 +34,13 @@ export default {
 </script>
 
 <style lang="scss">
+
+:root {
+  #app {
+    padding: 3%;
+  }
+  --ax-sidenav-width: 8rem;
+}
 @media screen and (min-width: 992px){
   .nav-button {
     display: none !important;
@@ -65,7 +72,6 @@ export default {
     color: white;
 }
 .sidenav {
-  --ax-sidenav-width: 8rem;
   --ax-sidenav-logo-height: 8rem;
   background-color: #ff364f;
 }

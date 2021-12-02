@@ -47,6 +47,7 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Register.vue'),
   },
+  
 ];
 
 const router = new VueRouter({
