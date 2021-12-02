@@ -107,6 +107,9 @@ let AppController = class AppController {
     constructor(authService) {
         this.authService = authService;
     }
+    getData() {
+        throw new Error('Method not implemented.');
+    }
     login(req) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return this.authService.login(req.user);
@@ -154,9 +157,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
 const auth_module_1 = __webpack_require__(/*! ../auth/auth.module */ "./apps/nest-app/src/auth/auth.module.ts");
-const jwt_auth_guard_1 = __webpack_require__(/*! ../auth/jwt-auth.guard */ "./apps/nest-app/src/auth/jwt-auth.guard.ts");
 const users_module_1 = __webpack_require__(/*! ../users/users.module */ "./apps/nest-app/src/users/users.module.ts");
 const app_controller_1 = __webpack_require__(/*! ./app.controller */ "./apps/nest-app/src/app/app.controller.ts");
 const app_service_1 = __webpack_require__(/*! ./app.service */ "./apps/nest-app/src/app/app.service.ts");
@@ -164,14 +165,16 @@ let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
     common_1.Module({
-        imports: [auth_module_1.AuthModule, users_module_1.UsersModule],
-        controllers: [app_controller_1.AppController],
+        imports: [
+            auth_module_1.AuthModule,
+            users_module_1.UsersModule,
+            //MongooseModule.forRoot('mongodb://localhost/nest-app', { useNewUrlParser: true }),
+        ],
+        controllers: [
+            app_controller_1.AppController
+        ],
         providers: [
             app_service_1.AppService,
-            {
-                provide: core_1.APP_GUARD,
-                useClass: jwt_auth_guard_1.JwtAuthGuard,
-            },
         ],
     })
 ], AppModule);
@@ -235,7 +238,7 @@ AuthModule = tslib_1.__decorate([
             passport_1.PassportModule,
             jwt_1.JwtModule.register({
                 secret: constants_1.jwtConstants.secret,
-                signOptions: { expiresIn: '60s' },
+                signOptions: { expiresIn: '120s' },
             }),
         ],
         providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_statregy_1.JwtStrategy],
@@ -329,7 +332,7 @@ exports.JwtAuthGuard = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
-let JwtAuthGuard = class JwtAuthGuard extends passport_1.AuthGuard(['strategy_jwt_1', 'strategy_jwt_2', '...']) {
+let JwtAuthGuard = class JwtAuthGuard extends passport_1.AuthGuard('jwt') {
     canActivate(context) {
         // Add your custom authentication logic here
         // for example, call super.logIn(request) to establish a session.
@@ -476,6 +479,7 @@ const app_module_1 = __webpack_require__(/*! ./app/app.module */ "./apps/nest-ap
 function bootstrap() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const app = yield core_1.NestFactory.create(app_module_1.AppModule);
+        app.enableCors(); // Cors = cross origin ressoure sharing
         const globalPrefix = 'api';
         app.setGlobalPrefix(globalPrefix);
         const port = process.env.PORT || 3333;

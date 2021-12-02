@@ -7,6 +7,10 @@ import { AuthService } from '../auth/auth.service';
 export class AppController {
   constructor(private authService: AuthService) {}
 
+  getData(): { message: string } {
+    throw new Error('Method not implemented.');
+  }
+
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
