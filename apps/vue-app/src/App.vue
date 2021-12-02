@@ -34,6 +34,17 @@ export default {
 </script>
 
 <style lang="scss">
+@media screen and (min-width: 992px){
+  .nav-button {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px){
+    .nav-button {
+    display: none !important;
+  }
+}
 
 .sidenav-footer {
   margin-top: 0 !important;
