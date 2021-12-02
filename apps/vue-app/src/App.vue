@@ -1,14 +1,63 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+
+    <div id="example-sidenav" data-ax="sidenav" class="sidenav shadow-1 sidenav-fixed white" :class="{active:isSidenavActive}">
+      <div class="sidenav-header">
+        <img class="sidenav-logo dropshadow-1" src="../src/assets/hynari_logo.png" alt="Logo" />
+      </div>
+      <router-link to="/" class="sidenav-link"><i class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4">home</i></router-link>
+      <router-link to="/bike" class="sidenav-link"><i class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4">directions_bike</i></router-link>
+      <router-link to="/about" class="sidenav-link"><i class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4">help_outline</i></router-link>
+
+      <div class="mt-auto d-block">
+      <router-link to="/login" class="sidenav-link"><i class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4 mt-auto d-block">login</i></router-link>
+      <router-link to="/register" class="sidenav-link"><i class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4">how_to_reg</i></router-link>
+      </div>
+      <div class="sidenav-footer shadow-5 hoverable-5">
+        <a href="https://hynari.fr">HYNARI</a>
+      </div>
     </div>
+    <button class="btn nav-button ml-auto d-block btn-circle transparent" @click="isSidenavActive=!isSidenavActive"><i class="material-icons nav__icon d-block my-auto py-3">menu</i></button>
     <router-view />
   </div>
+  
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      isSidenavActive: false,
+    }
+  },
+}
+</script>
+
 <style lang="scss">
+
+.sidenav-footer {
+  margin-top: 0 !important;
+}
+.sidenav-link {
+  margin-bottom: 15%;
+}
+.sidenav-link:hover {
+  background-color: initial !important;
+}
+.sidenav-footer {
+  background-color: white;
+}
+.sidenav {
+    padding: 0 !important;
+}
+.sidenav-link .material-icons {
+    color: white;
+}
+.sidenav {
+  --ax-sidenav-width: 8rem;
+  --ax-sidenav-logo-height: 8rem;
+  background-color: #ff364f;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -17,15 +66,13 @@
   color: #2c3e50;
 }
 
-#nav {
+.sidenav {
   padding: 30px;
 
   a {
     font-weight: bold;
-    color: #2c3e50;
-
     &.router-link-exact-active {
-      color: #42b983;
+      color: gold !important;
     }
   }
 }
