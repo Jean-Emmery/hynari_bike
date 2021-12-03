@@ -91,7 +91,8 @@
             "devServer": {
               "proxy": {
                 "^/api": {
-                  "target": "http://192.168.1.94:3333",
+                  // ecole : http://10.31.34.93
+                  "target": "http://10.31.34.93::3333",
                   "changeOrigin": true
                 }
               }

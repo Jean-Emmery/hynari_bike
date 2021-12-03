@@ -271,9 +271,9 @@ let AuthService = class AuthService {
         this.usersService = usersService;
         this.jwtService = jwtService;
     }
-    validateUser(username, pass) {
+    validateUser(email, pass) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const user = yield this.usersService.findOne(username);
+            const user = yield this.usersService.findOne(email);
             if (user && user.password === pass) {
                 const { password } = user, result = tslib_1.__rest(user, ["password"]);
                 return result;
@@ -283,7 +283,7 @@ let AuthService = class AuthService {
     }
     login(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const payload = { username: user.username, sub: user.userId };
+            const payload = { email: user.email, sub: user.userId };
             return {
                 access_token: this.jwtService.sign(payload),
                 user: user
@@ -380,7 +380,7 @@ let JwtStrategy = class JwtStrategy extends passport_1.PassportStrategy(passport
     }
     validate(payload) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return { userId: payload.sub, username: payload.username };
+            return { userId: payload.sub, email: payload.email };
         });
     }
 };
@@ -439,9 +439,9 @@ let LocalStrategy = class LocalStrategy extends passport_1.PassportStrategy(pass
         super();
         this.authService = authService;
     }
-    validate(username, password) {
+    validate(email, password) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const user = yield this.authService.validateUser(username, password);
+            const user = yield this.authService.validateUser(email, password);
             if (!user) {
                 throw new common_1.UnauthorizedException();
             }
@@ -538,7 +538,7 @@ let UsersService = class UsersService {
         this.users = [
             {
                 userId: 1,
-                username: 'john',
+                email: 'john',
                 password: 'changeme',
             },
             {
