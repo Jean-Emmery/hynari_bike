@@ -3,8 +3,8 @@ exports.up = function (knex) {
     t.increments('id').unsigned().primary();
     t.string('name').notNull();
     t.integer('capacityMax').notNull();
-    t.float('lat').notNull();
-    t.float('lng').notNull();
+    t.double('lat').notNull();
+    t.double('lng').notNull();
   });
 };
 

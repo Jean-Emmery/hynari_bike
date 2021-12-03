@@ -1,49 +1,47 @@
 <template>
-  <div style="height: 500px; width: 100%">
-    <div style="height: 200px; overflow: auto">
-      <p>1 GARAGE {{ firstGarage.lat }}, {{ firstGarage.lng }}</p>
-      <p>1 GARAGE {{ secondGarage.lat }}, {{ secondGarage.lng }}</p>
-      <p>2 GARAGE {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
-    </div>
-    <l-map
-      v-if="showMap"
-      :zoom="zoom"
-      :center="center"
-      :options="mapOptions"
-      style="height: 80%"
-      @update:center="centerUpdate"
-      @update:zoom="zoomUpdate"
-    >
-      <l-tile-layer :url="url" :attribution="attribution" />
-      <l-marker :lat-lng="firstGarage" @click="showFirstGarage">
-        <l-tooltip :options="{ permanent: true, interactive: true }">
-          <div @click="showFirstGarage">
-            I am a tooltip
-            <p v-show="showParagraph">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              sed pretium nisl, ut sagittis sapien. Sed vel sollicitudin nisi.
-              Donec finibus semper metus id malesuada.
-            </p>
+  <div>
+    <div style="height: 500px; width: 100%">
+      <div style="height: 200px; overflow: auto">
+        <p v-if="garages[0]">
+          1 GARAGE {{ garages[0].lat }}, {{ garages[0].lng }}
+        </p>
+        <p v-if="garages[1]">
+          2 GARAGE {{ garages[1].lat }}, {{ garages[1].lng }}
+        </p>
+        <p>2 GARAGE {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
+      </div>
+      <l-map
+        v-if="showMap"
+        :zoom="zoom"
+        :center="center"
+        :options="mapOptions"
+        style="height: 80%"
+        @update:center="centerUpdate"
+        @update:zoom="zoomUpdate"
+      >
+        <div v-if="garages">
+          <div v-for="garage in garages" :key="garage.id">
+            <l-tile-layer :url="url" :attribution="attribution" />
+            <l-marker
+              :lat-lng="garages[garage.id]"
+              @click="showGarage(garage.id)"
+            >
+              <l-tooltip :options="{ permanent: true, interactive: true }">
+                <div @click="showGarage(garage.id)">
+                  <span v-if="garages[garage.id]">{{
+                    garages[garage.id].name
+                  }}</span>
+                  <p v-show="showParagraph">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Quisque sed pretium nisl, ut sagittis sapien. Sed vel
+                    sollicitudin nisi. Donec finibus semper metus id malesuada.
+                  </p>
+                </div>
+              </l-tooltip>
+            </l-marker>
           </div>
-        </l-tooltip>
-      </l-marker>
-
-      <l-marker :lat-lng="secondGarage" @click="showSecondGarage">
-        <l-tooltip :options="{ permanent: true, interactive: true }">
-          <div @click="showSecondGarage">
-            I am a tooltip
-            <p v-show="showParagraph">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              sed pretium nisl, ut sagittis sapien. Sed vel sollicitudin nisi.
-              Donec finibus semper metus id malesuada.
-            </p>
-          </div>
-        </l-tooltip>
-      </l-marker>
-    </l-map>
-
-    <div class="m-1" v-for="garage in garages" v-bind:key="garage.id">
-      <span>{{ garage }}</span>
+        </div>
+      </l-map>
     </div>
   </div>
 </template>
@@ -93,22 +91,13 @@ export default {
     showLongText() {
       this.showParagraph = !this.showParagraph;
     },
-    showFirstGarage() {
-      console.log('Premier Garage');
-    },
-    showSecondGarage() {
-      console.log('Second Garage');
+    showGarage(id) {
+      this.$router.push({ path: '/bikes/' + this.garages[id].id });
     },
     getAllGarage() {
-      return Vue.axios
-        .get('/api/garage')
-        .then((res) => {
-          this.garage = res.data;
-          console.log(this.garage);
-        })
-        .catch((err) => {
-          console.error(err.toJSON());
-        });
+      return Vue.axios.get('/api/garage').then((res) => {
+        this.garages = res.data;
+      });
     },
   },
 };

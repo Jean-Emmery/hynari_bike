@@ -5,6 +5,6 @@ import { k } from '@hynari_bike/knex-lib';
 @Injectable()
 export class GarageService {
   getAllGarage(): any {
-    k.getAllGarageDb().then((garage) => console.log);
+    return k.getAllGarageDb();
   }
 }

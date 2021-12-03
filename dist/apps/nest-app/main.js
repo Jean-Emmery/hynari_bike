@@ -140,11 +140,12 @@ const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const app_controller_1 = __webpack_require__(/*! ./app.controller */ "./apps/nest-app/src/app/app.controller.ts");
 const app_service_1 = __webpack_require__(/*! ./app.service */ "./apps/nest-app/src/app/app.service.ts");
 const garage_module_1 = __webpack_require__(/*! ../garage/garage.module */ "./apps/nest-app/src/garage/garage.module.ts");
+const bikes_module_1 = __webpack_require__(/*! ../bikes/bikes.module */ "./apps/nest-app/src/bikes/bikes.module.ts");
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
     common_1.Module({
-        imports: [garage_module_1.GarageModule],
+        imports: [garage_module_1.GarageModule, bikes_module_1.BikesModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
@@ -176,6 +177,116 @@ AppService = tslib_1.__decorate([
     common_1.Injectable()
 ], AppService);
 exports.AppService = AppService;
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/bikes/bikes.controller.ts":
+/*!*****************************************************!*\
+  !*** ./apps/nest-app/src/bikes/bikes.controller.ts ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BikesController = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const bikes_service_1 = __webpack_require__(/*! ./bikes.service */ "./apps/nest-app/src/bikes/bikes.service.ts");
+let BikesController = class BikesController {
+    constructor(bikesService) {
+        this.bikesService = bikesService;
+    }
+    getAllBikes() {
+        return this.bikesService.getAllBikes();
+    }
+    getBikesByGarageId(data) {
+        console.log('textdata');
+        console.log(data.id);
+        return this.bikesService.getBikesByGarageId(data.id);
+    }
+};
+tslib_1.__decorate([
+    common_1.Get('/'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "getAllBikes", null);
+tslib_1.__decorate([
+    common_1.Get(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "getBikesByGarageId", null);
+BikesController = tslib_1.__decorate([
+    common_1.Controller('bikes'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof bikes_service_1.BikesService !== "undefined" && bikes_service_1.BikesService) === "function" ? _a : Object])
+], BikesController);
+exports.BikesController = BikesController;
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/bikes/bikes.module.ts":
+/*!*************************************************!*\
+  !*** ./apps/nest-app/src/bikes/bikes.module.ts ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BikesModule = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const bikes_controller_1 = __webpack_require__(/*! ./bikes.controller */ "./apps/nest-app/src/bikes/bikes.controller.ts");
+const bikes_service_1 = __webpack_require__(/*! ./bikes.service */ "./apps/nest-app/src/bikes/bikes.service.ts");
+let BikesModule = class BikesModule {
+};
+BikesModule = tslib_1.__decorate([
+    common_1.Module({
+        controllers: [bikes_controller_1.BikesController],
+        providers: [bikes_service_1.BikesService],
+    })
+], BikesModule);
+exports.BikesModule = BikesModule;
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/bikes/bikes.service.ts":
+/*!**************************************************!*\
+  !*** ./apps/nest-app/src/bikes/bikes.service.ts ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BikesService = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const knex_lib_1 = __webpack_require__(/*! @hynari_bike/knex-lib */ "./libs/knex-lib/src/index.ts");
+let BikesService = class BikesService {
+    getAllBikes() {
+        return knex_lib_1.k.getAllBikesDb();
+    }
+    getBikesByGarageId(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.getBikesByGarageIdDb(id);
+        });
+    }
+};
+BikesService = tslib_1.__decorate([
+    common_1.Injectable()
+], BikesService);
+exports.BikesService = BikesService;
 
 
 /***/ }),
@@ -262,7 +373,7 @@ const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const knex_lib_1 = __webpack_require__(/*! @hynari_bike/knex-lib */ "./libs/knex-lib/src/index.ts");
 let GarageService = class GarageService {
     getAllGarage() {
-        knex_lib_1.k.getAllGarageDb().then((garage) => console.log);
+        return knex_lib_1.k.getAllGarageDb();
     }
 };
 GarageService = tslib_1.__decorate([
@@ -347,6 +458,13 @@ const knex = __webpack_require__(/*! knex */ "knex")(options);
 class KnexLib {
     getAllGarageDb() {
         return knex('garage').select('*');
+    }
+    getAllBikesDb() {
+        return knex('bikes').select('*');
+    }
+    getBikesByGarageIdDb(id) {
+        console.log('db ' + id);
+        return knex('bikes').select('*').where({ garage_id: id });
     }
 }
 exports.k = new KnexLib();

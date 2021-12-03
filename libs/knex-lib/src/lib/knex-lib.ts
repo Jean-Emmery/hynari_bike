@@ -14,6 +14,13 @@ class KnexLib {
   getAllGarageDb() {
     return knex('garage').select('*');
   }
+  getAllBikesDb() {
+    return knex('bikes').select('*');
+  }
+  getBikesByGarageIdDb(id) {
+    console.log('db ' + id);
+    return knex('bikes').select('*').where({ garage_id: id });
+  }
 }
 
 export const k = new KnexLib();
