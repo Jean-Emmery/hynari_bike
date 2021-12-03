@@ -7,7 +7,6 @@ export class GarageController {
 
   @Get()
   getAllGarage() {
-    console.log('garage controller');
     return this.garageService.getAllGarage();
   }
 }

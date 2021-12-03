@@ -200,7 +200,6 @@ let GarageController = class GarageController {
         this.garageService = garageService;
     }
     getAllGarage() {
-        console.log('garage controller');
         return this.garageService.getAllGarage();
     }
 };
@@ -260,15 +259,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GarageService = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const axios_1 = __webpack_require__(/*! axios */ "axios");
 const knex_lib_1 = __webpack_require__(/*! @hynari_bike/knex-lib */ "./libs/knex-lib/src/index.ts");
 let GarageService = class GarageService {
     getAllGarage() {
-        console.log('garage service');
-        return axios_1.default
-            .get(knex_lib_1.k.getAllGarageDb())
-            .then((garage) => garage.data)
-            .catch((error) => console.log('erreur', error));
+        knex_lib_1.k.getAllGarageDb().then((garage) => console.log);
     }
 };
 GarageService = tslib_1.__decorate([
@@ -352,11 +346,7 @@ const options = {
 const knex = __webpack_require__(/*! knex */ "knex")(options);
 class KnexLib {
     getAllGarageDb() {
-        return knex('garage')
-            .select('*')
-            .then((el) => {
-            (garage) => garage.data;
-        });
+        return knex('garage').select('*');
     }
 }
 exports.k = new KnexLib();
@@ -395,17 +385,6 @@ module.exports = require("@nestjs/common");
 /***/ (function(module, exports) {
 
 module.exports = require("@nestjs/core");
-
-/***/ }),
-
-/***/ "axios":
-/*!************************!*\
-  !*** external "axios" ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("axios");
 
 /***/ }),
 

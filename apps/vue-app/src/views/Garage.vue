@@ -41,6 +41,10 @@
         </l-tooltip>
       </l-marker>
     </l-map>
+
+    <div class="m-1" v-for="garage in garages" v-bind:key="garage.id">
+      <span>{{ garage }}</span>
+    </div>
   </div>
 </template>
 
@@ -50,7 +54,6 @@ import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from 'vue2-leaflet';
 import Vue from 'vue';
 
 export default {
-  name: 'Example',
   components: {
     LMap,
     LTileLayer,
@@ -77,9 +80,6 @@ export default {
       showMap: true,
     };
   },
-  beforeMount() {
-    this.getAllGarage();
-  },
   mounted() {
     this.getAllGarage();
   },
@@ -103,7 +103,8 @@ export default {
       return Vue.axios
         .get('/api/garage')
         .then((res) => {
-          console.log('vue');
+          this.garage = res.data;
+          console.log(this.garage);
         })
         .catch((err) => {
           console.error(err.toJSON());

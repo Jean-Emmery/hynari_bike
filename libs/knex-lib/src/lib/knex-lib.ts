@@ -12,11 +12,7 @@ const knex = require('knex')(options);
 
 class KnexLib {
   getAllGarageDb() {
-    return knex('garage')
-      .select('*')
-      .then((el) => {
-        (garage) => garage.data;
-      });
+    return knex('garage').select('*');
   }
 }
 

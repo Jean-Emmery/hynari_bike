@@ -31,6 +31,7 @@
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "axios": "^0.21.1",
     "har-validator": "^5.1.5",
     "knex": "^0.95.14",
     "leaflet": "^1.7.1",
@@ -41,6 +42,7 @@
     "rxjs": "~6.6.3",
     "tslib": "^2.0.0",
     "vue": "^2.6.11",
+    "vue-axios": "^3.4.0",
     "vue-router": "^3.2.0",
     "vue2-leaflet": "^2.7.1"
   },

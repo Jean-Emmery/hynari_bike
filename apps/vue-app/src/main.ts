@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
@@ -24,6 +26,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
+Vue.use(VueAxios, axios);
 new Vue({
   router,
   render: (h) => h(App),
