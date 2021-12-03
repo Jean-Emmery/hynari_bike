@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "knex-lib": {
+      "tags": []
+    },
     "nest-app": {
       "tags": []
     },

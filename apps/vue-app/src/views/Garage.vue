@@ -47,6 +47,7 @@
 <script>
 import { latLng } from 'leaflet';
 import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from 'vue2-leaflet';
+import Vue from 'vue';
 
 export default {
   name: 'Example',
@@ -59,6 +60,7 @@ export default {
   },
   data() {
     return {
+      garages: [],
       zoom: 13,
       center: latLng(43.60579000000007, 1.448630000000037),
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -75,6 +77,12 @@ export default {
       showMap: true,
     };
   },
+  beforeMount() {
+    this.getAllGarage();
+  },
+  mounted() {
+    this.getAllGarage();
+  },
   methods: {
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
@@ -90,6 +98,16 @@ export default {
     },
     showSecondGarage() {
       console.log('Second Garage');
+    },
+    getAllGarage() {
+      return Vue.axios
+        .get('/api/garage')
+        .then((res) => {
+          console.log('vue');
+        })
+        .catch((err) => {
+          console.error(err.toJSON());
+        });
     },
   },
 };

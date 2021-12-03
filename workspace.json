@@ -1,6 +1,27 @@
 {
   "version": 2,
   "projects": {
+    "knex-lib": {
+      "root": "libs/knex-lib",
+      "sourceRoot": "libs/knex-lib/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/knex-lib/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/knex-lib"],
+          "options": {
+            "jestConfig": "libs/knex-lib/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "nest-app": {
       "root": "apps/nest-app",
       "sourceRoot": "apps/nest-app/src",
@@ -8,16 +29,12 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/nest-app",
             "main": "apps/nest-app/src/main.ts",
             "tsConfig": "apps/nest-app/tsconfig.app.json",
-            "assets": [
-              "apps/nest-app/src/assets"
-            ]
+            "assets": ["apps/nest-app/src/assets"]
           },
           "configurations": {
             "production": {
@@ -42,16 +59,12 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/nest-app/**/*.ts"
-            ]
+            "lintFilePatterns": ["apps/nest-app/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/nest-app"
-          ],
+          "outputs": ["coverage/apps/nest-app"],
           "options": {
             "jestConfig": "apps/nest-app/jest.config.js",
             "passWithNoTests": true
@@ -106,16 +119,12 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/vue-app/**/*.{ts,tsx,vue}"
-            ]
+            "lintFilePatterns": ["apps/vue-app/**/*.{ts,tsx,vue}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/vue-app"
-          ],
+          "outputs": ["coverage/apps/vue-app"],
           "options": {
             "jestConfig": "apps/vue-app/jest.config.js",
             "passWithNoTests": true
@@ -144,9 +153,7 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/vue-app-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/vue-app-e2e/**/*.{js,ts}"]
           }
         }
       }
