@@ -30,14 +30,14 @@ export default defineComponent({
   data() {
     return {
       isSidenavActive: false,
-      username: 'username',
+      email: 'username',
       password: 'password',
     };
   },
   methods: {
     login() {
       return axios.post('http://localhost:8080/api/auth/login', {
-        username: this.username,
+        email: this.email,
         password: this.password,
       })
       .then(el => console.log(el))

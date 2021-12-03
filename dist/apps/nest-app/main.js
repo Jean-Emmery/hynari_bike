@@ -273,6 +273,7 @@ let AuthService = class AuthService {
     }
     validateUser(email, pass) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("Login");
             const user = yield this.usersService.findOne(email);
             if (user && user.password === pass) {
                 const { password } = user, result = tslib_1.__rest(user, ["password"]);
@@ -283,6 +284,7 @@ let AuthService = class AuthService {
     }
     login(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("Login");
             const payload = { email: user.email, sub: user.userId };
             return {
                 access_token: this.jwtService.sign(payload),
@@ -374,7 +376,7 @@ let JwtStrategy = class JwtStrategy extends passport_1.PassportStrategy(passport
     constructor() {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
+            ignoreExpiration: true,
             secretOrKey: constants_1.jwtConstants.secret,
         });
     }
@@ -543,14 +545,15 @@ let UsersService = class UsersService {
             },
             {
                 userId: 2,
-                username: 'maria',
+                email: 'maria',
                 password: 'guess',
             },
         ];
     }
-    findOne(username) {
+    findOne(email) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return this.users.find(user => user.username === username);
+            console.log("findOne");
+            return this.users.find(user => user.email === email);
         });
     }
 };
