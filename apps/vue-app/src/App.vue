@@ -43,6 +43,21 @@
           >directions_bike</i
         ></router-link
       >
+      <router-link to="/dashboard" class="sidenav-link"
+        ><i
+          class="
+            material-icons
+            nav__icon
+            d-block
+            my-auto
+            py-3
+            shadow-3
+            hoverable-3
+            rounded-4
+          "
+          >grid_view</i
+        ></router-link
+      >
       <router-link to="/about" class="sidenav-link"
         ><i
           class="

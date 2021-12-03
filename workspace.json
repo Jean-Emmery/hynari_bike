@@ -1,6 +1,27 @@
 {
   "version": 2,
   "projects": {
+    "bike": {
+      "root": "libs/bike",
+      "sourceRoot": "libs/bike/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/bike/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/bike"],
+          "options": {
+            "jestConfig": "libs/bike/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "knex-lib": {
       "root": "libs/knex-lib",
       "sourceRoot": "libs/knex-lib/src",
@@ -104,7 +125,7 @@
             "devServer": {
               "proxy": {
                 "^/api": {
-                  "target": "http://10.31.33.98:3333",
+                  "target": "http://192.168.1.14:3333",
                   "changeOrigin": true
                 }
               }

@@ -7,4 +7,10 @@ export class GarageService {
   getAllGarage(): any {
     return k.getAllGarageDb();
   }
+  getGarage(): Promise<Array<string>> {
+    return k.getGarageDb();
+  }
+  addGarage(garage) {
+    return k.addGarageDb(garage);
+  }
 }

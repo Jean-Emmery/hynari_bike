@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "bike": {
+      "tags": []
+    },
     "knex-lib": {
       "tags": []
     },

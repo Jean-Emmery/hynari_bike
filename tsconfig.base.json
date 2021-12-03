@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@hynari_bike/bike": ["libs/bike/src/index.ts"],
       "@hynari_bike/knex-lib": ["libs/knex-lib/src/index.ts"]
     }
   },

@@ -190,12 +190,13 @@ exports.AppService = AppService;
 
 "use strict";
 
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BikesController = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const bikes_service_1 = __webpack_require__(/*! ./bikes.service */ "./apps/nest-app/src/bikes/bikes.service.ts");
+const bike_1 = __webpack_require__(/*! @hynari_bike/bike */ "./libs/bike/src/index.ts");
 let BikesController = class BikesController {
     constructor(bikesService) {
         this.bikesService = bikesService;
@@ -207,6 +208,15 @@ let BikesController = class BikesController {
         console.log('textdata');
         console.log(data.id);
         return this.bikesService.getBikesByGarageId(data.id);
+    }
+    addPet(bike) {
+        return this.bikesService.addBike(bike);
+    }
+    editBike(bike) {
+        return this.bikesService.editBike(bike);
+    }
+    getBikeById(data) {
+        return this.bikesService.getBikeById(data.id);
     }
 };
 tslib_1.__decorate([
@@ -222,9 +232,30 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
 ], BikesController.prototype, "getBikesByGarageId", null);
+tslib_1.__decorate([
+    common_1.Post('new'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "addPet", null);
+tslib_1.__decorate([
+    common_1.Post('editBike'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof bike_1.IBike !== "undefined" && bike_1.IBike) === "function" ? _a : Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "editBike", null);
+tslib_1.__decorate([
+    common_1.Get('show/:id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "getBikeById", null);
 BikesController = tslib_1.__decorate([
     common_1.Controller('bikes'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof bikes_service_1.BikesService !== "undefined" && bikes_service_1.BikesService) === "function" ? _a : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof bikes_service_1.BikesService !== "undefined" && bikes_service_1.BikesService) === "function" ? _b : Object])
 ], BikesController);
 exports.BikesController = BikesController;
 
@@ -282,6 +313,15 @@ let BikesService = class BikesService {
             return knex_lib_1.k.getBikesByGarageIdDb(id);
         });
     }
+    addBike(bike) {
+        return knex_lib_1.k.addBikeDb(bike);
+    }
+    editBike(bike) {
+        return knex_lib_1.k.editBikeDb(bike);
+    }
+    getBikeById(id) {
+        return knex_lib_1.k.getBikeByIdDb(id);
+    }
 };
 BikesService = tslib_1.__decorate([
     common_1.Injectable()
@@ -313,6 +353,12 @@ let GarageController = class GarageController {
     getAllGarage() {
         return this.garageService.getAllGarage();
     }
+    getGarage() {
+        return this.garageService.getGarage();
+    }
+    addGarage(garage) {
+        return this.garageService.addGarage(garage);
+    }
 };
 tslib_1.__decorate([
     common_1.Get(),
@@ -320,6 +366,19 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", void 0)
 ], GarageController.prototype, "getAllGarage", null);
+tslib_1.__decorate([
+    common_1.Get('/garageList'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], GarageController.prototype, "getGarage", null);
+tslib_1.__decorate([
+    common_1.Post('new'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], GarageController.prototype, "addGarage", null);
 GarageController = tslib_1.__decorate([
     common_1.Controller('garage'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof garage_service_1.GarageService !== "undefined" && garage_service_1.GarageService) === "function" ? _a : Object])
@@ -375,6 +434,12 @@ let GarageService = class GarageService {
     getAllGarage() {
         return knex_lib_1.k.getAllGarageDb();
     }
+    getGarage() {
+        return knex_lib_1.k.getGarageDb();
+    }
+    addGarage(garage) {
+        return knex_lib_1.k.addGarageDb(garage);
+    }
 };
 GarageService = tslib_1.__decorate([
     common_1.Injectable()
@@ -414,6 +479,36 @@ function bootstrap() {
     });
 }
 bootstrap();
+
+
+/***/ }),
+
+/***/ "./libs/bike/src/index.ts":
+/*!********************************!*\
+  !*** ./libs/bike/src/index.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+tslib_1.__exportStar(__webpack_require__(/*! ./lib/bike */ "./libs/bike/src/lib/bike.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/bike/src/lib/bike.ts":
+/*!***********************************!*\
+  !*** ./libs/bike/src/lib/bike.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
@@ -463,8 +558,31 @@ class KnexLib {
         return knex('bikes').select('*');
     }
     getBikesByGarageIdDb(id) {
-        console.log('db ' + id);
         return knex('bikes').select('*').where({ garage_id: id });
+    }
+    getGarageDb() {
+        return knex('garage').select('id', 'name');
+    }
+    addBikeDb(bike) {
+        return knex('bikes').insert({
+            name: bike.name,
+            garage_id: bike.garage,
+            pictureUrl: bike.pictureUrl,
+        });
+    }
+    addGarageDb(garage) {
+        return knex('garage').insert({
+            name: garage.name,
+            capacityMax: garage.capacityMax,
+            lat: garage.lat,
+            lng: garage.lng,
+        });
+    }
+    editBikeDb(bike) {
+        return knex('bikes').update(bike);
+    }
+    getBikeByIdDb(id) {
+        return knex('bikes').select('*').where({ id: id });
     }
 }
 exports.k = new KnexLib();

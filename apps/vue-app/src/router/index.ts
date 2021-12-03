@@ -55,6 +55,54 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Register.vue'),
   },
+  {
+    path: '/addBike',
+    name: 'AddBike',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/AddBike.vue'),
+  },
+  {
+    path: '/addGarage',
+    name: 'AddGarage',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/AddGarage.vue'),
+  },
+  {
+    path: '/bikes/show/:id',
+    name: 'EditBike',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/EditBike.vue'),
+  },
+  {
+    path: '/garage/:id',
+    name: 'EditGarage',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/EditGarage.vue'),
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
+  },
+  {
+    path: '/gestionGarages',
+    name: 'GestionGarages',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/GestionGarages.vue'),
+  },
+  {
+    path: '/gestionBikes',
+    name: 'GestionBikes',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/GestionBikes.vue'),
+  },
 ];
 
 const router = new VueRouter({

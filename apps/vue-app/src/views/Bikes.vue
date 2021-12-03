@@ -85,7 +85,6 @@ export default {
       console.log('garageId' + garageId);
       return Vue.axios.get('/api/bikes/' + garageId).then((res) => {
         this.bikes = res.data;
-        console.log(res.data);
       });
       // addPet() {
       //   this.$router.push({ path: '/addPet' });
