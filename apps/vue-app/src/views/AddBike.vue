@@ -71,7 +71,7 @@ export default {
     addBike() {
       const bike = {
         name: this.name,
-        garage: this.garage.id,
+        garage: this.garage,
         pictureUrl: this.pictureUrl,
       };
       console.log(bike);

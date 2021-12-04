@@ -317,6 +317,7 @@ let BikesService = class BikesService {
         return knex_lib_1.k.addBikeDb(bike);
     }
     editBike(bike) {
+        console.log('service' + bike);
         return knex_lib_1.k.editBikeDb(bike);
     }
     getBikeById(id) {
@@ -579,7 +580,8 @@ class KnexLib {
         });
     }
     editBikeDb(bike) {
-        return knex('bikes').update(bike);
+        console.log('db' + bike.id);
+        return knex('bikes').where({ id: bike.id }).update(bike);
     }
     getBikeByIdDb(id) {
         return knex('bikes').select('*').where({ id: id });
