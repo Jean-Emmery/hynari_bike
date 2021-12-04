@@ -3,11 +3,11 @@
 	<h2>Login</h2>
 	<form action="">
 		<div class="user-box">
-      <input v-model="email" type="text" />
+      <input v-model="username" type="text" />
 			<label>Email</label>
 		</div>
 		<div class="user-box">
-    <input v-model="password" type="text" />
+			<input v-model="password" type="password">
 			<label for="">Password</label>
 		</div>
 		<a @click="login">
@@ -25,29 +25,36 @@
 <script>
 import { defineComponent } from '@vue/composition-api'
 import axios from 'axios';
+import router from '../router/index';
 
 export default defineComponent({
   data() {
     return {
-      isSidenavActive: false,
-      email: '',
+      username: '',
       password: '',
+      isSidenavActive: false,
     };
   },
   methods: {
     login() {
       return axios.post('http://localhost:3333/api/auth/login', {
-        email: this.email,
+        username: this.username,
         password: this.password,
       })
-      .then(el => console.log(el))
+      .then(el => {
+        console.log("el: ");
+        console.log(el);
+        if (el.data.access_token) {
+          localStorage.setItem('user', JSON.stringify(el.data));
+        }
+        router.push({ name: 'Profil'})
+      })
       .catch(err => console.error(err))
-    },
+    }
     }
   }
 )
 </script>
-
 
 <style>
 .login-box {

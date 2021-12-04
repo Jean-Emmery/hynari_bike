@@ -2,23 +2,23 @@
 <div class="login-box">
 	<h2>Register</h2>
 	<form action="">
-        <div class="user-box">
-			<input type="text" name="firstname" required="">
+    <div class="user-box">
+			<input v-model="firstname" type="text" name="firstname" required="">
 			<label>First Name</label>
 		</div>
         <div class="user-box">
-			<input type="text" name="lastname" required="">
+			<input v-model="lastname" type="text" name="lastname" required="">
 			<label>Last Name</label>
 		</div>
 		<div class="user-box">
-			<input type="text" name="" required="">
+			<input v-model="email" type="text" name="email" required="">
 			<label>Email</label>
 		</div>
 		<div class="user-box">
-			<input type="password">
+			<input v-model="password" type="password">
 			<label for="">Password</label>
 		</div>
-		<a href="">
+		<a @click="signUp">
 			<span></span>
 			<span></span>
 			<span></span>
@@ -26,9 +26,46 @@
 			Register
 		</a>
 	</form>
-      <div class="mt-3 text-white font-s1">Already have an account ? <span class="bd-b-solid bd-1 bd-white" style="font-size: 14px;"><router-link to="/login">Login now</router-link></span></div>
+  <div class="mt-3 text-white font-s1">Already have an account ? <span class="bd-b-solid bd-1 bd-white" style="font-size: 14px;"><router-link to="/login">Login now</router-link></span></div>
 </div>
 </template>
+<script>
+import { defineComponent } from '@vue/composition-api'
+import axios from 'axios';
+import router from '../router/index';
+
+export default defineComponent({
+  data() {
+    return {
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+      isSidenavActive: false,
+    };
+  },
+  methods: {
+    signUp() {
+      console.log("signUp");
+      console.log(this.email);
+      console.log(this.firstname);
+      console.log(this.lastname);
+      console.log(this.password);
+      return axios.post('http://localhost:3333/api/user/register', {
+        username: this.email,
+        password: this.password,
+        firstname: this.firstname,
+        lastname: this.lastname,
+      })
+      .then(el => {
+        console.log("el: ");
+        console.log(el);
+      })
+      .catch(err => console.error(err))
+    }
+  }
+})
+</script>
 
 <style>
 .login-box {

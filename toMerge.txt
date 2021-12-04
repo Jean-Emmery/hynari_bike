@@ -1,0 +1,18 @@
+Auto-merging package.json
+CONFLICT (content): Merge conflict in package.json
+Auto-merging package-lock.json
+DONE
+CONFLICT (content): Merge conflict in package-lock.json
+CONFLICT (modify/delete): node_modules/.package-lock.json deleted in HEAD and modified in origin/jean. Version origin/jean of node_modules/.package-lock.json left in tree.
+Auto-merging node_modules/.cache/nx/nxdeps.json
+CONFLICT (content): Merge conflict in node_modules/.cache/nx/nxdeps.json
+Auto-merging dist/apps/nest-app/main.js.map
+CONFLICT (content): Merge conflict in dist/apps/nest-app/main.js.map
+Auto-merging dist/apps/nest-app/main.js
+CONFLICT (content): Merge conflict in dist/apps/nest-app/main.js
+Auto-merging apps/vue-app/src/router/index.ts
+Auto-merging apps/vue-app/src/main.ts
+CONFLICT (content): Merge conflict in apps/vue-app/src/main.ts
+Auto-merging apps/nest-app/src/app/app.module.ts
+CONFLICT (content): Merge conflict in apps/nest-app/src/app/app.module.ts
+Automatic merge failed; fix conflicts and then commit the result.

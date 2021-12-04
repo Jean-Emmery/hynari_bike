@@ -27,6 +27,12 @@
     ]
   },
   "projects": {
+    "bike": {
+      "tags": []
+    },
+    "knex-lib": {
+      "tags": []
+    },
     "nest-app": {
       "tags": []
     },

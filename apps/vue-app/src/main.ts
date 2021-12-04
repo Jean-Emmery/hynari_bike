@@ -7,11 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //import VeeValidate from 'vee-validate';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import 'leaflet/dist/leaflet.css';
-import { Icon } from 'leaflet';
-import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
 import {
   faHome,
   faUser,
@@ -19,6 +14,13 @@ import {
   faSignInAlt,
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import 'leaflet/dist/leaflet.css';
+import { Icon } from 'leaflet';
+import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt);
 
 Vue.config.productionTip = false;
@@ -40,6 +42,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
+Vue.use(VueAxios, axios);
 new Vue({
   router,
   //store,

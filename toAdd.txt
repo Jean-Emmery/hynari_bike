@@ -1,0 +1,9 @@
+
+      const user = await knex('users').insert([
+        {
+          firstname: this.firstname,
+          lastname: this.lastname,
+          email: this.email,
+          password: this.password,
+          role: '1'
+        },
