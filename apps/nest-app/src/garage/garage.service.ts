@@ -13,4 +13,11 @@ export class GarageService {
   addGarage(garage) {
     return k.addGarageDb(garage);
   }
+  getAllBikes(): any {
+    console.log('service');
+    return k.getAllBikesDb();
+  }
+  async deleteGarage(id) {
+    return k.deleteGarageDb(id);
+  }
 }

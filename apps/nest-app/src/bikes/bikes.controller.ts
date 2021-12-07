@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { BikesService } from './bikes.service';
 import { IBike } from '@hynari_bike/bike';
 
@@ -31,5 +31,9 @@ export class BikesController {
   @Get('show/:id')
   getBikeById(@Param() data) {
     return this.bikesService.getBikeById(data.id);
+  }
+  @Delete(':id')
+  deleteBike(@Param() data) {
+    return this.bikesService.deleteBike(data.id);
   }
 }

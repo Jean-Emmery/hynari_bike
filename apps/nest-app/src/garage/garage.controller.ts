@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { GarageService } from './garage.service';
 
 @Controller('garage')
@@ -10,6 +10,12 @@ export class GarageController {
     return this.garageService.getAllGarage();
   }
 
+  @Get('getAll')
+  getAllBikes() {
+    console.log('contro');
+    return this.garageService.getAllBikes();
+  }
+
   @Get('/garageList')
   getGarage() {
     return this.garageService.getGarage();
@@ -18,5 +24,9 @@ export class GarageController {
   @Post('new')
   addGarage(@Body() garage) {
     return this.garageService.addGarage(garage);
+  }
+  @Delete(':id')
+  deleteGarage(@Param() data) {
+    return this.garageService.deleteGarage(data.id);
   }
 }

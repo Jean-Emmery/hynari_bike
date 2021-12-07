@@ -21,4 +21,7 @@ export class BikesService {
   getBikeById(id: string) {
     return k.getBikeByIdDb(id);
   }
+  async deleteBike(id) {
+    return k.deleteBikeDb(id);
+  }
 }

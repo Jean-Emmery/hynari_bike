@@ -218,6 +218,9 @@ let BikesController = class BikesController {
     getBikeById(data) {
         return this.bikesService.getBikeById(data.id);
     }
+    deleteBike(data) {
+        return this.bikesService.deleteBike(data.id);
+    }
 };
 tslib_1.__decorate([
     common_1.Get('/'),
@@ -253,6 +256,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
 ], BikesController.prototype, "getBikeById", null);
+tslib_1.__decorate([
+    common_1.Delete(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "deleteBike", null);
 BikesController = tslib_1.__decorate([
     common_1.Controller('bikes'),
     tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof bikes_service_1.BikesService !== "undefined" && bikes_service_1.BikesService) === "function" ? _b : Object])
@@ -323,6 +333,11 @@ let BikesService = class BikesService {
     getBikeById(id) {
         return knex_lib_1.k.getBikeByIdDb(id);
     }
+    deleteBike(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.deleteBikeDb(id);
+        });
+    }
 };
 BikesService = tslib_1.__decorate([
     common_1.Injectable()
@@ -354,11 +369,18 @@ let GarageController = class GarageController {
     getAllGarage() {
         return this.garageService.getAllGarage();
     }
+    getAllBikes() {
+        console.log('contro');
+        return this.garageService.getAllBikes();
+    }
     getGarage() {
         return this.garageService.getGarage();
     }
     addGarage(garage) {
         return this.garageService.addGarage(garage);
+    }
+    deleteGarage(data) {
+        return this.garageService.deleteGarage(data.id);
     }
 };
 tslib_1.__decorate([
@@ -367,6 +389,12 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", void 0)
 ], GarageController.prototype, "getAllGarage", null);
+tslib_1.__decorate([
+    common_1.Get('getAll'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], GarageController.prototype, "getAllBikes", null);
 tslib_1.__decorate([
     common_1.Get('/garageList'),
     tslib_1.__metadata("design:type", Function),
@@ -380,6 +408,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
 ], GarageController.prototype, "addGarage", null);
+tslib_1.__decorate([
+    common_1.Delete(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], GarageController.prototype, "deleteGarage", null);
 GarageController = tslib_1.__decorate([
     common_1.Controller('garage'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof garage_service_1.GarageService !== "undefined" && garage_service_1.GarageService) === "function" ? _a : Object])
@@ -440,6 +475,15 @@ let GarageService = class GarageService {
     }
     addGarage(garage) {
         return knex_lib_1.k.addGarageDb(garage);
+    }
+    getAllBikes() {
+        console.log('service');
+        return knex_lib_1.k.getAllBikesDb();
+    }
+    deleteGarage(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.deleteGarageDb(id);
+        });
     }
 };
 GarageService = tslib_1.__decorate([
@@ -585,6 +629,12 @@ class KnexLib {
     }
     getBikeByIdDb(id) {
         return knex('bikes').select('*').where({ id: id });
+    }
+    deleteBikeDb(id) {
+        return knex('bikes').where({ id: id }).del();
+    }
+    deleteGarageDb(id) {
+        return knex('garage').where({ id: id }).del();
     }
 }
 exports.k = new KnexLib();

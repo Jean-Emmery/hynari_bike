@@ -79,7 +79,8 @@ export default {
       this.$router.push({ path: '/bikes/show/' + bikeId });
     },
     deleteBike(bikeId) {
-      return Vue.axios.delete('/api/bike/' + bikeId).then((res) => {
+      console.log('testDelete');
+      return Vue.axios.delete('/api/bikes/' + bikeId).then((res) => {
         this.getAllBikes();
       });
     },

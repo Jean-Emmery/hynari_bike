@@ -45,6 +45,12 @@ class KnexLib {
   getBikeByIdDb(id) {
     return knex('bikes').select('*').where({ id: id });
   }
+  deleteBikeDb(id) {
+    return knex('bikes').where({ id: id }).del();
+  }
+  deleteGarageDb(id) {
+    return knex('garage').where({ id: id }).del();
+  }
 }
 
 export const k = new KnexLib();
