@@ -36,6 +36,9 @@
     "nest-app": {
       "tags": []
     },
+    "station": {
+      "tags": []
+    },
     "vue-app": {
       "tags": []
     },

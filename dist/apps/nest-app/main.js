@@ -141,11 +141,12 @@ const app_controller_1 = __webpack_require__(/*! ./app.controller */ "./apps/nes
 const app_service_1 = __webpack_require__(/*! ./app.service */ "./apps/nest-app/src/app/app.service.ts");
 const garage_module_1 = __webpack_require__(/*! ../garage/garage.module */ "./apps/nest-app/src/garage/garage.module.ts");
 const bikes_module_1 = __webpack_require__(/*! ../bikes/bikes.module */ "./apps/nest-app/src/bikes/bikes.module.ts");
+const station_module_1 = __webpack_require__(/*! ../station/station.module */ "./apps/nest-app/src/station/station.module.ts");
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
     common_1.Module({
-        imports: [garage_module_1.GarageModule, bikes_module_1.BikesModule],
+        imports: [garage_module_1.GarageModule, bikes_module_1.BikesModule, station_module_1.StationModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
@@ -204,12 +205,10 @@ let BikesController = class BikesController {
     getAllBikes() {
         return this.bikesService.getAllBikes();
     }
-    getBikesByGarageId(data) {
-        console.log('textdata');
-        console.log(data.id);
-        return this.bikesService.getBikesByGarageId(data.id);
+    getBikesByStationId(data) {
+        return this.bikesService.getBikesByStationId(data.id);
     }
-    addPet(bike) {
+    addBike(bike) {
         return this.bikesService.addBike(bike);
     }
     editBike(bike) {
@@ -234,14 +233,14 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
-], BikesController.prototype, "getBikesByGarageId", null);
+], BikesController.prototype, "getBikesByStationId", null);
 tslib_1.__decorate([
     common_1.Post('new'),
     tslib_1.__param(0, common_1.Body()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
-], BikesController.prototype, "addPet", null);
+], BikesController.prototype, "addBike", null);
 tslib_1.__decorate([
     common_1.Post('editBike'),
     tslib_1.__param(0, common_1.Body()),
@@ -318,9 +317,9 @@ let BikesService = class BikesService {
     getAllBikes() {
         return knex_lib_1.k.getAllBikesDb();
     }
-    getBikesByGarageId(id) {
+    getBikesByStationId(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return knex_lib_1.k.getBikesByGarageIdDb(id);
+            return knex_lib_1.k.getBikesByStationIdDb(id);
         });
     }
     addBike(bike) {
@@ -390,7 +389,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], GarageController.prototype, "getAllGarage", null);
 tslib_1.__decorate([
-    common_1.Get('getAll'),
+    common_1.Get('bikes'),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", void 0)
@@ -477,7 +476,6 @@ let GarageService = class GarageService {
         return knex_lib_1.k.addGarageDb(garage);
     }
     getAllBikes() {
-        console.log('service');
         return knex_lib_1.k.getAllBikesDb();
     }
     deleteGarage(id) {
@@ -524,6 +522,161 @@ function bootstrap() {
     });
 }
 bootstrap();
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/station/station.controller.ts":
+/*!*********************************************************!*\
+  !*** ./apps/nest-app/src/station/station.controller.ts ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StationController = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const station_1 = __webpack_require__(/*! @hynari_bike/station */ "./libs/station/src/index.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const station_service_1 = __webpack_require__(/*! ./station.service */ "./apps/nest-app/src/station/station.service.ts");
+let StationController = class StationController {
+    constructor(stationService) {
+        this.stationService = stationService;
+    }
+    getAllStation() {
+        console.log('station contro');
+        return this.stationService.getAllStation();
+    }
+    getStationByGarageId(data) {
+        return this.stationService.getStationByGarageId(data.id);
+    }
+    editBike(station) {
+        return this.stationService.editStation(station);
+    }
+    deleteBike(data) {
+        return this.stationService.deleteStation(data.id);
+    }
+    addStation(station) {
+        return this.stationService.addStation(station);
+    }
+};
+tslib_1.__decorate([
+    common_1.Get('/'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "getAllStation", null);
+tslib_1.__decorate([
+    common_1.Get(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "getStationByGarageId", null);
+tslib_1.__decorate([
+    common_1.Post('editBike'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof station_1.IStation !== "undefined" && station_1.IStation) === "function" ? _a : Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "editBike", null);
+tslib_1.__decorate([
+    common_1.Delete(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "deleteBike", null);
+tslib_1.__decorate([
+    common_1.Post('new'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "addStation", null);
+StationController = tslib_1.__decorate([
+    common_1.Controller('station'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof station_service_1.StationService !== "undefined" && station_service_1.StationService) === "function" ? _b : Object])
+], StationController);
+exports.StationController = StationController;
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/station/station.module.ts":
+/*!*****************************************************!*\
+  !*** ./apps/nest-app/src/station/station.module.ts ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StationModule = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const station_controller_1 = __webpack_require__(/*! ./station.controller */ "./apps/nest-app/src/station/station.controller.ts");
+const station_service_1 = __webpack_require__(/*! ./station.service */ "./apps/nest-app/src/station/station.service.ts");
+let StationModule = class StationModule {
+};
+StationModule = tslib_1.__decorate([
+    common_1.Module({
+        controllers: [station_controller_1.StationController],
+        providers: [station_service_1.StationService],
+    })
+], StationModule);
+exports.StationModule = StationModule;
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/station/station.service.ts":
+/*!******************************************************!*\
+  !*** ./apps/nest-app/src/station/station.service.ts ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StationService = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const knex_lib_1 = __webpack_require__(/*! @hynari_bike/knex-lib */ "./libs/knex-lib/src/index.ts");
+let StationService = class StationService {
+    getStationByGarageId(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.getStationByGarageIdDb(id);
+        });
+    }
+    getAllStation() {
+        return knex_lib_1.k.getAllStationDb();
+    }
+    editStation(station) {
+        console.log('service' + station);
+        return knex_lib_1.k.editBikeDb(station);
+    }
+    deleteStation(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.deleteStationDb(id);
+        });
+    }
+    addStation(station) {
+        return knex_lib_1.k.addStationDb(station);
+    }
+    getStation() {
+        return knex_lib_1.k.getStationDb();
+    }
+};
+StationService = tslib_1.__decorate([
+    common_1.Injectable()
+], StationService);
+exports.StationService = StationService;
 
 
 /***/ }),
@@ -602,23 +755,33 @@ class KnexLib {
     getAllBikesDb() {
         return knex('bikes').select('*');
     }
-    getBikesByGarageIdDb(id) {
-        return knex('bikes').select('*').where({ garage_id: id });
+    getAllStationDb() {
+        return knex('station').select('*');
+    }
+    getBikesByStationIdDb(id) {
+        return knex('bikes').select('*').where({ station_id: id });
+    }
+    getStationByGarageIdDb(id) {
+        return knex('station').select('*').where({ garage_id: id });
     }
     getGarageDb() {
-        return knex('garage').select('id', 'name');
+        return knex('garage').select('id');
+    }
+    getStationDb() {
+        return knex('station').select('id');
     }
     addBikeDb(bike) {
         return knex('bikes').insert({
             name: bike.name,
-            garage_id: bike.garage,
             pictureUrl: bike.pictureUrl,
+            lat: bike.lat,
+            lng: bike.lng,
+            station_id: bike.station,
         });
     }
     addGarageDb(garage) {
         return knex('garage').insert({
             name: garage.name,
-            capacityMax: garage.capacityMax,
             lat: garage.lat,
             lng: garage.lng,
         });
@@ -636,8 +799,51 @@ class KnexLib {
     deleteGarageDb(id) {
         return knex('garage').where({ id: id }).del();
     }
+    editStationDb(station) {
+        console.log('db' + station.id);
+        return knex('station').where({ id: station.id }).update(station);
+    }
+    deleteStationDb(id) {
+        return knex('station').where({ id: id }).del();
+    }
+    addStationDb(station) {
+        return knex('station').insert({
+            capacityMax: station.capacityMax,
+            garage_id: station.garage,
+        });
+    }
 }
 exports.k = new KnexLib();
+
+
+/***/ }),
+
+/***/ "./libs/station/src/index.ts":
+/*!***********************************!*\
+  !*** ./libs/station/src/index.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+tslib_1.__exportStar(__webpack_require__(/*! ./lib/station */ "./libs/station/src/lib/station.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/station/src/lib/station.ts":
+/*!*****************************************!*\
+  !*** ./libs/station/src/lib/station.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),

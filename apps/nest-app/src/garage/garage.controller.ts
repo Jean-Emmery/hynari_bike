@@ -10,7 +10,7 @@ export class GarageController {
     return this.garageService.getAllGarage();
   }
 
-  @Get('getAll')
+  @Get('bikes')
   getAllBikes() {
     console.log('contro');
     return this.garageService.getAllBikes();

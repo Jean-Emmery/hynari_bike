@@ -20,24 +20,6 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
-    path: '/garage',
-    name: 'Garage',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Garage.vue'),
-  },
-  {
-    path: '/bikes/:id',
-    name: 'Bikes',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Bikes.vue'),
-  },
-  {
     path: '/login',
     name: 'Login',
     // route level code-splitting
@@ -56,13 +38,25 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ '../views/Register.vue'),
   },
   {
-    path: '/addBike',
-    name: 'AddBike',
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
+  },
+  {
+    path: '/garage',
+    name: 'Garage',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/AddBike.vue'),
+      import(/* webpackChunkName: "about" */ '../views/Garage.vue'),
+  },
+  {
+    path: '/gestionGarages',
+    name: 'GestionGarages',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/GestionGarages.vue'),
   },
   {
     path: '/addGarage',
@@ -74,34 +68,70 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ '../views/AddGarage.vue'),
   },
   {
-    path: '/bikes/show/:id',
-    name: 'EditBike',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/EditBike.vue'),
-  },
-  {
     path: '/garage/:id',
     name: 'EditGarage',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/EditGarage.vue'),
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
+    path: '/bikes/:id',
+    name: 'Bikes',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
+      import(/* webpackChunkName: "about" */ '../views/Bikes.vue'),
   },
   {
-    path: '/gestionGarages',
-    name: 'GestionGarages',
+    path: '/addBike',
+    name: 'AddBike',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/GestionGarages.vue'),
+      import(/* webpackChunkName: "about" */ '../views/AddBike.vue'),
+  },
+  {
+    path: '/bikes/show/:id',
+    name: 'EditBike',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/EditBike.vue'),
   },
   {
     path: '/gestionBikes',
     name: 'GestionBikes',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/GestionBikes.vue'),
+  },
+  {
+    path: '/station/:id',
+    name: 'Station',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Station.vue'),
+  },
+  {
+    path: '/gestionStation',
+    name: 'GestionStation',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/GestionStation.vue'),
+  },
+  {
+    path: '/station/show/:id',
+    name: 'EditStation',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/EditStation.vue'),
+  },
+  {
+    path: '/addStation',
+    name: 'AddStation',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/AddStation.vue'),
   },
 ];
 

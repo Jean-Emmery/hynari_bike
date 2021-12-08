@@ -12,14 +12,12 @@ export class BikesController {
   }
 
   @Get(':id')
-  getBikesByGarageId(@Param() data) {
-    console.log('textdata');
-    console.log(data.id);
-    return this.bikesService.getBikesByGarageId(data.id);
+  getBikesByStationId(@Param() data) {
+    return this.bikesService.getBikesByStationId(data.id);
   }
 
   @Post('new')
-  addPet(@Body() bike) {
+  addBike(@Body() bike) {
     return this.bikesService.addBike(bike);
   }
 

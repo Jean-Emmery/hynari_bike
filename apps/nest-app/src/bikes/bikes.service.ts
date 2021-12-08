@@ -8,8 +8,8 @@ export class BikesService {
   getAllBikes(): any {
     return k.getAllBikesDb();
   }
-  async getBikesByGarageId(id) {
-    return k.getBikesByGarageIdDb(id);
+  async getBikesByStationId(id) {
+    return k.getBikesByStationIdDb(id);
   }
   addBike(bike) {
     return k.addBikeDb(bike);

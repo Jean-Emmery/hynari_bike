@@ -7,6 +7,10 @@
     <h1>BIKES :</h1>
     <button class="btn blue" @click="showBikes">Show List</button>
     <button class="btn blue" @click="addBike">Add Bike</button>
+
+    <h1>STATIONS :</h1>
+    <button class="btn blue" @click="showStation">Show List</button>
+    <button class="btn blue" @click="addStation">Add Station</button>
   </div>
 </template>
 <script>
@@ -26,6 +30,12 @@ export default {
     },
     addBike() {
       this.$router.push({ path: '/addBike' });
+    },
+    showStation() {
+      this.$router.push({ path: '/gestionStation' });
+    },
+    addStation() {
+      this.$router.push({ path: '/addStation' });
     },
   },
 };

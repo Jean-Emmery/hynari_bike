@@ -93,6 +93,27 @@
         }
       }
     },
+    "station": {
+      "root": "libs/station",
+      "sourceRoot": "libs/station/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/station/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/station"],
+          "options": {
+            "jestConfig": "libs/station/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "vue-app": {
       "projectType": "application",
       "root": "apps/vue-app",

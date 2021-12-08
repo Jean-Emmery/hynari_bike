@@ -15,6 +15,7 @@
         :zoom="zoom"
         :center="center"
         :options="mapOptions"
+        :animate="isAnimated"
         style="height: 80%"
         @update:center="centerUpdate"
         @update:zoom="zoomUpdate"
@@ -73,7 +74,7 @@
             />
           </div>
           <div class="card-header">{{ garage.name }}</div>
-          <div class="card-content" style="height: 200px; overflow-y: scroll">
+          <div class="card-content">
             Quantity :{{ garage.capacityMax }}<br />
             Latitude : {{ garage.lat }}<br />
             Longitude : {{ garage.lng }}
@@ -155,13 +156,10 @@ export default {
       });
     },
     getAllBikes() {
-      return Vue.axios
-        .get('/api/garage/getAll')
-        .then((res) => {
-          this.bikes = res.data;
-          console.log('toto' + this.bikes);
-        })
-        .catch((err) => console.error(err));
+      return Vue.axios.get('/api/garage/bikes').then((res) => {
+        this.bikes = res.data;
+        console.log(this.bikes);
+      });
     },
     deleteGarage(garageId) {
       console.log('testDeleteG');
