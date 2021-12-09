@@ -29,11 +29,11 @@ export class AuthService {
     console.log("authService:login:user")
     console.log(user);
     const payload = {
+      id: user.userId,
       username: user.email,
       first_name: user.firstname,
       last_name: user.lastname,
       role: user.role,
-      //sub: user.userId,
     };
     const access_token = this.jwtService.sign(payload);
 

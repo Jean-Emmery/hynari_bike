@@ -39,17 +39,25 @@ class KnexLib {
     });
   }
   editBikeDb(bike) {
-    return knex('bikes').update(bike);
+    console.log('db' + bike.id);
+    return knex('bikes').where({ id: bike.id }).update(bike);
   }
   getBikeByIdDb(id) {
     return knex('bikes').select('*').where({ id: id });
+  }
+  pickUpBikeDb(bike) {
+    console.log('db' + bike.id);
+    return knex('bikes').where({ id: bike.id }).update({
+      id: bike.id,
+      user_id: bike.user_id,
+    });
   }
 
   findUser(username: string) {
     console.log("knexlib:findUser:username")
     console.log(username)
     return knex('users')
-    .select('email', 'firstname', 'lastname', 'password', 'role')
+    .select('email', 'firstname', 'lastname', 'password', 'role', 'id')
     .where({
       email: username,
     })

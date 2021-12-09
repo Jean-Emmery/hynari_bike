@@ -5,8 +5,7 @@
         style="background-color: #ff364f; margin-top: 7%"
         class="btn rounded-2 mb-5 txt-white"
         type="button"
-        @click="addPet()"
-      >
+        @click="addPet()">
         Ajouter un animal
       </button>
     </div>
@@ -16,7 +15,12 @@
         <div class="m-1" v-for="bike in bikes" v-bind:key="bike.id">
           <div class="card shadow-3 rounded-3 grey light-4">
             <div class="card-image">
-              <img alt="logo" class="responsive-media" style="height: 276px" />
+              <img
+                :src="bike.pictureUrl"
+                alt="logo"
+                class="responsive-media"
+                style="height: 276px"
+              />
             </div>
             <div class="card-header">{{ bike.name }}</div>
             <div
@@ -25,16 +29,10 @@
             ></div>
             <div class="card-footer">
               <button
-                class="btn airforce dark-2 mr-2 rounded-full"
-                @click="takeBike(bike.id)"
+                class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
+                @click="pickUpBike(bike.id)"
               >
-                <i class="mdi mdi-eye"></i>
-              </button>
-              <button
-                class="btn error airforce ml-2 rounded-full"
-                @click="putBike(bike.id)"
-              >
-                <i class="mdi mdi-delete"></i>
+                <i class="material-icons font-s2">check_circle</i>
               </button>
             </div>
           </div>
@@ -67,13 +65,23 @@ import router from '../router';
 export default {
   data() {
     return {
+      user: {},
       bikes: [],
       editId: null,
       garageId: this.$route.params.id,
+      stationId: this.$route.params.id,
     };
   },
   mounted() {
     this.getBikesByGarageId(this.garageId);
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      console.log("user found")
+      this.user = user;
+    } else {
+      console.log("user not found")
+    }
   },
   methods: {
     // getAllBikes() {
@@ -86,16 +94,19 @@ export default {
       return Vue.axios.get('/api/bikes/' + garageId).then((res) => {
         this.bikes = res.data;
       });
-      // addPet() {
-      //   this.$router.push({ path: '/addPet' });
-      // },
-      // editPet(petId) {
-      //   this.$router.push({ path: '/pet/' + petId });
-      // },
-      // deletePet(petId) {
-      //   return Vue.axios.delete('/api/pet/' + petId).then((res) => {
-      //     this.getAllPets();
-      //   });
+    },
+    pickUpBike(bikeId) {
+      console.log("veloid id" + bikeId)
+      console.log("user: ")
+      console.log(this.user.user.id);
+      const bike = {
+        id: bikeId,
+        user_id: this.user.user.id,
+      };
+      console.log(bike);
+
+      return axios.post('/api/bikes/pickUpBike', bike)
+      .then(console.log('edit'));
     },
   },
 };

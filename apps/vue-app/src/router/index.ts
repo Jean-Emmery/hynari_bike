@@ -95,6 +95,9 @@ const routes: Array<RouteConfig> = [
     name: 'Dashboard',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/gestionGarages',
@@ -115,5 +118,43 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+
+router.beforeEach((to, from, next) => {
+  let user = JSON.parse(localStorage.getItem('user') || '{}')
+
+  if (from.name !== 'Login' && from.name !== 'Register' && to.name !== 'Login' && to.name !== 'Register' && user.access_token == null) {
+    router.push({ name: 'Login'})
+    //next()
+  } else if ((from.name == 'Login' || from.name == 'Register') && user.access_token == null) {
+    if (to.name === 'Register' || to.name === 'Login') {
+      next()
+    }
+    next(false)
+  } else if (user && user.user) {
+    if (user.user.role === '1') {
+      if (to.name === 'Dashboard') {
+        next(false)
+      } else {
+        next()
+      }
+    }
+    if (user.user.role === '2') {
+      if (to.name === 'Register' || to.name === 'Garage' || to.name === 'Login') {
+        next(false)
+      } else {
+        next()
+      }
+    } else if (user.user.role === '3') {
+      if (to.name === 'Register' || to.name === 'Login') {
+        next(false)
+      } else {
+        next()
+      }
+    }
+  } else {
+    next()
+  }
+})
 
 export default router;

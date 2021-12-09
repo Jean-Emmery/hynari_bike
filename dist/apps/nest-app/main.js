@@ -146,7 +146,8 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", Promise)
 ], AppController.prototype, "login", null);
 tslib_1.__decorate([
-    common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
+    common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard) // Si l'utilisateur est connecté et a son token
+    ,
     common_1.Get('profile'),
     tslib_1.__param(0, common_1.Request()),
     tslib_1.__metadata("design:type", Function),
@@ -357,11 +358,11 @@ let AuthService = class AuthService {
             console.log("authService:login:user");
             console.log(user);
             const payload = {
+                id: user.userId,
                 username: user.email,
                 first_name: user.firstname,
                 last_name: user.lastname,
                 role: user.role,
-                //sub: user.userId,
             };
             const access_token = this.jwtService.sign(payload);
             console.log("authService:login:access_token");
@@ -561,7 +562,7 @@ exports.LocalStrategy = LocalStrategy;
 
 "use strict";
 
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BikesController = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
@@ -585,6 +586,9 @@ let BikesController = class BikesController {
     }
     editBike(bike) {
         return this.bikesService.editBike(bike);
+    }
+    pickUpBike(bike) {
+        return this.bikesService.pickUpBike(bike);
     }
     getBikeById(data) {
         return this.bikesService.getBikeById(data.id);
@@ -618,6 +622,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], BikesController.prototype, "editBike", null);
 tslib_1.__decorate([
+    common_1.Post('pickUpBike'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof bike_1.IBike !== "undefined" && bike_1.IBike) === "function" ? _b : Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "pickUpBike", null);
+tslib_1.__decorate([
     common_1.Get('show/:id'),
     tslib_1.__param(0, common_1.Param()),
     tslib_1.__metadata("design:type", Function),
@@ -626,7 +637,7 @@ tslib_1.__decorate([
 ], BikesController.prototype, "getBikeById", null);
 BikesController = tslib_1.__decorate([
     common_1.Controller('bikes'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof bikes_service_1.BikesService !== "undefined" && bikes_service_1.BikesService) === "function" ? _b : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_c = typeof bikes_service_1.BikesService !== "undefined" && bikes_service_1.BikesService) === "function" ? _c : Object])
 ], BikesController);
 exports.BikesController = BikesController;
 
@@ -688,7 +699,12 @@ let BikesService = class BikesService {
         return knex_lib_1.k.addBikeDb(bike);
     }
     editBike(bike) {
+        console.log('service' + bike);
         return knex_lib_1.k.editBikeDb(bike);
+    }
+    pickUpBike(bike) {
+        console.log('service' + bike);
+        return knex_lib_1.k.pickUpBikeDb(bike);
     }
     getBikeById(id) {
         return knex_lib_1.k.getBikeByIdDb(id);
@@ -1048,16 +1064,24 @@ class KnexLib {
         });
     }
     editBikeDb(bike) {
-        return knex('bikes').update(bike);
+        console.log('db' + bike.id);
+        return knex('bikes').where({ id: bike.id }).update(bike);
     }
     getBikeByIdDb(id) {
         return knex('bikes').select('*').where({ id: id });
+    }
+    pickUpBikeDb(bike) {
+        console.log('db' + bike.id);
+        return knex('bikes').where({ id: bike.id }).update({
+            id: bike.id,
+            user_id: bike.user_id,
+        });
     }
     findUser(username) {
         console.log("knexlib:findUser:username");
         console.log(username);
         return knex('users')
-            .select('email', 'firstname', 'lastname', 'password', 'role')
+            .select('email', 'firstname', 'lastname', 'password', 'role', 'id')
             .where({
             email: username,
         })

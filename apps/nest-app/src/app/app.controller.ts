@@ -23,7 +23,7 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard) // Si l'utilisateur est connecté et a son token
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

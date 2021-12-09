@@ -1,4 +1,5 @@
 <template>
+
   <div id="app">
     <div
       id="example-sidenav"
@@ -28,7 +29,7 @@
           >home</i
         ></router-link
       >
-      <router-link to="/garage" class="sidenav-link"
+      <router-link v-if="role != '2' || role != '3'" to="/garage" class="sidenav-link"
         ><i
           class="
             material-icons
@@ -43,7 +44,7 @@
           >directions_bike</i
         ></router-link
       >
-      <router-link to="/dashboard" class="sidenav-link"
+      <router-link v-if="role != '1'" to="/dashboard" class="sidenav-link"
         ><i
           class="
             material-icons
@@ -75,7 +76,7 @@
       >
 
       <div class="mt-auto d-block">
-        <router-link to="/login" class="sidenav-link"
+        <router-link v-if="role === '0'" to="/login" class="sidenav-link"
           ><i
             class="
               material-icons
@@ -92,7 +93,7 @@
             >login</i
           ></router-link
         >
-        <router-link to="/register" class="sidenav-link"
+        <router-link v-if="role === '0'" to="/register" class="sidenav-link"
           ><i
             class="
               material-icons
@@ -129,24 +130,19 @@ import axios from 'axios';
 export default defineComponent({
   data() {
     return {
-      username: 'username',
-      password: 'password',
+      role: '0',
       isSidenavActive: false,
     };
   },
-  methods: {
-    login() {
-      return axios.post('http://localhost:3333/api/auth/login', {
-        username: this.username,
-        password: this.password,
-      })
-      .then(el => console.log(el))
-      .catch(err => console.error(err))
-    },
-  }
+  created() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.role = user.user.role;
+      console.log("role = " + this.role)
+    }
+  },
 });
 </script>
-
 
 <style lang="scss">
 :root {

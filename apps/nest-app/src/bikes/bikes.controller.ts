@@ -27,6 +27,10 @@ export class BikesController {
   editBike(@Body() bike: IBike) {
     return this.bikesService.editBike(bike);
   }
+  @Post('pickUpBike')
+  pickUpBike(@Body() bike: IBike) {
+    return this.bikesService.pickUpBike(bike);
+  }
 
   @Get('show/:id')
   getBikeById(@Param() data) {

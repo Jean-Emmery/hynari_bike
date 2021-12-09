@@ -3,7 +3,7 @@
 	<h2>Profile</h2>
   <form action="">
   <div class="user-box">
-		<input :id="myfirstname" v-model="firstname" type="text" name="firstname" required="">{{username}}
+		<input v-model="firstname" type="text" name="firstname" required="">
 		<label>First Name</label>
 	</div>
   <div class="user-box">
@@ -15,7 +15,7 @@
 			<label>Email</label>
 		</div>
 		<div class="user-box">
-			<input v-model="password" type="password">
+			<input v-model="password" type="password" autocomplete="current-password">
 			<label for="">Password</label>
 		</div>
 		<a href="">
@@ -26,6 +26,8 @@
 			Update
 		</a>
     </form>
+
+    <button @click="logout">LOGOUT</button>
 </div>
 </template>
 
@@ -36,10 +38,9 @@ import axios from 'axios';
 import router from '../router/index';
 
 export default defineComponent({
-  props: ['myfirstname', 'value'],
   data() {
     return {
-      user,
+      user: {},
       firstname: '',
       password: '',
       email: '',
@@ -47,7 +48,18 @@ export default defineComponent({
       isSidenavActive: false,
     };
   },
-  beforeMounted() {
+  created() {
+    // if (localStorage.getItem('reloaded')) {
+    //     // The page was just reloaded. Clear the value from local storage
+    //     // so that it will reload the next time this page is visited.
+    //     localStorage.removeItem('reloaded');
+    // } else {
+    //     // Set a flag so that we know not to reload the page twice.
+    //     localStorage.setItem('reloaded', '1');
+    //     location.reload();
+    // }
+  },
+  mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.access_token;
     console.log("token");
@@ -59,16 +71,15 @@ export default defineComponent({
     .then((res) => {
       console.log('test 1')
       console.log(res.data)
-      console.log('res.data.username')
-      console.log(res.data.username)
-      console.log('this.email')
-      console.log(this.email)
       this.email = res.data.username;
-      this.firstname = res.data.firstname;
-      this.lastname = res.data.lastname;
-      this.password = res.data.password;
+      this.firstname = res.data.first_name;
+      this.lastname = res.data.last_name;
       console.log('this.email')
       console.log(this.email)
+      console.log('this.firstname')
+      console.log(this.firstname)
+      console.log('this.lastname')
+      console.log(this.lastname)
     })
     .catch((error) => {
       console.log('test 2')
@@ -77,28 +88,13 @@ export default defineComponent({
   },
   methods: {
     logout() {
-      console.log(localStorage);
-      console.log("logout");
-      return;
+      console.log(localStorage)
+      console.log("logout")
+      localStorage.removeItem('user')
+      router.push({ name: 'Login' })
     },
-    login() {
-      return axios.post('http://localhost:3333/api/auth/login', {
-        username: this.username,
-        password: this.password,
-      })
-      .then(el => {
-        console.log("el: ");
-        console.log(el);
-        if (el.data.access_token) {
-          localStorage.setItem('user', JSON.stringify(el.data));
-        }
-        router.push({ name: 'Bike'})
-      })
-      .catch(err => console.error(err))
-    },
-    }
   }
-)
+})
 </script>
 
 
