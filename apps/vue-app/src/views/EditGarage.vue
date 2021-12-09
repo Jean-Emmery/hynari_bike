@@ -1,100 +1,49 @@
 <template>
   <div>
-    <div class="grix shadow-1" style="height: 100vh">
+    <div class="grix" style="height: 100vh">
       <form style="margin: 10%">
         <div class="grix xs1 sm2">
           <div class="form-field">
-            <label for="firstName">FirstName</label>
+            <label for="newName">Name</label>
             <input
               required="required"
               type="text"
-              id="firstName"
+              id="newName"
               class="form-control rounded-1 white"
-              placeholder="FirstName"
-              v-model="pet.firstName"
+              placeholder="Name"
+              v-model="newName"
             />
           </div>
           <div class="form-field">
-            <label for="lastName">LastName</label>
+            <label for="newLat">Latitude</label>
             <input
               required="required"
               type="text"
-              id="lastName"
+              id="newLat"
               class="form-control rounded-1 white"
-              placeholder="LastName"
-              v-model="pet.lastName"
+              placeholder="Latitude"
+              v-model="newLat"
             />
           </div>
           <div class="form-field">
-            <label for="birthDate">BirthDate</label>
+            <label for="newLng">Longitude</label>
             <input
               required="required"
               type="text"
-              id="birthDate"
+              id="newLng"
               class="form-control rounded-1 white"
-              placeholder="BirthDate"
-              v-model="pet.birthDate"
+              placeholder="Longitude"
+              v-model="newLng"
             />
-          </div>
-          <div class="form-field d-flex fx-col">
-            <label for="type">Type</label>
-            <select
-              required
-              class="form-control select rounded-1 white"
-              placeholder="Type"
-              v-model="pet.type"
-            >
-              <option value="type" disabled hidden>Type</option>
-              <option
-                :name="i"
-                v-for="(categorie, i) in categories"
-                :key="categorie.id"
-              >
-                {{ categorie }}
-              </option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label for="avatarPictureUrl">Avatar Picture URL</label>
-            <input
-              required="required"
-              type="text"
-              id="avatarPictureUrl"
-              class="form-control rounded-1 white"
-              placeholder="Avatar Picture URL"
-              v-model="pet.avatarPictureUrl"
-            />
-          </div>
-          <div class="form-field">
-            <label for="coverPictureUrl">Cover Picture URL</label>
-            <input
-              required="required"
-              type="text"
-              id="coverPictureUrl"
-              class="form-control rounded-1 white"
-              placeholder="Cover Picture URL"
-              v-model="pet.coverPictureUrl"
-            />
-          </div>
-          <div class="form-field">
-            <label for="textarea">Summary</label>
-            <textarea
-              required="required"
-              rows="2"
-              id="summary"
-              class="form-control rounded-1 white"
-              placeholder="Summary"
-              v-model="pet.summary"
-            ></textarea>
           </div>
         </div>
         <button
           style="margin-top: 10px; background-color: #ff364f"
           class="btn txt-white rounded-2"
           type="button"
-          @click="editPet()"
+          @click="editGarage(garageId)"
         >
-          Modifier
+          Edit Garage
         </button>
       </form>
     </div>
@@ -121,37 +70,35 @@ import router from '../router';
 export default {
   data() {
     return {
-      petId: this.$route.params.id,
-      pet: [],
-      type: '',
-      categories: [],
+      garageId: this.$route.params.id,
+      garages: [],
+      newName: '',
+      newLat: '',
+      newLng: '',
     };
   },
   mounted() {
-    this.getType();
-    this.getPet(this.petId);
+    this.getGarage(this.garageId);
   },
   methods: {
-    getPet(id) {
-      return axios.get(`/api/pet/${id}`).then((res) => {
-        this.pet = res.data;
+    getGarage(id) {
+      return axios.get(`/api/garage/show/${id}`).then((res) => {
+        this.garage = res.data;
       });
     },
-    editPet() {
-      this.pet.birthDate = '1940-01-01T00:00:00.000Z';
-      console.log(this.pet);
-      return axios.post('/api/pet/editPet', this.pet).then((res) => {
-        router.push('/pet');
-      });
-    },
-    getType() {
-      return Vue.axios.get('/api/pet/pet-types').then((res) => {
-        if (res.status === 200) {
-          this.categories = res.data;
-        } else {
-          console.error(res);
-        }
-      });
+    editGarage(garageId) {
+      console.log('garageid' + garageId);
+      const garage = {
+        id: garageId,
+        name: this.newName,
+        lat: this.newLat,
+        lng: this.newLng,
+      };
+      console.log(this.name);
+      console.log(garage);
+      return axios
+        .post('/api/garage/editGarage', garage)
+        .then(console.log('edit garage'));
     },
   },
 };

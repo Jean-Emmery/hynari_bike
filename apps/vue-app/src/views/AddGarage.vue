@@ -1,5 +1,5 @@
 <template>
-  <div class="grix shadow-1" style="height: 100vh">
+  <div class="grix" style="height: 100vh">
     <form style="margin: 10%">
       <div class="grix xs1 sm2">
         <div class="form-field">

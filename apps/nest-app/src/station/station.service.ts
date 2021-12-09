@@ -13,7 +13,7 @@ export class StationService {
   }
   editStation(station: IStation) {
     console.log('service' + station);
-    return k.editBikeDb(station);
+    return k.editStationDb(station);
   }
   async deleteStation(id) {
     return k.deleteStationDb(id);
@@ -23,5 +23,8 @@ export class StationService {
   }
   getStation(): Promise<Array<string>> {
     return k.getStationDb();
+  }
+  getStationById(id: string) {
+    return k.getStationByIdDb(id);
   }
 }

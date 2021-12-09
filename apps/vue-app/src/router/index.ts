@@ -68,7 +68,7 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ '../views/AddGarage.vue'),
   },
   {
-    path: '/garage/:id',
+    path: '/garage/show/:id',
     name: 'EditGarage',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/EditGarage.vue'),

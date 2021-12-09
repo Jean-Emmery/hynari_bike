@@ -355,10 +355,11 @@ exports.BikesService = BikesService;
 
 "use strict";
 
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GarageController = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const garage_1 = __webpack_require__(/*! @hynari_bike/garage */ "./libs/garage/src/index.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const garage_service_1 = __webpack_require__(/*! ./garage.service */ "./apps/nest-app/src/garage/garage.service.ts");
 let GarageController = class GarageController {
@@ -380,6 +381,13 @@ let GarageController = class GarageController {
     }
     deleteGarage(data) {
         return this.garageService.deleteGarage(data.id);
+    }
+    editGarage(garage) {
+        console.log('editcontroller');
+        return this.garageService.editGarage(garage);
+    }
+    getGarageById(data) {
+        return this.garageService.getGarageById(data.id);
     }
 };
 tslib_1.__decorate([
@@ -414,9 +422,23 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
 ], GarageController.prototype, "deleteGarage", null);
+tslib_1.__decorate([
+    common_1.Post('editGarage'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof garage_1.IGarage !== "undefined" && garage_1.IGarage) === "function" ? _a : Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], GarageController.prototype, "editGarage", null);
+tslib_1.__decorate([
+    common_1.Get('show/:id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], GarageController.prototype, "getGarageById", null);
 GarageController = tslib_1.__decorate([
     common_1.Controller('garage'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof garage_service_1.GarageService !== "undefined" && garage_service_1.GarageService) === "function" ? _a : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof garage_service_1.GarageService !== "undefined" && garage_service_1.GarageService) === "function" ? _b : Object])
 ], GarageController);
 exports.GarageController = GarageController;
 
@@ -482,6 +504,13 @@ let GarageService = class GarageService {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return knex_lib_1.k.deleteGarageDb(id);
         });
+    }
+    editGarage(garage) {
+        console.log('service' + garage);
+        return knex_lib_1.k.editGarageDb(garage);
+    }
+    getGarageById(id) {
+        return knex_lib_1.k.getGarageByIdDb(id);
     }
 };
 GarageService = tslib_1.__decorate([
@@ -553,7 +582,7 @@ let StationController = class StationController {
     getStationByGarageId(data) {
         return this.stationService.getStationByGarageId(data.id);
     }
-    editBike(station) {
+    editStation(station) {
         return this.stationService.editStation(station);
     }
     deleteBike(data) {
@@ -561,6 +590,12 @@ let StationController = class StationController {
     }
     addStation(station) {
         return this.stationService.addStation(station);
+    }
+    getStationById(data) {
+        return this.stationService.getStationById(data.id);
+    }
+    getStation() {
+        return this.stationService.getStation();
     }
 };
 tslib_1.__decorate([
@@ -577,12 +612,12 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], StationController.prototype, "getStationByGarageId", null);
 tslib_1.__decorate([
-    common_1.Post('editBike'),
+    common_1.Post('editStation'),
     tslib_1.__param(0, common_1.Body()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof station_1.IStation !== "undefined" && station_1.IStation) === "function" ? _a : Object]),
     tslib_1.__metadata("design:returntype", void 0)
-], StationController.prototype, "editBike", null);
+], StationController.prototype, "editStation", null);
 tslib_1.__decorate([
     common_1.Delete(':id'),
     tslib_1.__param(0, common_1.Param()),
@@ -597,6 +632,19 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
 ], StationController.prototype, "addStation", null);
+tslib_1.__decorate([
+    common_1.Get('show/:id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "getStationById", null);
+tslib_1.__decorate([
+    common_1.Get('/stationList'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "getStation", null);
 StationController = tslib_1.__decorate([
     common_1.Controller('station'),
     tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof station_service_1.StationService !== "undefined" && station_service_1.StationService) === "function" ? _b : Object])
@@ -659,7 +707,7 @@ let StationService = class StationService {
     }
     editStation(station) {
         console.log('service' + station);
-        return knex_lib_1.k.editBikeDb(station);
+        return knex_lib_1.k.editStationDb(station);
     }
     deleteStation(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -671,6 +719,9 @@ let StationService = class StationService {
     }
     getStation() {
         return knex_lib_1.k.getStationDb();
+    }
+    getStationById(id) {
+        return knex_lib_1.k.getStationByIdDb(id);
     }
 };
 StationService = tslib_1.__decorate([
@@ -701,6 +752,36 @@ tslib_1.__exportStar(__webpack_require__(/*! ./lib/bike */ "./libs/bike/src/lib/
 /*!***********************************!*\
   !*** ./libs/bike/src/lib/bike.ts ***!
   \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+
+/***/ "./libs/garage/src/index.ts":
+/*!**********************************!*\
+  !*** ./libs/garage/src/index.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+tslib_1.__exportStar(__webpack_require__(/*! ./lib/garage */ "./libs/garage/src/lib/garage.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/garage/src/lib/garage.ts":
+/*!***************************************!*\
+  !*** ./libs/garage/src/lib/garage.ts ***!
+  \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -788,10 +869,21 @@ class KnexLib {
     }
     editBikeDb(bike) {
         console.log('db' + bike.id);
-        return knex('bikes').where({ id: bike.id }).update(bike);
+        return knex('bikes').where({ id: bike.id }).update({
+            id: bike.id,
+            name: bike.name,
+            pictureUrl: bike.pictureUrl,
+            station_id: bike.station,
+        });
     }
     getBikeByIdDb(id) {
         return knex('bikes').select('*').where({ id: id });
+    }
+    getStationByIdDb(id) {
+        return knex('station').select('*').where({ id: id });
+    }
+    getGarageByIdDb(id) {
+        return knex('garage').select('*').where({ id: id });
     }
     deleteBikeDb(id) {
         return knex('bikes').where({ id: id }).del();
@@ -801,7 +893,20 @@ class KnexLib {
     }
     editStationDb(station) {
         console.log('db' + station.id);
-        return knex('station').where({ id: station.id }).update(station);
+        return knex('station').where({ id: station.id }).update({
+            id: station.id,
+            capacityMax: station.capacityMax,
+            garage_id: station.garage,
+        });
+    }
+    editGarageDb(garage) {
+        console.log('db' + garage.id);
+        return knex('garage').where({ id: garage.id }).update({
+            id: garage.id,
+            name: garage.name,
+            lat: garage.lat,
+            lng: garage.lng,
+        });
     }
     deleteStationDb(id) {
         return knex('station').where({ id: id }).del();

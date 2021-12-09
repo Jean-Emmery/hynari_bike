@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="grix shadow-1" style="height: 100vh">
+    <div class="grix" style="height: 100vh">
       <form style="margin: 10%">
         <div class="grix xs1 sm2">
           <div class="form-field">
-            <label for="capacityMax">Capacity</label>
+            <label for="newCapacityMax">Capacity</label>
             <input
               required="required"
               type="text"
-              id="capacityMax"
+              id="newCapacityMax"
               class="form-control rounded-1 white"
               placeholder="Capacity Max"
-              v-model="station.capacityMax"
+              v-model="newCapacityMax"
             />
           </div>
           <div class="form-field d-flex fx-col">
@@ -20,7 +20,7 @@
               required
               class="form-control select rounded-1 white"
               placeholder="Garage"
-              v-model="station.garage"
+              v-model="newGarage"
             >
               <option value="type" disabled hidden>Garage</option>
               <option :name="i" v-for="(garage, i) in garages" :key="garage.id">
@@ -33,9 +33,9 @@
           style="margin-top: 10px; background-color: #ff364f"
           class="btn txt-white rounded-2"
           type="button"
-          @click="editStation()"
+          @click="editStation(stationId)"
         >
-          Edit
+          Edit Station
         </button>
       </form>
     </div>
@@ -65,6 +65,8 @@ export default {
       stationId: this.$route.params.id,
       station: [],
       garages: [],
+      newCapacityMax: '',
+      newGarage: '',
     };
   },
   mounted() {
@@ -77,18 +79,22 @@ export default {
         this.station = res.data;
       });
     },
-    editStation() {
+    editStation(stationId) {
+      const station = {
+        id: stationId,
+        capacityMax: this.newCapacityMax,
+        garage: this.newGarage,
+      };
+      console.log(this.capacityMax);
+      console.log(station);
       return axios
-        .post('/api/station/editStation', this.station)
-        .then((res) => {
-          console.log(this.station);
-          console.log(res);
-          // router.push('/dashboard');
-        });
+        .post('/api/station/editStation', station)
+        .then(console.log('edit'));
     },
     getGarage() {
       return Vue.axios.get('/api/garage/garageList').then((res) => {
         if (res.status === 200) {
+          console.log(res.data);
           this.garages = res.data;
         } else {
           console.error(res);

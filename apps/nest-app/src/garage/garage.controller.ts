@@ -1,3 +1,4 @@
+import { IGarage } from '@hynari_bike/garage';
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { GarageService } from './garage.service';
 
@@ -28,5 +29,14 @@ export class GarageController {
   @Delete(':id')
   deleteGarage(@Param() data) {
     return this.garageService.deleteGarage(data.id);
+  }
+  @Post('editGarage')
+  editGarage(@Body() garage: IGarage) {
+    console.log('editcontroller');
+    return this.garageService.editGarage(garage);
+  }
+  @Get('show/:id')
+  getGarageById(@Param() data) {
+    return this.garageService.getGarageById(data.id);
   }
 }
