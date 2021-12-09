@@ -31,8 +31,15 @@ export class AppController {
 
   @Post('user/register')
   async register(@Request() req) {
+    console.log("app.controller:register()")
     console.log("req.body");
     console.log(req.body);
     return this.usersService.register(req.body);
+  }
+
+  @Get('user/all')
+  async findAll() {
+    console.log("app.controller:FindAll()")
+    return this.usersService.findAll();
   }
 }

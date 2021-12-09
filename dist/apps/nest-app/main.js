@@ -124,9 +124,16 @@ let AppController = class AppController {
     }
     register(req) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("app.controller:register()");
             console.log("req.body");
             console.log(req.body);
             return this.usersService.register(req.body);
+        });
+    }
+    findAll() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("app.controller:FindAll()");
+            return this.usersService.findAll();
         });
     }
 };
@@ -153,6 +160,12 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], AppController.prototype, "register", null);
+tslib_1.__decorate([
+    common_1.Get('user/all'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", Promise)
+], AppController.prototype, "findAll", null);
 AppController = tslib_1.__decorate([
     common_1.Controller(),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object, typeof (_b = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _b : Object])
@@ -326,8 +339,14 @@ let AuthService = class AuthService {
     validateUser(username, pass) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const user = yield this.usersService.findOne(username);
+            console.log("authService:validateUser:user");
+            console.log(user);
+            console.log("authService:validateUser:password&pass");
+            console.log(user.password + " - " + pass);
             if (user && user.password === pass) {
                 const { password } = user, result = tslib_1.__rest(user, ["password"]);
+                console.log("authService:validateUser:result");
+                console.log(result);
                 return result;
             }
             return null;
@@ -335,15 +354,21 @@ let AuthService = class AuthService {
     }
     login(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("authService:login:user");
+            console.log(user);
             const payload = {
-                username: user.username,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                sub: user.userId
+                username: user.email,
+                first_name: user.firstname,
+                last_name: user.lastname,
+                role: user.role,
+                //sub: user.userId,
             };
             const access_token = this.jwtService.sign(payload);
+            console.log("authService:login:access_token");
             console.log(access_token);
+            console.log("authService:login:payload");
             console.log(payload);
+            console.log("authService:login:user");
             console.log(user);
             return {
                 access_token,
@@ -507,6 +532,9 @@ let LocalStrategy = class LocalStrategy extends passport_1.PassportStrategy(pass
     }
     validate(username, password) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("local.strategy:valide:username&password");
+            console.log(username);
+            console.log(password);
             const user = yield this.authService.validateUser(username, password);
             if (!user) {
                 throw new common_1.UnauthorizedException();
@@ -841,22 +869,12 @@ exports.UsersModule = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const users_service_1 = __webpack_require__(/*! ./users.service */ "./apps/nest-app/src/users/users.service.ts");
-const nestjs_knex_1 = __webpack_require__(/*! nestjs-knex */ "./node_modules/nestjs-knex/dist/index.js");
 let UsersModule = class UsersModule {
 };
 UsersModule = tslib_1.__decorate([
     common_1.Module({
-        imports: [
-            nestjs_knex_1.KnexModule.forRoot({
-                config: {
-                    client: "sqlite3",
-                    useNullAsDefault: true,
-                    connection: ':memory:',
-                },
-            }),
-        ],
         providers: [users_service_1.UsersService],
-        exports: [users_service_1.UsersService],
+        exports: [users_service_1.UsersService]
     })
 ], UsersModule);
 exports.UsersModule = UsersModule;
@@ -873,15 +891,13 @@ exports.UsersModule = UsersModule;
 
 "use strict";
 
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const nestjs_knex_1 = __webpack_require__(/*! nestjs-knex */ "./node_modules/nestjs-knex/dist/index.js");
+const knex_lib_1 = __webpack_require__(/*! @hynari_bike/knex-lib */ "./libs/knex-lib/src/index.ts");
 let UsersService = class UsersService {
-    constructor(knex) {
-        this.knex = knex;
+    constructor() {
         this.users = [
             {
                 userId: 1,
@@ -899,35 +915,37 @@ let UsersService = class UsersService {
             },
         ];
     }
+    // async findOne(username: string): Promise<User | undefined> {
+    //   return this.users.find(user => user.username === username);
+    // }
     findOne(username) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return this.users.find(user => user.username === username);
+            console.log("usersService:findOne:username");
+            console.log(username);
+            const user = yield knex_lib_1.k.findUser(username);
+            console.log("usersService:findOne:user");
+            console.log(user);
+            return user;
+        });
+    }
+    findAll() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return yield knex_lib_1.k.findAll();
         });
     }
     register(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             console.log("user");
             console.log(user);
-            yield this.knex.table('users').insert({
-                email: user.username,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                password: user.password
-            });
+            knex_lib_1.k.registerUser(user)
+                .then((el) => console.log(el))
+                .catch((err) => console.log(err));
             return;
-        });
-    }
-    findAll() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const users = yield this.knex.table('users');
-            return { users };
         });
     }
 };
 UsersService = tslib_1.__decorate([
-    common_1.Injectable(),
-    tslib_1.__param(0, nestjs_knex_1.InjectKnex()),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof nestjs_knex_1.Knex !== "undefined" && nestjs_knex_1.Knex) === "function" ? _a : Object])
+    common_1.Injectable()
 ], UsersService);
 exports.UsersService = UsersService;
 
@@ -1035,259 +1053,36 @@ class KnexLib {
     getBikeByIdDb(id) {
         return knex('bikes').select('*').where({ id: id });
     }
+    findUser(username) {
+        console.log("knexlib:findUser:username");
+        console.log(username);
+        return knex('users')
+            .select('email', 'firstname', 'lastname', 'password', 'role')
+            .where({
+            email: username,
+        })
+            .then((el) => {
+            console.log("el");
+            console.log(el[0]);
+            return (el[0]);
+        })
+            .catch((err) => console.log(err));
+        return null;
+    }
+    findAll() {
+        return knex('users');
+    }
+    registerUser(user) {
+        return knex('users').insert({
+            email: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            password: user.password,
+            role: '1'
+        });
+    }
 }
 exports.k = new KnexLib();
-
-
-/***/ }),
-
-/***/ "./node_modules/nestjs-knex/dist/index.js":
-/*!************************************************!*\
-  !*** ./node_modules/nestjs-knex/dist/index.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(__webpack_require__(/*! ./knex.module */ "./node_modules/nestjs-knex/dist/knex.module.js"), exports);
-__exportStar(__webpack_require__(/*! ./knex.decorators */ "./node_modules/nestjs-knex/dist/knex.decorators.js"), exports);
-__exportStar(__webpack_require__(/*! ./knex.interfaces */ "./node_modules/nestjs-knex/dist/knex.interfaces.js"), exports);
-__exportStar(__webpack_require__(/*! ./knex.utils */ "./node_modules/nestjs-knex/dist/knex.utils.js"), exports);
-
-
-/***/ }),
-
-/***/ "./node_modules/nestjs-knex/dist/knex.constants.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/nestjs-knex/dist/knex.constants.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.KNEX_MODULE_OPTIONS_TOKEN = exports.KNEX_MODULE_CONNECTION_TOKEN = exports.KNEX_MODULE_CONNECTION = void 0;
-exports.KNEX_MODULE_CONNECTION = 'default';
-exports.KNEX_MODULE_CONNECTION_TOKEN = 'KnexModuleConnectionToken';
-exports.KNEX_MODULE_OPTIONS_TOKEN = 'KnexModuleOptionsToken';
-
-
-/***/ }),
-
-/***/ "./node_modules/nestjs-knex/dist/knex.core-module.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/nestjs-knex/dist/knex.core-module.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var KnexCoreModule_1;
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.KnexCoreModule = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const knex_utils_1 = __webpack_require__(/*! ./knex.utils */ "./node_modules/nestjs-knex/dist/knex.utils.js");
-let KnexCoreModule = KnexCoreModule_1 = class KnexCoreModule {
-    static forRoot(options, connection) {
-        const knexOptionsProvider = {
-            provide: knex_utils_1.getKnexOptionsToken(connection),
-            useValue: options,
-        };
-        const knexConnectionProvider = {
-            provide: knex_utils_1.getKnexConnectionToken(connection),
-            useValue: knex_utils_1.createKnexConnection(options),
-        };
-        return {
-            module: KnexCoreModule_1,
-            providers: [knexOptionsProvider, knexConnectionProvider],
-            exports: [knexOptionsProvider, knexConnectionProvider],
-        };
-    }
-    static forRootAsync(options, connection) {
-        const knexConnectionProvider = {
-            provide: knex_utils_1.getKnexConnectionToken(connection),
-            useFactory(options) {
-                return knex_utils_1.createKnexConnection(options);
-            },
-            inject: [knex_utils_1.getKnexOptionsToken(connection)],
-        };
-        return {
-            module: KnexCoreModule_1,
-            imports: options.imports,
-            providers: [
-                ...this.createAsyncProviders(options, connection),
-                knexConnectionProvider,
-            ],
-            exports: [knexConnectionProvider],
-        };
-    }
-    static createAsyncProviders(options, connection) {
-        if (!(options.useExisting || options.useFactory || options.useClass)) {
-            throw new Error('Invalid configuration. Must provide useFactory, useClass or useExisting');
-        }
-        if (options.useExisting || options.useFactory) {
-            return [this.createAsyncOptionsProvider(options, connection)];
-        }
-        return [
-            this.createAsyncOptionsProvider(options, connection),
-            { provide: options.useClass, useClass: options.useClass },
-        ];
-    }
-    static createAsyncOptionsProvider(options, connection) {
-        if (!(options.useExisting || options.useFactory || options.useClass)) {
-            throw new Error('Invalid configuration. Must provide useFactory, useClass or useExisting');
-        }
-        if (options.useFactory) {
-            return {
-                provide: knex_utils_1.getKnexOptionsToken(connection),
-                useFactory: options.useFactory,
-                inject: options.inject || [],
-            };
-        }
-        return {
-            provide: knex_utils_1.getKnexOptionsToken(connection),
-            async useFactory(optionsFactory) {
-                return optionsFactory.createKnexModuleOptions();
-            },
-            inject: [options.useClass || options.useExisting],
-        };
-    }
-};
-KnexCoreModule = KnexCoreModule_1 = __decorate([
-    common_1.Global(),
-    common_1.Module({})
-], KnexCoreModule);
-exports.KnexCoreModule = KnexCoreModule;
-
-
-/***/ }),
-
-/***/ "./node_modules/nestjs-knex/dist/knex.decorators.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/nestjs-knex/dist/knex.decorators.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.InjectConnection = exports.InjectKnex = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const knex_utils_1 = __webpack_require__(/*! ./knex.utils */ "./node_modules/nestjs-knex/dist/knex.utils.js");
-const InjectKnex = (connection) => {
-    return common_1.Inject(knex_utils_1.getKnexConnectionToken(connection));
-};
-exports.InjectKnex = InjectKnex;
-exports.InjectConnection = exports.InjectKnex;
-
-
-/***/ }),
-
-/***/ "./node_modules/nestjs-knex/dist/knex.interfaces.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/nestjs-knex/dist/knex.interfaces.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-/***/ }),
-
-/***/ "./node_modules/nestjs-knex/dist/knex.module.js":
-/*!******************************************************!*\
-  !*** ./node_modules/nestjs-knex/dist/knex.module.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var KnexModule_1;
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.KnexModule = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const knex_core_module_1 = __webpack_require__(/*! ./knex.core-module */ "./node_modules/nestjs-knex/dist/knex.core-module.js");
-let KnexModule = KnexModule_1 = class KnexModule {
-    static forRoot(options, connection) {
-        return {
-            module: KnexModule_1,
-            imports: [knex_core_module_1.KnexCoreModule.forRoot(options, connection)],
-            exports: [knex_core_module_1.KnexCoreModule],
-        };
-    }
-    static forRootAsync(options, connection) {
-        return {
-            module: KnexModule_1,
-            imports: [knex_core_module_1.KnexCoreModule.forRootAsync(options, connection)],
-            exports: [knex_core_module_1.KnexCoreModule],
-        };
-    }
-};
-KnexModule = KnexModule_1 = __decorate([
-    common_1.Module({})
-], KnexModule);
-exports.KnexModule = KnexModule;
-
-
-/***/ }),
-
-/***/ "./node_modules/nestjs-knex/dist/knex.utils.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/nestjs-knex/dist/knex.utils.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createKnexConnection = exports.getKnexConnectionToken = exports.getKnexOptionsToken = void 0;
-const knex_1 = __webpack_require__(/*! knex */ "knex");
-const knex_constants_1 = __webpack_require__(/*! ./knex.constants */ "./node_modules/nestjs-knex/dist/knex.constants.js");
-function getKnexOptionsToken(connection) {
-    return `${connection || knex_constants_1.KNEX_MODULE_CONNECTION}_${knex_constants_1.KNEX_MODULE_OPTIONS_TOKEN}`;
-}
-exports.getKnexOptionsToken = getKnexOptionsToken;
-function getKnexConnectionToken(connection) {
-    return `${connection || knex_constants_1.KNEX_MODULE_CONNECTION}_${knex_constants_1.KNEX_MODULE_CONNECTION_TOKEN}`;
-}
-exports.getKnexConnectionToken = getKnexConnectionToken;
-function createKnexConnection(options) {
-    const { config } = options;
-    return knex_1.knex(config);
-}
-exports.createKnexConnection = createKnexConnection;
 
 
 /***/ }),

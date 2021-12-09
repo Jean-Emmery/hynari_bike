@@ -44,6 +44,37 @@ class KnexLib {
   getBikeByIdDb(id) {
     return knex('bikes').select('*').where({ id: id });
   }
+
+  findUser(username: string) {
+    console.log("knexlib:findUser:username")
+    console.log(username)
+    return knex('users')
+    .select('email', 'firstname', 'lastname', 'password', 'role')
+    .where({
+      email: username,
+    })
+    .then((el) => {
+      console.log("el")
+      console.log(el[0])
+      return (el[0]);
+    })
+    .catch((err) => console.log(err))
+    return null
+  }
+
+  findAll() {
+    return knex('users');
+  }
+
+  registerUser(user: any) {
+    return knex('users').insert({
+      email: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      password: user.password,
+      role: '1'
+    });
+  }
 }
 
 export const k = new KnexLib();
