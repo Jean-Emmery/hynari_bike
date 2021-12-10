@@ -50,20 +50,24 @@
             </div>
             <div class="card-header">{{ bike.name }}</div>
             <div class="card-content"></div>
-            <div class="card-footer">
-              <div class="dropdown" id="example-dropdown" data-ax="dropdown">
-              <button type="button" class="btn shadow-1 rounded-1 primary dropdown-trigger">
-                Station
-              </button>
-              <div class="dropdown-content white shadow-1 rounded-1">
-                <a v-for="station in stations" v-bind:key="station.id" class="dropdown-item" href="#">{{ station.name }}</a>
-              </div>
-          </div>
+              <label for="card-footer">Drop bike</label>
+            <div class="card-footer d-flex">
+              <select
+                required
+                class="form-control select rounded-1 white"
+                placeholder="Garage"
+                v-model="newStation"
+              >
+                <option value="type" disabled hidden>Station</option>
+                <option :name="i" v-for="(station, i) in stations" :key="station.id">
+                  {{ station.name }}
+                </option>
+              </select>
+
               <button
                 class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
                 @click="dropBike(bike.id)"
-              >
-                <i class="material-icons font-s2">check_circle</i>
+              >DROP
               </button>
             </div>
           </div>
@@ -93,6 +97,8 @@ export default defineComponent({
       isSidenavActive: false,
 			bikes: [],
       stations: [],
+      newStation: '',
+      stationId: '',
     };
   },
   created() {
@@ -124,14 +130,6 @@ export default defineComponent({
       this.id = res.data.userId;
       this.getBikesByUserId(this.id)
       this.getAllStation()
-      console.log('this.email')
-      console.log(this.email)
-      console.log('this.firstname')
-      console.log(this.firstname)
-      console.log('this.lastname')
-      console.log(this.lastname)
-      console.log('this.id')
-      console.log(this.id)
     })
     .catch((error) => {
       console.log('test 2')
@@ -148,15 +146,32 @@ export default defineComponent({
 		getBikesByUserId(userId) {
       console.log('userId: ' + userId);
       return Vue.axios.get('/api/bikes/my/' + userId).then((res) => {
+        console.log("res.data")
+        console.log(res.data);
         this.bikes = res.data;
+        console.log("this.bikes")
+        console.log(this.bikes);
       });
     },
-    dropBike(bikeId) {
+    AdropBike(bikeId) {
       return Vue.axios.post('/api/bikes/drop/' + bikeId).then((res) => {
         console.log("res")
         console.log(res)
         this.bikes = res.data;
       });
+    },
+    async dropBike(bikeId) {
+      await this.getStationIdByName(this.newStation)
+      const bike = {
+        id: bikeId,
+        station_id: this.stationId, // = await this.getStationIdByName(this.newStation)
+        user_id: '0'
+      };
+      console.log("bike");
+      console.log(bike);
+      return axios
+        .post('/api/bikes/editBike', bike)
+        .then(console.log('edit'));
     },
     getAllStation() {
       console.log('getAllStation');
@@ -164,6 +179,14 @@ export default defineComponent({
         this.stations = res.data;
         console.log(this.stations);
       });
+    },
+    async getStationIdByName(stationName) {
+      console.log("stationName: " + stationName)
+      await Vue.axios.get('/api/station/getId/' + stationName)
+      .then((el) => {
+        this.stationId = el.data[0].id
+        return el.data[0].id
+      })
     },
   }
 })

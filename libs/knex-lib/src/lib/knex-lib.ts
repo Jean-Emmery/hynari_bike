@@ -55,7 +55,7 @@ class KnexLib {
     return knex('station').select('*').where({ garage_id: id });
   }
   getGarageDb() {
-    return knex('garage').select('id');
+    return knex('garage').select('*');
   }
   getStationDb() {
     return knex('station').select('id');
@@ -79,7 +79,13 @@ class KnexLib {
   }
   editBikeDb(bike) {
     console.log('db' + bike.id);
-    return knex('bikes').where({ id: bike.id }).update(bike);
+    return knex('bikes').where({ id: bike.id }).update({
+      id: bike.id,
+      name: bike.name,
+      pictureUrl: bike.pictureUrl,
+      station_id: bike.station_id,
+      user_id: bike.user_id,
+    });
   }
   getBikeByIdDb(id) {
     return knex('bikes').select('*').where({ id: id });
@@ -125,7 +131,19 @@ class KnexLib {
       role: '1'
     })
   }
+  getStationIdByNameDb(stationName) {
+    return knex('station').select('id').where({name: stationName})
+  }
+  getGarageIdByNameDb(garageName) {
+    return knex('garage').select('id').where({name: garageName})
+  }
 
+  getStationByIdDb(id) {
+    return knex('station').select('*').where({ id: id });
+  }
+  getGarageByIdDb(id) {
+    return knex('garage').select('*').where({ id: id });
+  }
   deleteBikeDb(id) {
     return knex('bikes').where({ id: id }).del();
   }
@@ -133,8 +151,23 @@ class KnexLib {
     return knex('garage').where({ id: id }).del();
   }
   editStationDb(station) {
-    console.log('db' + station.id);
-    return knex('station').where({ id: station.id }).update(station);
+    console.log('station');
+    console.log(station);
+    return knex('station').where({ id: station.id }).update({
+      id: station.id,
+      capacityMax: station.capacityMax,
+      name: station.name,
+      garage_id: station.garage_id,
+    });
+  }
+  editGarageDb(garage) {
+    console.log('db' + garage.id);
+    return knex('garage').where({ id: garage.id }).update({
+      id: garage.id,
+      name: garage.name,
+      lat: garage.lat,
+      lng: garage.lng,
+    });
   }
   deleteStationDb(id) {
     return knex('station').where({ id: id }).del();

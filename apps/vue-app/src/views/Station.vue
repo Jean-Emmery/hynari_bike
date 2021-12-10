@@ -12,7 +12,7 @@
                 style="height: 276px"
               />
             </div>
-            <div class="card-header">{{ station.id }}</div>
+            <div class="card-header">{{ station.id }}<br>{{ station.name }}</div>
             <div class="card-content">
               Bike available : {{ station.capacityMax }}
             </div>

@@ -22,6 +22,27 @@
         }
       }
     },
+    "garage": {
+      "root": "libs/garage",
+      "sourceRoot": "libs/garage/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/garage/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/garage"],
+          "options": {
+            "jestConfig": "libs/garage/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "knex-lib": {
       "root": "libs/knex-lib",
       "sourceRoot": "libs/knex-lib/src",

@@ -82,7 +82,7 @@
           <div class="card-footer">
             <button
               class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
-              @click="editGarage(garage.id)"
+              @click="showGarage(garage.id)"
             >
               <i class="material-icons font-s2">edit</i>
             </button>
@@ -146,14 +146,14 @@ export default {
     showLongText() {
       this.showParagraph = !this.showParagraph;
     },
-    showGarage(id) {
-      this.$router.push({ path: '/editGarage/' + this.garages[id].id });
-    },
     getAllGarage() {
       return Vue.axios.get('/api/garage').then((res) => {
         this.garages = res.data;
         console.log(this.garages);
       });
+    },
+    showGarage(garageId) {
+      this.$router.push({ path: '/garage/show/' + garageId });
     },
     getAllBikes() {
       return Vue.axios.get('/api/garage/bikes').then((res) => {

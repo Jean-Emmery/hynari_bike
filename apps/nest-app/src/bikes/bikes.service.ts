@@ -18,8 +18,9 @@ export class BikesService {
     return k.addBikeDb(bike);
   }
   editBike(bike: IBike) {
-    console.log('service' + bike);
-    return k.editBikeDb(bike);
+    console.log('service')
+    console.log(bike)
+    return k.editBikeDb(bike)
   }
   pickUpBike(bike: IBike) {
     console.log('service' + bike);

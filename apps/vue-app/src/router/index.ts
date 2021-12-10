@@ -103,6 +103,12 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ '../views/AddBike.vue'),
   },
   {
+    path: '/garage/show/:id',
+    name: 'EditGarage',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/EditGarage.vue'),
+  },
+  {
     path: '/bikes/show/:id',
     name: 'EditBike',
     component: () =>

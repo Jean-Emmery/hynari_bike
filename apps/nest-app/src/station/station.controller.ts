@@ -16,8 +16,8 @@ export class StationController {
   getStationByGarageId(@Param() data) {
     return this.stationService.getStationByGarageId(data.id);
   }
-  @Post('editBike')
-  editBike(@Body() station: IStation) {
+  @Post('editStation')
+  editStation(@Body() station: IStation) {
     return this.stationService.editStation(station);
   }
   @Delete(':id')
@@ -27,5 +27,18 @@ export class StationController {
   @Post('new')
   addStation(@Body() station) {
     return this.stationService.addStation(station);
+  }
+  @Get('show/:id')
+  getStationById(@Param() data) {
+    return this.stationService.getStationById(data.id);
+  }
+  @Get('/stationList')
+  getStation() {
+    return this.stationService.getStation();
+  }
+
+  @Get('/getId/:name')
+  getStationIdByName(@Param() data) {
+    return this.stationService.getStationIdByName(data.name)
   }
 }

@@ -1,41 +1,45 @@
 <template>
   <div>
-    <div class="grix shadow-1" style="height: 100vh">
+    <div class="grix" style="height: 100vh">
       <form style="margin: 10%">
         <div class="grix xs1 sm2">
           <div class="form-field">
-            <label for="name">Name</label>
+            <label for="newName">Name</label>
             <input
               required="required"
               type="text"
-              id="name"
+              id="newName"
               class="form-control rounded-1 white"
               placeholder="Name"
-              v-model="bike.name"
+              v-model="newName"
             />
           </div>
           <div class="form-field">
-            <label for="pictureUrl">Picture URL</label>
+            <label for="newPictureUrl">Picture URL</label>
             <input
               required="required"
               type="text"
-              id="pictureUrl"
+              id="newPictureUrl"
               class="form-control rounded-1 white"
               placeholder="Picture URL"
-              v-model="bike.pictureUrl"
+              v-model="newPictureUrl"
             />
           </div>
           <div class="form-field d-flex fx-col">
-            <label for="garage">Garage</label>
+            <label for="newStation">Station</label>
             <select
               required
               class="form-control select rounded-1 white"
-              placeholder="Garage"
-              v-model="bike.garage"
+              placeholder="Station"
+              v-model="newStation"
             >
-              <option value="type" disabled hidden>Garage</option>
-              <option :name="i" v-for="(garage, i) in garages" :key="garage.id">
-                {{ garage.id }}
+              <option value="type" disabled hidden>station</option>
+              <option
+                :name="i"
+                v-for="(station, i) in stations"
+                :key="station.id"
+              >
+                {{ station.id }}
               </option>
             </select>
           </div>
@@ -44,9 +48,9 @@
           style="margin-top: 10px; background-color: #ff364f"
           class="btn txt-white rounded-2"
           type="button"
-          @click="editBike()"
+          @click="editBike(bikeId)"
         >
-          Edit
+          Edit Bike
         </button>
       </form>
     </div>
@@ -75,11 +79,14 @@ export default {
     return {
       bikeId: this.$route.params.id,
       bike: [],
-      garages: [],
+      stations: [],
+      newName: '',
+      newPictureUrl: '',
+      newStation: '',
     };
   },
   mounted() {
-    this.getGarage();
+    this.getStation();
     this.getBike(this.bikeId);
   },
   methods: {
@@ -88,17 +95,22 @@ export default {
         this.bike = res.data;
       });
     },
-    editBike() {
-      return axios.post('/api/bikes/editBike', this.bike).then((res) => {
-        console.log(this.bike);
-        console.log(res);
-        // router.push('/dashboard');
-      });
+    editBike(bikeId) {
+      const bike = {
+        id: bikeId,
+        name: this.newName,
+        pictureUrl: this.newPictureUrl,
+        station: this.newStation,
+      };
+      console.log(this.capacityMax);
+      console.log(bike);
+      return axios.post('/api/bikes/editBike', bike).then(console.log('edit'));
     },
-    getGarage() {
-      return Vue.axios.get('/api/garage/garageList').then((res) => {
+    getStation() {
+      return Vue.axios.get('/api/station').then((res) => {
         if (res.status === 200) {
-          this.garages = res.data;
+          console.log(res.data);
+          this.stations = res.data;
         } else {
           console.error(res);
         }
