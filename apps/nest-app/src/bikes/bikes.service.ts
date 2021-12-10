@@ -8,8 +8,11 @@ export class BikesService {
   getAllBikes(): any {
     return k.getAllBikesDb();
   }
-  async getBikesByGarageId(id) {
-    return k.getBikesByGarageIdDb(id);
+  // async getBikesByStationId(id) {
+  //   return k.getBikesByStationIdDb(id);
+  // }
+  async getBikesUpByStationId(id) {
+    return k.getBikesUpByStationIdDb(id);
   }
   addBike(bike) {
     return k.addBikeDb(bike);
@@ -24,5 +27,14 @@ export class BikesService {
   }
   getBikeById(id: string) {
     return k.getBikeByIdDb(id);
+  }
+  getBikesByUserId(id: string) {
+    return k.getBikesByUserIdDb(id);
+  }
+  async dropBike(id: string) {
+    return k.dropBikeDb(id);
+  }
+  async deleteBike(id) {
+    return k.deleteBikeDb(id);
   }
 }

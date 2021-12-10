@@ -120,7 +120,9 @@ let AppController = class AppController {
         });
     }
     getProfile(req) {
-        return req.user;
+        console.log("app.controller:profile:req.user");
+        console.log(req.user);
+        return this.usersService.profile(req.user);
     }
     register(req) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -195,6 +197,7 @@ const app_controller_1 = __webpack_require__(/*! ./app.controller */ "./apps/nes
 const app_service_1 = __webpack_require__(/*! ./app.service */ "./apps/nest-app/src/app/app.service.ts");
 const garage_module_1 = __webpack_require__(/*! ../garage/garage.module */ "./apps/nest-app/src/garage/garage.module.ts");
 const bikes_module_1 = __webpack_require__(/*! ../bikes/bikes.module */ "./apps/nest-app/src/bikes/bikes.module.ts");
+const station_module_1 = __webpack_require__(/*! ../station/station.module */ "./apps/nest-app/src/station/station.module.ts");
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
@@ -204,6 +207,7 @@ AppModule = tslib_1.__decorate([
             users_module_1.UsersModule,
             garage_module_1.GarageModule,
             bikes_module_1.BikesModule,
+            station_module_1.StationModule
         ],
         controllers: [
             app_controller_1.AppController
@@ -358,7 +362,7 @@ let AuthService = class AuthService {
             console.log("authService:login:user");
             console.log(user);
             const payload = {
-                id: user.userId,
+                id: user.id,
                 username: user.email,
                 first_name: user.firstname,
                 last_name: user.lastname,
@@ -467,8 +471,10 @@ let JwtStrategy = class JwtStrategy extends passport_1.PassportStrategy(passport
     }
     validate(payload) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("jwt.strategy:valide:payload");
+            console.log(payload);
             return {
-                userId: payload.sub,
+                userId: payload.id,
                 username: payload.username,
                 first_name: payload.first_name,
                 last_name: payload.last_name
@@ -576,22 +582,34 @@ let BikesController = class BikesController {
     getAllBikes() {
         return this.bikesService.getAllBikes();
     }
-    getBikesByGarageId(data) {
-        console.log('textdata');
-        console.log(data.id);
-        return this.bikesService.getBikesByGarageId(data.id);
+    getBikesUpByStationId(data) {
+        return this.bikesService.getBikesUpByStationId(data.id);
     }
-    addPet(bike) {
+    getBikesByUserId(data) {
+        return this.bikesService.getBikesByUserId(data.id);
+    }
+    dropBike(data) {
+        return this.bikesService.dropBike(data.id);
+    }
+    // @Get(':id')
+    // getBikesByStationId(@Param() data) {
+    //   return this.bikesService.getBikesByStationId(data.id);
+    // }
+    addBike(bike) {
         return this.bikesService.addBike(bike);
     }
     editBike(bike) {
         return this.bikesService.editBike(bike);
     }
     pickUpBike(bike) {
+        console.log("Post:PickupBike");
         return this.bikesService.pickUpBike(bike);
     }
     getBikeById(data) {
         return this.bikesService.getBikeById(data.id);
+    }
+    deleteBike(data) {
+        return this.bikesService.deleteBike(data.id);
     }
 };
 tslib_1.__decorate([
@@ -606,14 +624,28 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
-], BikesController.prototype, "getBikesByGarageId", null);
+], BikesController.prototype, "getBikesUpByStationId", null);
+tslib_1.__decorate([
+    common_1.Get('my/:id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "getBikesByUserId", null);
+tslib_1.__decorate([
+    common_1.Post('drop/:id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "dropBike", null);
 tslib_1.__decorate([
     common_1.Post('new'),
     tslib_1.__param(0, common_1.Body()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
-], BikesController.prototype, "addPet", null);
+], BikesController.prototype, "addBike", null);
 tslib_1.__decorate([
     common_1.Post('editBike'),
     tslib_1.__param(0, common_1.Body()),
@@ -635,6 +667,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
 ], BikesController.prototype, "getBikeById", null);
+tslib_1.__decorate([
+    common_1.Delete(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], BikesController.prototype, "deleteBike", null);
 BikesController = tslib_1.__decorate([
     common_1.Controller('bikes'),
     tslib_1.__metadata("design:paramtypes", [typeof (_c = typeof bikes_service_1.BikesService !== "undefined" && bikes_service_1.BikesService) === "function" ? _c : Object])
@@ -690,9 +729,12 @@ let BikesService = class BikesService {
     getAllBikes() {
         return knex_lib_1.k.getAllBikesDb();
     }
-    getBikesByGarageId(id) {
+    // async getBikesByStationId(id) {
+    //   return k.getBikesByStationIdDb(id);
+    // }
+    getBikesUpByStationId(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return knex_lib_1.k.getBikesByGarageIdDb(id);
+            return knex_lib_1.k.getBikesUpByStationIdDb(id);
         });
     }
     addBike(bike) {
@@ -708,6 +750,19 @@ let BikesService = class BikesService {
     }
     getBikeById(id) {
         return knex_lib_1.k.getBikeByIdDb(id);
+    }
+    getBikesByUserId(id) {
+        return knex_lib_1.k.getBikesByUserIdDb(id);
+    }
+    dropBike(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.dropBikeDb(id);
+        });
+    }
+    deleteBike(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.deleteBikeDb(id);
+        });
     }
 };
 BikesService = tslib_1.__decorate([
@@ -740,11 +795,18 @@ let GarageController = class GarageController {
     getAllGarage() {
         return this.garageService.getAllGarage();
     }
+    getAllBikes() {
+        console.log('contro');
+        return this.garageService.getAllBikes();
+    }
     getGarage() {
         return this.garageService.getGarage();
     }
     addGarage(garage) {
         return this.garageService.addGarage(garage);
+    }
+    deleteGarage(data) {
+        return this.garageService.deleteGarage(data.id);
     }
 };
 tslib_1.__decorate([
@@ -753,6 +815,12 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", void 0)
 ], GarageController.prototype, "getAllGarage", null);
+tslib_1.__decorate([
+    common_1.Get('bikes'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], GarageController.prototype, "getAllBikes", null);
 tslib_1.__decorate([
     common_1.Get('/garageList'),
     tslib_1.__metadata("design:type", Function),
@@ -766,6 +834,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
 ], GarageController.prototype, "addGarage", null);
+tslib_1.__decorate([
+    common_1.Delete(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], GarageController.prototype, "deleteGarage", null);
 GarageController = tslib_1.__decorate([
     common_1.Controller('garage'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof garage_service_1.GarageService !== "undefined" && garage_service_1.GarageService) === "function" ? _a : Object])
@@ -827,6 +902,14 @@ let GarageService = class GarageService {
     addGarage(garage) {
         return knex_lib_1.k.addGarageDb(garage);
     }
+    getAllBikes() {
+        return knex_lib_1.k.getAllBikesDb();
+    }
+    deleteGarage(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.deleteGarageDb(id);
+        });
+    }
 };
 GarageService = tslib_1.__decorate([
     common_1.Injectable()
@@ -867,6 +950,161 @@ function bootstrap() {
     });
 }
 bootstrap();
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/station/station.controller.ts":
+/*!*********************************************************!*\
+  !*** ./apps/nest-app/src/station/station.controller.ts ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StationController = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const station_1 = __webpack_require__(/*! @hynari_bike/station */ "./libs/station/src/index.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const station_service_1 = __webpack_require__(/*! ./station.service */ "./apps/nest-app/src/station/station.service.ts");
+let StationController = class StationController {
+    constructor(stationService) {
+        this.stationService = stationService;
+    }
+    getAllStation() {
+        console.log('station contro');
+        return this.stationService.getAllStation();
+    }
+    getStationByGarageId(data) {
+        return this.stationService.getStationByGarageId(data.id);
+    }
+    editBike(station) {
+        return this.stationService.editStation(station);
+    }
+    deleteBike(data) {
+        return this.stationService.deleteStation(data.id);
+    }
+    addStation(station) {
+        return this.stationService.addStation(station);
+    }
+};
+tslib_1.__decorate([
+    common_1.Get('/'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "getAllStation", null);
+tslib_1.__decorate([
+    common_1.Get(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "getStationByGarageId", null);
+tslib_1.__decorate([
+    common_1.Post('editBike'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof station_1.IStation !== "undefined" && station_1.IStation) === "function" ? _a : Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "editBike", null);
+tslib_1.__decorate([
+    common_1.Delete(':id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "deleteBike", null);
+tslib_1.__decorate([
+    common_1.Post('new'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], StationController.prototype, "addStation", null);
+StationController = tslib_1.__decorate([
+    common_1.Controller('station'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof station_service_1.StationService !== "undefined" && station_service_1.StationService) === "function" ? _b : Object])
+], StationController);
+exports.StationController = StationController;
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/station/station.module.ts":
+/*!*****************************************************!*\
+  !*** ./apps/nest-app/src/station/station.module.ts ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StationModule = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const station_controller_1 = __webpack_require__(/*! ./station.controller */ "./apps/nest-app/src/station/station.controller.ts");
+const station_service_1 = __webpack_require__(/*! ./station.service */ "./apps/nest-app/src/station/station.service.ts");
+let StationModule = class StationModule {
+};
+StationModule = tslib_1.__decorate([
+    common_1.Module({
+        controllers: [station_controller_1.StationController],
+        providers: [station_service_1.StationService],
+    })
+], StationModule);
+exports.StationModule = StationModule;
+
+
+/***/ }),
+
+/***/ "./apps/nest-app/src/station/station.service.ts":
+/*!******************************************************!*\
+  !*** ./apps/nest-app/src/station/station.service.ts ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StationService = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const knex_lib_1 = __webpack_require__(/*! @hynari_bike/knex-lib */ "./libs/knex-lib/src/index.ts");
+let StationService = class StationService {
+    getStationByGarageId(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.getStationByGarageIdDb(id);
+        });
+    }
+    getAllStation() {
+        return knex_lib_1.k.getAllStationDb();
+    }
+    editStation(station) {
+        console.log('service' + station);
+        return knex_lib_1.k.editBikeDb(station);
+    }
+    deleteStation(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return knex_lib_1.k.deleteStationDb(id);
+        });
+    }
+    addStation(station) {
+        return knex_lib_1.k.addStationDb(station);
+    }
+    getStation() {
+        return knex_lib_1.k.getStationDb();
+    }
+};
+StationService = tslib_1.__decorate([
+    common_1.Injectable()
+], StationService);
+exports.StationService = StationService;
 
 
 /***/ }),
@@ -959,6 +1197,13 @@ let UsersService = class UsersService {
             return;
         });
     }
+    profile(user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("users.services:profile:user");
+            console.log(user);
+            return user;
+        });
+    }
 };
 UsersService = tslib_1.__decorate([
     common_1.Injectable()
@@ -1025,6 +1270,7 @@ tslib_1.__exportStar(__webpack_require__(/*! ./lib/knex-lib */ "./libs/knex-lib/
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.k = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const options = {
     client: 'mysql2',
     connection: {
@@ -1042,23 +1288,66 @@ class KnexLib {
     getAllBikesDb() {
         return knex('bikes').select('*');
     }
-    getBikesByGarageIdDb(id) {
-        return knex('bikes').select('*').where({ garage_id: id });
+    getAllStationDb() {
+        return knex('station').select('*');
+    }
+    getUserByBikeIdDb(bikeId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            yield knex('bikes')
+                .where({ id: bikeId })
+                .then((row) => {
+                console.log("user_id: " + row[0].user_id);
+                return (row[0].user_id);
+            });
+        });
+    }
+    dropBikeDb(bikeId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("knex-lib:dropBikeDb");
+            console.log('bikeId: ' + bikeId);
+            const userId = this.getUserByBikeIdDb(bikeId);
+            console.log('userId: ' + userId);
+            yield knex('bikes')
+                .where({ id: bikeId })
+                .update({ user_id: '0' });
+            // pour l'instant userId est une promise, await devant le this.etc marche pas
+            //return this.getBikesByUserIdDb(userId)
+        });
+    }
+    // getBikesByStationIdDb(id) {
+    //   return knex('bikes').select('*').where({ station_id: id });
+    // }
+    getBikesUpByStationIdDb(id) {
+        return knex('bikes')
+            .select('*')
+            .where({ station_id: id, user_id: '0' });
+    }
+    getBikesByUserIdDb(id) {
+        console.log("knex-lib:getBikesByUserIdDb:id=" + id);
+        return knex('bikes').select('*').where({ user_id: id });
+    }
+    getStationByGarageIdDb(id) {
+        return knex('station').select('*').where({ garage_id: id });
     }
     getGarageDb() {
-        return knex('garage').select('id', 'name');
+        return knex('garage').select('id');
+    }
+    getStationDb() {
+        return knex('station').select('id');
     }
     addBikeDb(bike) {
         return knex('bikes').insert({
             name: bike.name,
-            garage_id: bike.garage,
             pictureUrl: bike.pictureUrl,
+            lat: bike.lat,
+            lng: bike.lng,
+            station_id: bike.station,
+            user_id: bike.user_id,
         });
     }
     addGarageDb(garage) {
         return knex('garage').insert({
             name: garage.name,
-            capacityMax: garage.capacityMax,
             lat: garage.lat,
             lng: garage.lng,
         });
@@ -1072,9 +1361,12 @@ class KnexLib {
     }
     pickUpBikeDb(bike) {
         console.log('db' + bike.id);
+        console.log('bike');
+        console.log(bike);
         return knex('bikes').where({ id: bike.id }).update({
             id: bike.id,
             user_id: bike.user_id,
+            station_id: bike.station_id,
         });
     }
     findUser(username) {
@@ -1105,8 +1397,58 @@ class KnexLib {
             role: '1'
         });
     }
+    deleteBikeDb(id) {
+        return knex('bikes').where({ id: id }).del();
+    }
+    deleteGarageDb(id) {
+        return knex('garage').where({ id: id }).del();
+    }
+    editStationDb(station) {
+        console.log('db' + station.id);
+        return knex('station').where({ id: station.id }).update(station);
+    }
+    deleteStationDb(id) {
+        return knex('station').where({ id: id }).del();
+    }
+    addStationDb(station) {
+        return knex('station').insert({
+            capacityMax: station.capacityMax,
+            name: station.name,
+            garage_id: station.garage,
+        });
+    }
 }
 exports.k = new KnexLib();
+
+
+/***/ }),
+
+/***/ "./libs/station/src/index.ts":
+/*!***********************************!*\
+  !*** ./libs/station/src/index.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+tslib_1.__exportStar(__webpack_require__(/*! ./lib/station */ "./libs/station/src/lib/station.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/station/src/lib/station.ts":
+/*!*****************************************!*\
+  !*** ./libs/station/src/lib/station.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),

@@ -1,5 +1,4 @@
 exports.up = function (knex) {
-  console.log('users');
   return knex.schema.createTable('users', (t) => {
     t.increments('id').unsigned().primary();
     t.string('firstname').notNull();

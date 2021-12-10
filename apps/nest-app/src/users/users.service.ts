@@ -50,4 +50,10 @@ export class UsersService {
     .catch((err) => console.log(err))
     return ;
   }
+
+  async profile(user: any) {
+    console.log("users.services:profile:user");
+    console.log(user);
+    return user;
+  }
 }

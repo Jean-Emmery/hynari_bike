@@ -17,23 +17,62 @@ class KnexLib {
   getAllBikesDb() {
     return knex('bikes').select('*');
   }
-  getBikesByGarageIdDb(id) {
-    return knex('bikes').select('*').where({ garage_id: id });
+  getAllStationDb() {
+    return knex('station').select('*');
+  }
+  async getUserByBikeIdDb(bikeId) {
+    await knex('bikes')
+    .where({id: bikeId})
+    .then((row) => {
+      console.log("user_id: " + row[0].user_id)
+      return (row[0].user_id);
+    })
+  }
+  async dropBikeDb(bikeId) {
+    console.log("knex-lib:dropBikeDb")
+    console.log('bikeId: ' + bikeId)
+    const userId = this.getUserByBikeIdDb(bikeId)
+    console.log('userId: ' + userId)
+    await knex('bikes')
+    .where({ id: bikeId })
+    .update({ user_id: '0' })
+    // pour l'instant userId est une promise, await devant le this.etc marche pas
+    //return this.getBikesByUserIdDb(userId)
+  }
+  // getBikesByStationIdDb(id) {
+  //   return knex('bikes').select('*').where({ station_id: id });
+  // }
+  getBikesUpByStationIdDb(id) {
+    return knex('bikes')
+    .select('*')
+    .where({ station_id: id, user_id: '0' });
+  }
+  getBikesByUserIdDb(id) {
+    console.log("knex-lib:getBikesByUserIdDb:id=" + id)
+    return knex('bikes').select('*').where({ user_id: id });
+  }
+  getStationByGarageIdDb(id) {
+    return knex('station').select('*').where({ garage_id: id });
   }
   getGarageDb() {
-    return knex('garage').select('id', 'name');
+    return knex('garage').select('id');
+  }
+  getStationDb() {
+    return knex('station').select('id');
   }
   addBikeDb(bike) {
     return knex('bikes').insert({
       name: bike.name,
-      garage_id: bike.garage,
       pictureUrl: bike.pictureUrl,
+      lat: bike.lat,
+      lng: bike.lng,
+      station_id: bike.station,
+      user_id: bike.user_id,
     });
   }
   addGarageDb(garage) {
     return knex('garage').insert({
       name: garage.name,
-      capacityMax: garage.capacityMax,
       lat: garage.lat,
       lng: garage.lng,
     });
@@ -47,9 +86,12 @@ class KnexLib {
   }
   pickUpBikeDb(bike) {
     console.log('db' + bike.id);
+    console.log('bike')
+    console.log(bike)
     return knex('bikes').where({ id: bike.id }).update({
       id: bike.id,
       user_id: bike.user_id,
+      station_id: bike.station_id,
     });
   }
 
@@ -81,6 +123,27 @@ class KnexLib {
       lastname: user.lastname,
       password: user.password,
       role: '1'
+    })
+  }
+
+  deleteBikeDb(id) {
+    return knex('bikes').where({ id: id }).del();
+  }
+  deleteGarageDb(id) {
+    return knex('garage').where({ id: id }).del();
+  }
+  editStationDb(station) {
+    console.log('db' + station.id);
+    return knex('station').where({ id: station.id }).update(station);
+  }
+  deleteStationDb(id) {
+    return knex('station').where({ id: id }).del();
+  }
+  addStationDb(station) {
+    return knex('station').insert({
+      capacityMax: station.capacityMax,
+      name: station.name,
+      garage_id: station.garage,
     });
   }
 }

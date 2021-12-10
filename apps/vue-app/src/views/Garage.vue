@@ -92,7 +92,7 @@ export default {
       this.showParagraph = !this.showParagraph;
     },
     showGarage(id) {
-      this.$router.push({ path: '/bikes/' + this.garages[id].id });
+      this.$router.push({ path: '/station/' + this.garages[id].id });
     },
     getAllGarage() {
       return Vue.axios.get('/api/garage').then((res) => {

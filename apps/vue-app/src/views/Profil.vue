@@ -1,4 +1,7 @@
 <template>
+<div>
+	<div class="d-flex fx-wrap" style="place-content: center;height:800px;">
+	    <div class="d-flex fx-wrap profil_vue">
 <div class="login-box">
 	<h2>Profile</h2>
   <form action="">
@@ -29,6 +32,46 @@
 
     <button @click="logout">LOGOUT</button>
 </div>
+</div>
+</div>
+  <div class="d-flex fx-wrap" style="place-content: center">
+    <div style="width: 80%" class="d-flex fx-wrap">
+		<h2>My bikes</h2>
+      <div class="grix xs3 gutter-xs4">
+        <div class="m-1" v-for="bike in bikes" v-bind:key="bike.id">
+          <div class="card shadow-3 rounded-3 grey light-4">
+            <div class="card-image">
+              <img
+                :src="bike.pictureUrl"
+                alt="logo"
+                class="responsive-media"
+                style="height: 276px"
+              />
+            </div>
+            <div class="card-header">{{ bike.name }}</div>
+            <div class="card-content"></div>
+            <div class="card-footer">
+              <div class="dropdown" id="example-dropdown" data-ax="dropdown">
+              <button type="button" class="btn shadow-1 rounded-1 primary dropdown-trigger">
+                Station
+              </button>
+              <div class="dropdown-content white shadow-1 rounded-1">
+                <a v-for="station in stations" v-bind:key="station.id" class="dropdown-item" href="#">{{ station.name }}</a>
+              </div>
+          </div>
+              <button
+                class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
+                @click="dropBike(bike.id)"
+              >
+                <i class="material-icons font-s2">check_circle</i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 </template>
 
 
@@ -36,6 +79,7 @@
 import { defineComponent } from '@vue/composition-api'
 import axios from 'axios';
 import router from '../router/index';
+import Vue from 'vue';
 
 export default defineComponent({
   data() {
@@ -45,7 +89,10 @@ export default defineComponent({
       password: '',
       email: '',
       lastname: '',
+      id: '',
       isSidenavActive: false,
+			bikes: [],
+      stations: [],
     };
   },
   created() {
@@ -74,12 +121,17 @@ export default defineComponent({
       this.email = res.data.username;
       this.firstname = res.data.first_name;
       this.lastname = res.data.last_name;
+      this.id = res.data.userId;
+      this.getBikesByUserId(this.id)
+      this.getAllStation()
       console.log('this.email')
       console.log(this.email)
       console.log('this.firstname')
       console.log(this.firstname)
       console.log('this.lastname')
       console.log(this.lastname)
+      console.log('this.id')
+      console.log(this.id)
     })
     .catch((error) => {
       console.log('test 2')
@@ -93,16 +145,39 @@ export default defineComponent({
       localStorage.removeItem('user')
       router.push({ name: 'Login' })
     },
+		getBikesByUserId(userId) {
+      console.log('userId: ' + userId);
+      return Vue.axios.get('/api/bikes/my/' + userId).then((res) => {
+        this.bikes = res.data;
+      });
+    },
+    dropBike(bikeId) {
+      return Vue.axios.post('/api/bikes/drop/' + bikeId).then((res) => {
+        console.log("res")
+        console.log(res)
+        this.bikes = res.data;
+      });
+    },
+    getAllStation() {
+      console.log('getAllStation');
+      return Vue.axios.get('/api/station/').then((res) => {
+        this.stations = res.data;
+        console.log(this.stations);
+      });
+    },
   }
 })
 </script>
 
 
 <style>
+
+.profil_vue .login-box {
+	left: unset;
+}
 .login-box {
 	position: absolute;
-	top: 50%;
-	left: 50%;
+	top: unset;
 	width: 400px;
 	padding: 40px;
 	transform: translate(-50%, -50%);

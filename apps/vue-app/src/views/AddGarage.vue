@@ -14,17 +14,6 @@
           />
         </div>
         <div class="form-field">
-          <label for="capacityMax">Capacity Max</label>
-          <input
-            required="required"
-            type="text"
-            id="capacityMax"
-            class="form-control rounded-1 white"
-            placeholder="Capacity Max"
-            v-model="capacityMax"
-          />
-        </div>
-        <div class="form-field">
           <label for="lat">Latitude</label>
           <input
             required="required"
@@ -49,11 +38,11 @@
       </div>
       <button
         style="margin-top: 10px; background-color: #ff364f"
-        class="btn rounded-2 txt-white"
+        class="btn rounded-2 text-white"
         type="button"
         @click="addGarage()"
       >
-        Add
+        New Garage
       </button>
     </form>
   </div>
@@ -68,7 +57,6 @@ export default {
   data() {
     return {
       name: '',
-      capacityMax: '',
       lat: '',
       lng: '',
     };
@@ -77,7 +65,6 @@ export default {
     addGarage() {
       const garage = {
         name: this.name,
-        capacityMax: this.capacityMax,
         lat: this.lat,
         lng: this.lng,
       };

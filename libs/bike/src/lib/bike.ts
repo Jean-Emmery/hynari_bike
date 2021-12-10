@@ -1,6 +1,8 @@
 export interface IBike {
   id: number;
   name: string;
+  station_id: number;
   pictureUrl: string;
-  garage_id: number;
+  lat: any;
+  lng: any;
 }

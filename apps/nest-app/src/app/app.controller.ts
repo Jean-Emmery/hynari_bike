@@ -26,7 +26,9 @@ export class AppController {
   @UseGuards(JwtAuthGuard) // Si l'utilisateur est connecté et a son token
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    console.log("app.controller:profile:req.user");
+    console.log(req.user);
+    return this.usersService.profile(req.user);
   }
 
   @Post('user/register')

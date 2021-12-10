@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GarageModule } from '../garage/garage.module';
 import { BikesModule } from '../bikes/bikes.module';
+import { StationModule } from '../station/station.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { BikesModule } from '../bikes/bikes.module';
     UsersModule,
     GarageModule,
     BikesModule,
+    StationModule
   ],
   controllers: [
     AppController

@@ -1,41 +1,39 @@
 CONFLICT (content): Merge conflict in workspace.json
-Auto-merging package.json
 
-CONFLICT (content): Merge conflict in package.json
-Auto-merging package-lock.json
+CONFLICT (modify/delete): seeds/01_garage.js deleted in
 
-CONFLICT (content): Merge conflict in package-lock.json
-CONFLICT (modify/delete): node_modules/.package-lock.json deleted in HEAD and modified in origin/jean. Version origin/jean of node_modules/.package-lock.json left in tree.
-CONFLICT (modify/delete): node_modules/.cache/nx/nxdeps.json deleted in HEAD and modified in origin/jean. Version origin/jean of node_modules/.cache/nx/nxdeps.json left in tree.
+HEAD and modified in origin/jean. Version origin/jean of seeds/01_garage.js left in tree.
+
+Auto-merging node_modules/.cache/nx/nxdeps.json
+
+CONFLICT (content): Merge conflict in node_modules/.cache/nx/nxdeps.json
+
+CONFLICT (rename/rename): Rename "migrations/004_role.js"->"migrations/005_role.js" in branch "HEAD" rename "migrations/004_role.js"->"migrations/001_role.js" in "origin/jean"
+
+CONFLICT (rename/delete): migrations/003_bikes.js deleted in HEAD and renamed to migrations/003_station.js in origin/jean. Version origin/jean of migrations/003_station.js left in tree.
+
 Auto-merging libs/knex-lib/src/lib/knex-lib.ts
-CONFLICT (add/add): Merge conflict in libs/knex-lib/src/lib/knex-lib.ts
-
-Auto-merging knexfile.js
-CONFLICT (add/add): Merge conflict in knexfile.js
+CONFLICT (content): Merge conflict in libs/knex-lib/src/lib/knex-lib.ts
 
 Auto-merging dist/apps/nest-app/main.js.map
 CONFLICT (content): Merge conflict in dist/apps/nest-app/main.js.map
 Auto-merging dist/apps/nest-app/main.js
+
 CONFLICT (content): Merge conflict in dist/apps/nest-app/main.js
 Auto-merging apps/vue-app/src/views/Bikes.vue
 
-CONFLICT (add/add): Merge conflict in apps/vue-app/src/views/Bikes.vue
-Auto-merging apps/vue-app/src/views/AddBike.vue
-
-CONFLICT (add/add): Merge conflict in apps/vue-app/src/views/AddBike.vue
+CONFLICT (content): Merge conflict in apps/vue-app/src/views/Bikes.vue
 Auto-merging apps/vue-app/src/router/index.ts
 
 CONFLICT (content): Merge conflict in apps/vue-app/src/router/index.ts
 Auto-merging apps/vue-app/src/main.ts
 
 CONFLICT (content): Merge conflict in apps/vue-app/src/main.ts
-Auto-merging apps/vue-app/src/App.vue
-
-CONFLICT (content): Merge conflict in apps/vue-app/src/App.vue
 Auto-merging apps/nest-app/src/bikes/bikes.service.ts
-CONFLICT (add/add): Merge conflict in apps/nest-app/src/bikes/bikes.service.ts
-Auto-merging apps/nest-app/src/app/app.module.ts
+Auto-merging apps/nest-app/src/bikes/bikes.controller.tsAuto-merging apps/nest-app/src/app/app.module.ts
 CONFLICT (content): Merge conflict in apps/nest-app/src/app/app.module.ts
+
 warning: inexact rename detection was skipped due to too many files.
-warning: you may want to set your merge.renamelimit variable to at least 57700 and retry the command.
+warning: you may want to set your merge.renamelimit variable to at least 57701 and retry the command.
 Automatic merge failed; fix conflicts and then commit the result.
+PS C:\Users\romai\Documents\Ynov\MASTER_1\WEB FULL STACK\hynari_bike>

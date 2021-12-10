@@ -1,17 +1,7 @@
 <template>
   <div class="d-flex fx-wrap" style="place-content: center">
-    <div style="width: 100%">
-      <button
-        style="background-color: #ff364f; margin-top: 7%"
-        class="btn rounded-2 mb-5 txt-white"
-        type="button"
-        @click="addPet()">
-        Ajouter un animal
-      </button>
-    </div>
-
     <div style="width: 80%" class="d-flex fx-wrap">
-      <div class="grix xs4 gutter-xs4">
+      <div class="grix xs3 gutter-xs4">
         <div class="m-1" v-for="bike in bikes" v-bind:key="bike.id">
           <div class="card shadow-3 rounded-3 grey light-4">
             <div class="card-image">
@@ -23,10 +13,7 @@
               />
             </div>
             <div class="card-header">{{ bike.name }}</div>
-            <div
-              class="card-content"
-              style="height: 200px; overflow-y: scroll"
-            ></div>
+            <div class="card-content"></div>
             <div class="card-footer">
               <button
                 class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
@@ -62,6 +49,8 @@ input {
 <script>
 import Vue from 'vue';
 import router from '../router';
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -73,8 +62,6 @@ export default {
     };
   },
   mounted() {
-    this.getBikesByGarageId(this.garageId);
-
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       console.log("user found")
@@ -82,6 +69,8 @@ export default {
     } else {
       console.log("user not found")
     }
+    this.getBikesUpByStationId(this.stationId);
+    //getBikesUpByStationId(this.stationId);
   },
   methods: {
     // getAllBikes() {
@@ -89,9 +78,17 @@ export default {
     //     this.bikes = res.data;
     //   });
     // },
-    getBikesByGarageId(garageId) {
-      console.log('garageId' + garageId);
-      return Vue.axios.get('/api/bikes/' + garageId).then((res) => {
+    // getBikesByStationId(stationId) {
+    //   console.log('stationId' + stationId);
+    //   return Vue.axios.get('/api/bikes/' + stationId).then((res) => {
+    //     this.bikes = res.data;
+    //   });
+    // },
+    getBikesUpByStationId(stationId) {
+      console.log('stationId' + stationId);
+      return Vue.axios.get('/api/bikes/' + stationId).then((res) => {
+        console.log("res.data")
+        console.log(res.data);
         this.bikes = res.data;
       });
     },
@@ -102,6 +99,7 @@ export default {
       const bike = {
         id: bikeId,
         user_id: this.user.user.id,
+        station_id: '0',
       };
       console.log(bike);
 

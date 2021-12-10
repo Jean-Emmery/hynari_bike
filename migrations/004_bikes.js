@@ -11,10 +11,10 @@ exports.up = function (knex) {
     //   .references('users.id')
     //   .onUpdate('cascade')
     //   .onDelete('cascade');
-    t.foreign('station_id')
-      .references('station.id')
-      .onUpdate('cascade')
-      .onDelete('cascade');
+    // t.foreign('station_id')
+    //   .references('station.id')
+    //   .onUpdate('cascade')
+    //   .onDelete('cascade');
   });
 };
 
