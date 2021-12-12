@@ -3,7 +3,7 @@ const options = {
   connection: {
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: '',
     database: 'hynari_bike',
   },
 };

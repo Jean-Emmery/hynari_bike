@@ -10,15 +10,15 @@
         </p>
         <p>2 GARAGE {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
               @click="showGarage(garage.id)"
+        :options="mapOptions"
+        @update:center="centerUpdate"
+        @update:zoom="zoomUpdate"
       </div> -->
       <l-map
         v-if="showMap"
         :zoom="zoom"
         :center="center"
-        :options="mapOptions"
-        ref="map"
-        @update:center="centerUpdate"
-        @update:zoom="zoomUpdate"
+
       >
         <div v-if="garages">
           <div v-for="garage in garages" :key="garage.id">
@@ -60,6 +60,7 @@
             </l-marker>
           </div>
         </div>
+
       </l-map>
     </div>
   </div>
@@ -84,15 +85,18 @@ export default {
       myIcon: icon({
         iconUrl: "https://cdn-icons-png.flaticon.com/512/565/565350.png",
         iconSize: [32, 37],
-        iconAnchor: [43.667,1.43333]
+        iconAnchor: [16, 37]
       }),
       user: {},
       garages: [],
+      bikes: [],
       zoom: 13,
       center: latLng(43.60579000000007, 1.448630000000037),
+
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        
       currentZoom: 11.5,
       currentCenter: latLng(47.41322, -1.219482),
       showParagraph: false,
@@ -103,6 +107,7 @@ export default {
       userId: '',
       staticAnchor: [16, 37],
       iconSize: 64,
+      bike_headline: "Vélo",
     };
   },
   computed: {
@@ -118,21 +123,23 @@ export default {
     if (user.user != null) {
       console.log(user.user)
       this.userId = user.user.id
+    this.getBikesByUserId();
     }
     this.getAllGarage();
-    this.getBikesByUserId();
   },
   methods: {
     showInfo(bike) {
       console.log("showInfo")
       console.log(bike)
     },
+
     zoomUpdate(zoom) {
-      this.currentZoom = zoom;
+      this.zoom = zoom;
     },
     centerUpdate(center) {
-      this.currentCenter = center;
+      this.center = center;
     },
+
     showLongText() {
       this.showParagraph = !this.showParagraph;
     },
@@ -141,6 +148,7 @@ export default {
       this.$router.push({ path: '/station/' + this.garages[id].id });
     },
     getAllGarage() {
+    console.log("getAllGarage()")
       return Vue.axios.get('/api/garage').then((res) => {
         this.garages = res.data;
       });
@@ -148,7 +156,10 @@ export default {
     getBikesByUserId() {
       console.log('userId: ' + this.userId); // marchze
       return Vue.axios.get('/api/bikes/my/' + this.userId).then((res) => { //donc erreur ici
+      console.log(res)
         this.bikes = res.data[0];
+        console.log("this.res.data[0]")
+        console.log( res.data);
         console.log("this.bikes")
         console.log(this.bikes);
       });
@@ -158,10 +169,15 @@ export default {
 </script>
 
 <style>
- .map {
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   overflow :hidden
- }
+.someExtraClass {
+  background-color: aqua;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 0 20px 20px 20px;
+  box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+}
 </style>
