@@ -9,13 +9,14 @@
           2 GARAGE {{ garages[1].lat }}, {{ garages[1].lng }}
         </p>
         <p>2 GARAGE {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
+              @click="showGarage(garage.id)"
       </div> -->
       <l-map
         v-if="showMap"
         :zoom="zoom"
         :center="center"
         :options="mapOptions"
-        style="height: 80%"
+        ref="map"
         @update:center="centerUpdate"
         @update:zoom="zoomUpdate"
       >
@@ -26,7 +27,7 @@
               :lat-lng="garages[garage.id]"
               @click="showGarage(garage.id)"
             >
-              <l-tooltip :options="{ permanent: true, interactive: true }">
+              <l-tooltip>
                 <div @click="showGarage(garage.id)">
                   <span v-if="garages[garage.id]">{{
                     garages[garage.id].name
@@ -36,14 +37,26 @@
             </l-marker>
           </div>
         </div>
+<l-marker :lat-lng="markerLatLng">
+<l-tooltip>Hello!</l-tooltip>
+</l-marker>
         <div v-if="bikes">
           <div v-for="bike in bikes" :key="bike.id">
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker
               :icon="myIcon"
-              :lat-lng="[43.667,1.43333]"
-              @click="showGarage(bike.id)"
+              :lat-lng="[43.604652,	1.444209]"
+              @click="showInfo(bike)"
             >
+            <l-icon
+              :icon-anchor="staticAnchor"
+              class-name="someExtraClass"
+            >
+              <div class="bike_headline">
+                {{ bike_headline }}
+              </div>
+              <img src="https://cdn-icons-png.flaticon.com/512/565/565350.png">
+            </l-icon>
             </l-marker>
           </div>
         </div>
@@ -62,14 +75,16 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LTooltip
+    LTooltip,
+    LIcon
   },
   data() {
     return {
+      markerLatLng: [	43.579445, 	1.403195],
       myIcon: icon({
         iconUrl: "https://cdn-icons-png.flaticon.com/512/565/565350.png",
         iconSize: [32, 37],
-        iconAnchor: [16, 37]
+        iconAnchor: [43.667,1.43333]
       }),
       user: {},
       garages: [],
@@ -86,7 +101,17 @@ export default {
       },
       showMap: true,
       userId: '',
+      staticAnchor: [16, 37],
+      iconSize: 64,
     };
+  },
+  computed: {
+    dynamicSize() {
+      return [this.iconSize, this.iconSize * 1.15];
+    },
+    dynamicAnchor() {
+      return [this.iconSize / 2, this.iconSize * 1.15];
+    }
   },
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -98,6 +123,10 @@ export default {
     this.getBikesByUserId();
   },
   methods: {
+    showInfo(bike) {
+      console.log("showInfo")
+      console.log(bike)
+    },
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
     },
@@ -108,6 +137,7 @@ export default {
       this.showParagraph = !this.showParagraph;
     },
     showGarage(id) {
+      console.log("showGarage")
       this.$router.push({ path: '/station/' + this.garages[id].id });
     },
     getAllGarage() {
@@ -118,8 +148,6 @@ export default {
     getBikesByUserId() {
       console.log('userId: ' + this.userId); // marchze
       return Vue.axios.get('/api/bikes/my/' + this.userId).then((res) => { //donc erreur ici
-        console.log("res.data") //marche
-        console.log(res.data[0]);
         this.bikes = res.data[0];
         console.log("this.bikes")
         console.log(this.bikes);
@@ -128,3 +156,12 @@ export default {
   },
 };
 </script>
+
+<style>
+ .map {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   overflow :hidden
+ }
+</style>
