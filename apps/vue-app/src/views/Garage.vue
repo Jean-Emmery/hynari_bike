@@ -45,7 +45,7 @@
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker
               :icon="myIcon"
-              :lat-lng="[43.604652,	1.444209]"
+              :lat-lng="[bikes.lat,bikes.lng]"
               @click="showInfo(bike)"
             >
             <l-icon
@@ -151,6 +151,7 @@ export default {
     console.log("getAllGarage()")
       return Vue.axios.get('/api/garage').then((res) => {
         this.garages = res.data;
+        console.log(this.garages)
       });
     },
     getBikesByUserId() {
@@ -176,8 +177,12 @@ export default {
   border-radius: 0 20px 20px 20px;
   box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
-  width: auto !important;
-  height: auto !important;
+  width: 12px !important;
+  height: 12px !important;
   margin: 0 !important;
+}
+.someExtraClass img {
+  width: 100%;
+  height: 100%;
 }
 </style>
