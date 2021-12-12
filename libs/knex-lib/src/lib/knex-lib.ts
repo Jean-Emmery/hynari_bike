@@ -3,7 +3,7 @@ const options = {
   connection: {
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: '',
     database: 'hynari_bike',
   },
 };
@@ -22,20 +22,18 @@ class KnexLib {
   }
   async getUserByBikeIdDb(bikeId) {
     await knex('bikes')
-    .where({id: bikeId})
-    .then((row) => {
-      console.log("user_id: " + row[0].user_id)
-      return (row[0].user_id);
-    })
+      .where({ id: bikeId })
+      .then((row) => {
+        console.log('user_id: ' + row[0].user_id);
+        return row[0].user_id;
+      });
   }
   async dropBikeDb(bikeId) {
-    console.log("knex-lib:dropBikeDb")
-    console.log('bikeId: ' + bikeId)
-    const userId = this.getUserByBikeIdDb(bikeId)
-    console.log('userId: ' + userId)
-    await knex('bikes')
-    .where({ id: bikeId })
-    .update({ user_id: '0' })
+    console.log('knex-lib:dropBikeDb');
+    console.log('bikeId: ' + bikeId);
+    const userId = this.getUserByBikeIdDb(bikeId);
+    console.log('userId: ' + userId);
+    await knex('bikes').where({ id: bikeId }).update({ user_id: '0' });
     // pour l'instant userId est une promise, await devant le this.etc marche pas
     //return this.getBikesByUserIdDb(userId)
   }
@@ -43,12 +41,10 @@ class KnexLib {
   //   return knex('bikes').select('*').where({ station_id: id });
   // }
   getBikesUpByStationIdDb(id) {
-    return knex('bikes')
-    .select('*')
-    .where({ station_id: id, user_id: '0' });
+    return knex('bikes').select('*').where({ station_id: id, user_id: '0' });
   }
   getBikesByUserIdDb(id) {
-    console.log("knex-lib:getBikesByUserIdDb:id=" + id)
+    console.log('knex-lib:getBikesByUserIdDb:id=' + id);
     return knex('bikes').select('*').where({ user_id: id });
   }
   getStationByGarageIdDb(id) {
@@ -92,8 +88,8 @@ class KnexLib {
   }
   pickUpBikeDb(bike) {
     console.log('db' + bike.id);
-    console.log('bike')
-    console.log(bike)
+    console.log('bike');
+    console.log(bike);
     return knex('bikes').where({ id: bike.id }).update({
       id: bike.id,
       user_id: bike.user_id,
@@ -102,20 +98,20 @@ class KnexLib {
   }
 
   findUser(username: string) {
-    console.log("knexlib:findUser:username")
-    console.log(username)
+    console.log('knexlib:findUser:username');
+    console.log(username);
     return knex('users')
-    .select('email', 'firstname', 'lastname', 'password', 'role', 'id')
-    .where({
-      email: username,
-    })
-    .then((el) => {
-      console.log("el")
-      console.log(el[0])
-      return (el[0]);
-    })
-    .catch((err) => console.log(err))
-    return null
+      .select('email', 'firstname', 'lastname', 'password', 'role', 'id')
+      .where({
+        email: username,
+      })
+      .then((el) => {
+        console.log('el');
+        console.log(el[0]);
+        return el[0];
+      })
+      .catch((err) => console.log(err));
+    return null;
   }
 
   findAll() {
@@ -128,14 +124,14 @@ class KnexLib {
       firstname: user.firstname,
       lastname: user.lastname,
       password: user.password,
-      role: '1'
-    })
+      role: '1',
+    });
   }
   getStationIdByNameDb(stationName) {
-    return knex('station').select('id').where({name: stationName})
+    return knex('station').select('id').where({ name: stationName });
   }
   getGarageIdByNameDb(garageName) {
-    return knex('garage').select('id').where({name: garageName})
+    return knex('garage').select('id').where({ name: garageName });
   }
 
   getStationByIdDb(id) {

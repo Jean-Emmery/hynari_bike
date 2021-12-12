@@ -4,7 +4,7 @@ import Home from '../views/Home.vue';
 // import Login from '../components/Login.vue';
 // import Create from '../components/customer/Create.vue';
 // import Edit from '../components/customer/Edit.vue';
-import Bike from '../views/Bike.vue'
+import Bike from '../views/Bike.vue';
 
 Vue.use(VueRouter);
 
@@ -43,6 +43,12 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
   },
   {
+    path: '/dashboardAdmin',
+    name: 'DashboardAdmin',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/DashboardAdmin.vue'),
+  },
+  {
     path: '/garage',
     name: 'Garage',
     // route level code-splitting
@@ -69,8 +75,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/profil',
     name: 'Profil',
-    component: () =>
-      import('../views/Profil.vue'),
+    component: () => import('../views/Profil.vue'),
   },
   {
     path: '/addBike',
@@ -158,42 +163,54 @@ const router = new VueRouter({
   routes,
 });
 
-
 router.beforeEach((to, from, next) => {
-  let user = JSON.parse(localStorage.getItem('user') || '{}')
+  let user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  if (from.name !== 'Login' && from.name !== 'Register' && to.name !== 'Login' && to.name !== 'Register' && user.access_token == null) {
-    router.push({ name: 'Login'})
+  if (
+    from.name !== 'Login' &&
+    from.name !== 'Register' &&
+    to.name !== 'Login' &&
+    to.name !== 'Register' &&
+    user.access_token == null
+  ) {
+    router.push({ name: 'Login' });
     //next()
-  } else if ((from.name == 'Login' || from.name == 'Register') && user.access_token == null) {
+  } else if (
+    (from.name == 'Login' || from.name == 'Register') &&
+    user.access_token == null
+  ) {
     if (to.name === 'Register' || to.name === 'Login') {
-      next()
+      next();
     }
-    next(false)
+    next(false);
   } else if (user && user.user) {
     if (user.user.role === '1') {
       if (to.name === 'Dashboard') {
-        next(false)
+        next(false);
       } else {
-        next()
+        next();
       }
     }
     if (user.user.role === '2') {
-      if (to.name === 'Register' || to.name === 'Garage' || to.name === 'Login') {
-        next(false)
+      if (
+        to.name === 'Register' ||
+        to.name === 'Garage' ||
+        to.name === 'Login'
+      ) {
+        next(false);
       } else {
-        next()
+        next();
       }
     } else if (user.user.role === '3') {
       if (to.name === 'Register' || to.name === 'Login') {
-        next(false)
+        next(false);
       } else {
-        next()
+        next();
       }
     }
   } else {
-    next()
+    next();
   }
-})
+});
 
 export default router;

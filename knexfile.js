@@ -5,7 +5,7 @@ module.exports = {
       host: 'localhost',
       database: 'hynari_bike',
       user: 'root',
-      password: 'root',
+      password: '',
       port: 3306,
       charset: 'utf8',
     },
