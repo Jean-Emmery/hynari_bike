@@ -147,7 +147,7 @@ let AppController = class AppController {
     deleteUser(data) {
         console.log("app.controller:DeleteUser()");
         console.log(data);
-        return this.usersService.delete(data);
+        return this.usersService.delete(data.id);
     }
 };
 tslib_1.__decorate([
@@ -1552,10 +1552,10 @@ class KnexLib {
     findAll() {
         return knex('users');
     }
-    deleteUserDb(userId) {
+    deleteUserDb(id) {
         console.log("knex-lib:deleteUSerDb:userId");
-        console.log(userId);
-        knex('users').where({ id: userId }).del();
+        console.log(id);
+        return knex('users').where({ id: id }).del();
     }
     registerUser(user) {
         if (user && user.role !== 3) {
@@ -1588,6 +1588,8 @@ class KnexLib {
         return knex('garage').select('*').where({ id: id });
     }
     deleteBikeDb(id) {
+        console.log("knex-lib:deleteBikeDb:id");
+        console.log(id);
         return knex('bikes').where({ id: id }).del();
     }
     deleteGarageDb(id) {

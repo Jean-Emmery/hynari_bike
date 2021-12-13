@@ -126,10 +126,10 @@ class KnexLib {
   findAll() {
     return knex('users');
   }
-  deleteUserDb(userId: number) {
+  deleteUserDb(id) {
     console.log("knex-lib:deleteUSerDb:userId")
-    console.log(userId)
-    knex('users').where({id: userId}).del()
+    console.log(id)
+    return knex('users').where({id: id}).del()
   }
 
   registerUser(user: any) {
@@ -164,6 +164,8 @@ class KnexLib {
     return knex('garage').select('*').where({ id: id });
   }
   deleteBikeDb(id) {
+    console.log("knex-lib:deleteBikeDb:id")
+    console.log(id)
     return knex('bikes').where({ id: id }).del();
   }
   deleteGarageDb(id) {

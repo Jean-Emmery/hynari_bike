@@ -55,6 +55,6 @@ export class AppController {
   deleteUser(@Param() data) {
     console.log("app.controller:DeleteUser()")
     console.log(data)
-    return this.usersService.delete(data);
+    return this.usersService.delete(data.id);
   }
 }
