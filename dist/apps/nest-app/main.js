@@ -138,6 +138,11 @@ let AppController = class AppController {
             return this.usersService.findAll();
         });
     }
+    addNew(user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.usersService.addNew(user);
+        });
+    }
 };
 tslib_1.__decorate([
     common_1.UseGuards(local_auth_guard_1.LocalAuthGuard),
@@ -169,6 +174,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", Promise)
 ], AppController.prototype, "findAll", null);
+tslib_1.__decorate([
+    common_1.Post('user/new'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], AppController.prototype, "addNew", null);
 AppController = tslib_1.__decorate([
     common_1.Controller(),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object, typeof (_b = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _b : Object])
@@ -1252,6 +1264,25 @@ let UsersService = class UsersService {
     // async findOne(username: string): Promise<User | undefined> {
     //   return this.users.find(user => user.username === username);
     // }
+    getAll() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("usersService:findAll");
+            const users = yield knex_lib_1.k.getUsers();
+            console.log("usersService:findOne:user");
+            console.log(users);
+            return users;
+        });
+    }
+    addNew(user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("users.service:user");
+            console.log(user);
+            knex_lib_1.k.registerUser(user)
+                .then((el) => console.log(el))
+                .catch((err) => console.log(err));
+            return;
+        });
+    }
     findOne(username) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             console.log("usersService:findOne:username");
@@ -1432,6 +1463,17 @@ class KnexLib {
             .select('*')
             .where({ station_id: id, user_id: '0' });
     }
+    getUsers() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("knex-lib:getUsers");
+            yield knex('users').select('*')
+                .then((rows) => {
+                console.log("knex-lib:getUsers:rows");
+                console.log(rows);
+                return rows;
+            });
+        });
+    }
     getBikesByUserIdDb(id) {
         console.log("knex-lib:getBikesByUserIdDb:id=" + id);
         return knex('bikes').select('*').where({ user_id: id });
@@ -1505,6 +1547,15 @@ class KnexLib {
         return knex('users');
     }
     registerUser(user) {
+        if (user && user.role !== 3) {
+            return knex('users').insert({
+                email: user.email,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                password: user.password,
+                role: user.role
+            });
+        }
         return knex('users').insert({
             email: user.username,
             firstname: user.firstname,

@@ -29,6 +29,23 @@ export class UsersService {
   //   return this.users.find(user => user.username === username);
   // }
 
+  async getAll() {
+    console.log("usersService:findAll")
+    const users = await k.getUsers()
+    console.log("usersService:findOne:user")
+    console.log(users)
+    return users;
+  }
+
+  async addNew(user: any) {
+    console.log("users.service:user")
+    console.log(user)
+    k.registerUser(user)
+    .then((el) => console.log(el))
+    .catch((err) => console.log(err))
+    return ;
+  }
+
   async findOne(username: string): Promise<User | undefined> {
     console.log("usersService:findOne:username")
     console.log(username)

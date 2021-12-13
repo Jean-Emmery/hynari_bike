@@ -47,6 +47,16 @@ class KnexLib {
     .select('*')
     .where({ station_id: id, user_id: '0' });
   }
+  async getUsers() {
+    console.log("knex-lib:getUsers")
+    await knex('users').select('*')
+    .then((rows) => {
+      console.log("knex-lib:getUsers:rows")
+      console.log(rows)
+      return rows
+    })
+
+  }
   getBikesByUserIdDb(id) {
     console.log("knex-lib:getBikesByUserIdDb:id=" + id)
     return knex('bikes').select('*').where({ user_id: id });
@@ -123,13 +133,22 @@ class KnexLib {
   }
 
   registerUser(user: any) {
-    return knex('users').insert({
+    if (user && user.role !== 3) {
+      return knex('users').insert({
+         email: user.email,
+         firstname: user.firstname,
+         lastname: user.lastname,
+         password: user.password,
+         role: user.role
+       });
+    }
+   return knex('users').insert({
       email: user.username,
       firstname: user.firstname,
       lastname: user.lastname,
       password: user.password,
       role: '1'
-    })
+    });
   }
   getStationIdByNameDb(stationName) {
     return knex('station').select('id').where({name: stationName})

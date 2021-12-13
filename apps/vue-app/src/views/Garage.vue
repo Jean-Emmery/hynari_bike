@@ -10,15 +10,15 @@
         </p>
         <p>2 GARAGE {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
               @click="showGarage(garage.id)"
+        :options="mapOptions"
+        @update:center="centerUpdate"
+        @update:zoom="zoomUpdate"
       </div> -->
       <l-map
         v-if="showMap"
         :zoom="zoom"
         :center="center"
-        :options="mapOptions"
-        ref="map"
-        @update:center="centerUpdate"
-        @update:zoom="zoomUpdate"
+
       >
         <div v-if="garages">
           <div v-for="garage in garages" :key="garage.id">
@@ -28,7 +28,7 @@
               @click="showGarage(garage.id)"
             >
               <l-tooltip>
-                <div @click="showGarage(garage.id)">
+                <div>
                   <span v-if="garages[garage.id]">{{
                     garages[garage.id].name
                   }}</span>
@@ -37,29 +37,24 @@
             </l-marker>
           </div>
         </div>
-<l-marker :lat-lng="markerLatLng">
-<l-tooltip>Hello!</l-tooltip>
-</l-marker>
         <div v-if="bikes">
           <div v-for="bike in bikes" :key="bike.id">
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker
               :icon="myIcon"
-              :lat-lng="[43.604652,	1.444209]"
-              @click="showInfo(bike)"
+              :lat-lng="[bikes.lat,bikes.lng]"
+              @click="showInfo(bikes)"
             >
             <l-icon
               :icon-anchor="staticAnchor"
               class-name="someExtraClass"
             >
-              <div class="bike_headline">
-                {{ bike_headline }}
-              </div>
-              <img src="https://cdn-icons-png.flaticon.com/512/565/565350.png">
+              <img class="bike_logo" src="https://cdn-icons-png.flaticon.com/512/565/565350.png">
             </l-icon>
             </l-marker>
           </div>
         </div>
+
       </l-map>
     </div>
   </div>
@@ -80,19 +75,21 @@ export default {
   },
   data() {
     return {
-      markerLatLng: [	43.579445, 	1.403195],
       myIcon: icon({
         iconUrl: "https://cdn-icons-png.flaticon.com/512/565/565350.png",
-        iconSize: [32, 37],
-        iconAnchor: [43.667,1.43333]
+        iconSize: [32, 64],
+        iconAnchor: [16, 37]
       }),
       user: {},
       garages: [],
+      bikes: [],
       zoom: 13,
       center: latLng(43.60579000000007, 1.448630000000037),
+
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+
       currentZoom: 11.5,
       currentCenter: latLng(47.41322, -1.219482),
       showParagraph: false,
@@ -103,6 +100,7 @@ export default {
       userId: '',
       staticAnchor: [16, 37],
       iconSize: 64,
+      bike_headline: "",
     };
   },
   computed: {
@@ -118,37 +116,48 @@ export default {
     if (user.user != null) {
       console.log(user.user)
       this.userId = user.user.id
+    this.getBikesByUserId();
     }
     this.getAllGarage();
-    this.getBikesByUserId();
   },
   methods: {
     showInfo(bike) {
       console.log("showInfo")
       console.log(bike)
     },
+
     zoomUpdate(zoom) {
-      this.currentZoom = zoom;
+      this.zoom = zoom;
     },
     centerUpdate(center) {
-      this.currentCenter = center;
+      this.center = center;
     },
+
     showLongText() {
       this.showParagraph = !this.showParagraph;
     },
     showGarage(id) {
       console.log("showGarage")
+      console.log(this.garages)
       this.$router.push({ path: '/station/' + this.garages[id].id });
     },
     getAllGarage() {
+    console.log("getAllGarage()")
       return Vue.axios.get('/api/garage').then((res) => {
+        console.log("res")
+        console.log(res)
         this.garages = res.data;
+        console.log("this.garages")
+        console.log(this.garages)
       });
     },
     getBikesByUserId() {
       console.log('userId: ' + this.userId); // marchze
       return Vue.axios.get('/api/bikes/my/' + this.userId).then((res) => { //donc erreur ici
+      console.log(res)
         this.bikes = res.data[0];
+        console.log("this.res.data[0]")
+        console.log( res.data);
         console.log("this.bikes")
         console.log(this.bikes);
       });
@@ -158,10 +167,19 @@ export default {
 </script>
 
 <style>
- .map {
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   overflow :hidden
- }
+.someExtraClass {
+  border-radius: 0 20px 20px 20px;
+  font-size: 15px;
+  color: black;
+  font-weight: bold;
+  text-decoration:
+}
+.bike_logo {
+  width: 20px;
+  height: 20px;
+}
+.bike_headline {
+    background-color: #ffffff29;
+    width: 70px;
+}
 </style>

@@ -11,6 +11,10 @@
     <h1>STATIONS :</h1>
     <button class="btn blue" @click="showStation">Show List</button>
     <button class="btn blue" @click="addStation">Add Station</button>
+
+    <h1>USERS :</h1>
+    <button class="btn blue" @click="showUser">Show List</button>
+    <button class="btn blue" @click="addUser">Add User</button>
   </div>
 </template>
 <script>
@@ -36,6 +40,12 @@ export default {
     },
     addStation() {
       this.$router.push({ path: '/addStation' });
+    },
+    showUser() {
+      this.$router.push({ path: '/gestionUser' });
+    },
+    addUser() {
+      this.$router.push({ path: '/addUser' });
     },
   },
 };

@@ -150,6 +150,21 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/AddStation.vue'),
   },
+  {
+    path: '/gestionUser',
+    name: 'GestionUser',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/GestionUser.vue'),
+  },
+  {
+    path: '/addUser',
+    name: 'AddUser',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+    import(/* webpackChunkName: "about" */ '../views/AddUser.vue'),
+  },
 ];
 
 const router = new VueRouter({
