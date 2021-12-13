@@ -47,14 +47,9 @@ class KnexLib {
     .select('*')
     .where({ station_id: id, user_id: '0' });
   }
-  async getUsers() {
+  getUsers() {
     console.log("knex-lib:getUsers")
-    await knex('users').select('*')
-    .then((rows) => {
-      console.log("knex-lib:getUsers:rows")
-      console.log(rows)
-      return rows
-    })
+    return knex('users').select('*')
 
   }
   getBikesByUserIdDb(id) {
@@ -130,6 +125,11 @@ class KnexLib {
 
   findAll() {
     return knex('users');
+  }
+  deleteUserDb(userId: number) {
+    console.log("knex-lib:deleteUSerDb:userId")
+    console.log(userId)
+    knex('users').where({id: userId}).del()
   }
 
   registerUser(user: any) {

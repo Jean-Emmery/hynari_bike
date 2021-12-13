@@ -29,12 +29,9 @@ export class UsersService {
   //   return this.users.find(user => user.username === username);
   // }
 
-  async getAll() {
-    console.log("usersService:findAll")
-    const users = await k.getUsers()
-    console.log("usersService:findOne:user")
-    console.log(users)
-    return users;
+  getAll() {
+    console.log("usersService:getAll")
+    return k.getUsers();
   }
 
   async addNew(user: any) {
@@ -72,5 +69,11 @@ export class UsersService {
     console.log("users.services:profile:user");
     console.log(user);
     return user;
+  }
+
+  delete(userId: number) {
+    console.log("users.services:delete:userId");
+    console.log(userId);
+    return k.deleteUserDb(userId);
   }
 }

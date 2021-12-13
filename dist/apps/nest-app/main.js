@@ -132,16 +132,22 @@ let AppController = class AppController {
             return this.usersService.register(req.body);
         });
     }
-    findAll() {
+    getAll() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("app.controller:FindAll()");
-            return this.usersService.findAll();
+            console.log("app.controller:getAll()");
+            return this.usersService.getAll();
         });
     }
     addNew(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("app.controller:addNew()");
             return this.usersService.addNew(user);
         });
+    }
+    deleteUser(data) {
+        console.log("app.controller:DeleteUser()");
+        console.log(data);
+        return this.usersService.delete(data);
     }
 };
 tslib_1.__decorate([
@@ -169,11 +175,11 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", Promise)
 ], AppController.prototype, "register", null);
 tslib_1.__decorate([
-    common_1.Get('user/all'),
+    common_1.Get('user/getAll'),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", Promise)
-], AppController.prototype, "findAll", null);
+], AppController.prototype, "getAll", null);
 tslib_1.__decorate([
     common_1.Post('user/new'),
     tslib_1.__param(0, common_1.Body()),
@@ -181,6 +187,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], AppController.prototype, "addNew", null);
+tslib_1.__decorate([
+    common_1.Delete('/user/:id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], AppController.prototype, "deleteUser", null);
 AppController = tslib_1.__decorate([
     common_1.Controller(),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object, typeof (_b = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _b : Object])
@@ -1265,13 +1278,8 @@ let UsersService = class UsersService {
     //   return this.users.find(user => user.username === username);
     // }
     getAll() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("usersService:findAll");
-            const users = yield knex_lib_1.k.getUsers();
-            console.log("usersService:findOne:user");
-            console.log(users);
-            return users;
-        });
+        console.log("usersService:getAll");
+        return knex_lib_1.k.getUsers();
     }
     addNew(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -1314,6 +1322,11 @@ let UsersService = class UsersService {
             console.log(user);
             return user;
         });
+    }
+    delete(userId) {
+        console.log("users.services:delete:userId");
+        console.log(userId);
+        return knex_lib_1.k.deleteUserDb(userId);
     }
 };
 UsersService = tslib_1.__decorate([
@@ -1464,15 +1477,8 @@ class KnexLib {
             .where({ station_id: id, user_id: '0' });
     }
     getUsers() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("knex-lib:getUsers");
-            yield knex('users').select('*')
-                .then((rows) => {
-                console.log("knex-lib:getUsers:rows");
-                console.log(rows);
-                return rows;
-            });
-        });
+        console.log("knex-lib:getUsers");
+        return knex('users').select('*');
     }
     getBikesByUserIdDb(id) {
         console.log("knex-lib:getBikesByUserIdDb:id=" + id);
@@ -1545,6 +1551,11 @@ class KnexLib {
     }
     findAll() {
         return knex('users');
+    }
+    deleteUserDb(userId) {
+        console.log("knex-lib:deleteUSerDb:userId");
+        console.log(userId);
+        knex('users').where({ id: userId }).del();
     }
     registerUser(user) {
         if (user && user.role !== 3) {

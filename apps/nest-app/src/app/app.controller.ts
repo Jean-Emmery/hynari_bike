@@ -1,4 +1,4 @@
-import { Controller, Get, Request, Post, UseGuards, Body } from '@nestjs/common';
+import { Controller, Get, Request, Post, UseGuards, Body, Delete, Param } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { AuthService } from '../auth/auth.service';
@@ -39,14 +39,22 @@ export class AppController {
     return this.usersService.register(req.body);
   }
 
-  @Get('user/all')
-  async findAll() {
-    console.log("app.controller:FindAll()")
-    return this.usersService.findAll();
+  @Get('user/getAll')
+  async getAll() {
+    console.log("app.controller:getAll()")
+    return this.usersService.getAll();
   }
 
   @Post('user/new')
   async addNew(@Body() user) {
+    console.log("app.controller:addNew()")
     return this.usersService.addNew(user);
+  }
+
+  @Delete('/user/:id')
+  deleteUser(@Param() data) {
+    console.log("app.controller:DeleteUser()")
+    console.log(data)
+    return this.usersService.delete(data);
   }
 }
