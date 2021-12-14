@@ -116,7 +116,7 @@ export default {
     if (user.user != null) {
       console.log(user.user)
       this.userId = user.user.id
-    this.getBikesByUserId();
+      this.getBikesByUserId();
     }
     this.getAllGarage();
   },
@@ -172,7 +172,7 @@ export default {
   font-size: 15px;
   color: black;
   font-weight: bold;
-  text-decoration:
+  text-decoration: none
 }
 .bike_logo {
   width: 20px;

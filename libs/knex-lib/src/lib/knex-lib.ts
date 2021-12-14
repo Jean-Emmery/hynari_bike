@@ -133,6 +133,8 @@ class KnexLib {
   }
 
   registerUser(user: any) {
+    console.log('knex-lib:registerUser:user')
+    console.log(user)
     if (user && user.role !== 3) {
       return knex('users').insert({
          email: user.email,

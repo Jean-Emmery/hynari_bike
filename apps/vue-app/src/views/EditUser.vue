@@ -49,7 +49,7 @@
           />
         </div>
         <div v-if="my_role && my_role === '3'" class="form-field">
-          <label for="mail">Role</label>
+          <label for="Role">Role</label>
           <select v-model="newRole">
           <option value="1">User</option>
           <option value="2">Modérateur</option>
@@ -72,7 +72,7 @@
 
 <style>
 label {
-  color: black;
+  color: black !important;
 }
 
 .form-control {

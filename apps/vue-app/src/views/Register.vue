@@ -52,10 +52,11 @@ export default defineComponent({
       console.log(this.lastname);
       console.log(this.password);
       return axios.post('http://localhost:3333/api/user/register', {
-        username: this.email,
+        email: this.email,
         password: this.password,
         firstname: this.firstname,
         lastname: this.lastname,
+        role: '1'
       })
       .then(el => {
         console.log("el: ");

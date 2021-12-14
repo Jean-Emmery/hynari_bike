@@ -1592,6 +1592,8 @@ class KnexLib {
         return knex('users').where({ id: id }).del();
     }
     registerUser(user) {
+        console.log('knex-lib:registerUser:user');
+        console.log(user);
         if (user && user.role !== 3) {
             return knex('users').insert({
                 email: user.email,
