@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="moderator">
+    <div v-if="admin">
       <h1>GARAGE :</h1>
       <button class="btn blue" @click="showGarages">Show List</button>
       <button class="btn blue" @click="addGarage">Add Garage</button>
@@ -10,7 +10,7 @@
       <button class="btn blue" @click="showBikes">Show List</button>
       <button class="btn blue" @click="addBike">Add Bike</button>
     </div>
-    <div v-if="admin">
+    <div v-if="moderator">
       <h1>STATIONS :</h1>
       <button class="btn blue" @click="showStation">Show List</button>
       <button class="btn blue" @click="addStation">Add Station</button>
