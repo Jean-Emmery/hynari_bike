@@ -23,7 +23,7 @@
             <div class="card-footer">
               <button
                 class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
-                @click="editStation(user.id)"
+                @click="editUser(user.id)"
               >
                 <i class="material-icons font-s2">edit</i>
               </button>
@@ -96,8 +96,8 @@ export default {
         }
       });
     },
-    editStation(stationId) {
-      this.$router.push({ path: '/station/show/' + stationId });
+    editUser(userId) {
+      this.$router.push({ path: '/user/show/' + userId });
     },
     deleteUser(userId) {
       console.log('deleteUser:userId');

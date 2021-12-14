@@ -160,6 +160,9 @@ class KnexLib {
   getStationByIdDb(id) {
     return knex('station').select('*').where({ id: id });
   }
+  getUserByIdDb(id) {
+    return knex('users').select('*').where({ id: id });
+  }
   getGarageByIdDb(id) {
     return knex('garage').select('*').where({ id: id });
   }
@@ -179,6 +182,18 @@ class KnexLib {
       capacityMax: station.capacityMax,
       name: station.name,
       garage_id: station.garage_id,
+    });
+  }
+  editUserDb(user) {
+    console.log('knex-lib:editUserDb:user');
+    console.log(user);
+    return knex('users').where({ id: user.id }).update({
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      password: user.password,
+      role: user.role,
     });
   }
   editGarageDb(garage) {

@@ -157,6 +157,12 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ '../views/GestionUser.vue'),
   },
   {
+    path: '/user/show/:id',
+    name: 'EditUser',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/EditUser.vue'),
+  },
+  {
     path: '/addUser',
     name: 'AddUser',
     // route level code-splitting

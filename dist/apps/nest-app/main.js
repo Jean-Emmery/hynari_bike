@@ -95,7 +95,7 @@
 
 "use strict";
 
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
@@ -104,6 +104,7 @@ const jwt_auth_guard_1 = __webpack_require__(/*! ../auth/jwt-auth.guard */ "./ap
 const local_auth_guard_1 = __webpack_require__(/*! ../auth/local-auth.guard */ "./apps/nest-app/src/auth/local-auth.guard.ts");
 const auth_service_1 = __webpack_require__(/*! ../auth/auth.service */ "./apps/nest-app/src/auth/auth.service.ts");
 const users_service_1 = __webpack_require__(/*! ../users/users.service */ "./apps/nest-app/src/users/users.service.ts");
+const user_1 = __webpack_require__(/*! @hynari_bike/user */ "./libs/user/src/index.ts");
 let AppController = class AppController {
     constructor(authService, usersService) {
         this.authService = authService;
@@ -148,6 +149,16 @@ let AppController = class AppController {
         console.log("app.controller:DeleteUser()");
         console.log(data);
         return this.usersService.delete(data.id);
+    }
+    getUSerById(data) {
+        console.log('app.controller:getUSerById');
+        console.log(data);
+        return this.usersService.getUserById(data.id);
+    }
+    editUser(user) {
+        console.log("app.controller:editUser:user");
+        console.log(user);
+        return this.usersService.editUser(user);
     }
 };
 tslib_1.__decorate([
@@ -194,9 +205,23 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", void 0)
 ], AppController.prototype, "deleteUser", null);
+tslib_1.__decorate([
+    common_1.Get('/user/show/:id'),
+    tslib_1.__param(0, common_1.Param()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], AppController.prototype, "getUSerById", null);
+tslib_1.__decorate([
+    common_1.Post('/user/editUser'),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof user_1.IUser !== "undefined" && user_1.IUser) === "function" ? _a : Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], AppController.prototype, "editUser", null);
 AppController = tslib_1.__decorate([
     common_1.Controller(),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object, typeof (_b = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _b : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _b : Object, typeof (_c = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _c : Object])
 ], AppController);
 exports.AppController = AppController;
 
@@ -1328,6 +1353,15 @@ let UsersService = class UsersService {
         console.log(userId);
         return knex_lib_1.k.deleteUserDb(userId);
     }
+    getUserById(id) {
+        console.log("users.services:getUserbyId");
+        return knex_lib_1.k.getUserByIdDb(id);
+    }
+    editUser(user) {
+        console.log('user.services:editUser');
+        console.log(user);
+        return knex_lib_1.k.editUserDb(user);
+    }
 };
 UsersService = tslib_1.__decorate([
     common_1.Injectable()
@@ -1584,6 +1618,9 @@ class KnexLib {
     getStationByIdDb(id) {
         return knex('station').select('*').where({ id: id });
     }
+    getUserByIdDb(id) {
+        return knex('users').select('*').where({ id: id });
+    }
     getGarageByIdDb(id) {
         return knex('garage').select('*').where({ id: id });
     }
@@ -1603,6 +1640,18 @@ class KnexLib {
             capacityMax: station.capacityMax,
             name: station.name,
             garage_id: station.garage_id,
+        });
+    }
+    editUserDb(user) {
+        console.log('knex-lib:editUserDb:user');
+        console.log(user);
+        return knex('users').where({ id: user.id }).update({
+            id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            password: user.password,
+            role: user.role,
         });
     }
     editGarageDb(garage) {
@@ -1650,6 +1699,36 @@ tslib_1.__exportStar(__webpack_require__(/*! ./lib/station */ "./libs/station/sr
 /*!*****************************************!*\
   !*** ./libs/station/src/lib/station.ts ***!
   \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+
+/***/ "./libs/user/src/index.ts":
+/*!********************************!*\
+  !*** ./libs/user/src/index.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+tslib_1.__exportStar(__webpack_require__(/*! ./lib/user.module */ "./libs/user/src/lib/user.module.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/user/src/lib/user.module.ts":
+/*!******************************************!*\
+  !*** ./libs/user/src/lib/user.module.ts ***!
+  \******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

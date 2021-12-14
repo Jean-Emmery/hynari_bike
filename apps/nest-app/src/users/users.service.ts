@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
+import { IUser } from '@hynari_bike/user';
 import { k } from '@hynari_bike/knex-lib';
 
 // This should be a real class/interface representing a user entity
@@ -75,5 +75,16 @@ export class UsersService {
     console.log("users.services:delete:userId");
     console.log(userId);
     return k.deleteUserDb(userId);
+  }
+
+  getUserById(id: string) {
+    console.log("users.services:getUserbyId");
+    return k.getUserByIdDb(id);
+  }
+
+  editUser(user: IUser) {
+    console.log('user.services:editUser')
+    console.log(user);
+    return k.editUserDb(user);
   }
 }

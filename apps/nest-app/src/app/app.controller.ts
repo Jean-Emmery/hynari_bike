@@ -3,6 +3,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { UsersService } from '../users/users.service';
+import { IUser } from '@hynari_bike/user';
 
 @Controller()
 export class AppController {
@@ -56,5 +57,19 @@ export class AppController {
     console.log("app.controller:DeleteUser()")
     console.log(data)
     return this.usersService.delete(data.id);
+  }
+
+  @Get('/user/show/:id')
+  getUSerById(@Param() data) {
+    console.log('app.controller:getUSerById')
+    console.log(data)
+    return this.usersService.getUserById(data.id)
+  }
+
+  @Post('/user/editUser')
+  editUser(@Body() user: IUser) {
+    console.log("app.controller:editUser:user")
+    console.log(user)
+    return this.usersService.editUser(user)
   }
 }
