@@ -12,7 +12,7 @@
     <button class="btn blue" @click="showStation">Show List</button>
     <button class="btn blue" @click="addStation">Add Station</button>
 
-    <div v-if="moderator || admin">
+    <div v-if="admin">
       <h1>USERS :</h1>
       <button class="btn blue" @click="showUser">Show List</button>
       <button class="btn blue" @click="addUser">Add User</button>
