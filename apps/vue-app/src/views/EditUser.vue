@@ -63,7 +63,7 @@
           type="button"
           @click="editUser(userId)"
         >
-          Edit Station
+          Edit User
         </button>
       </form>
     </div>
@@ -132,7 +132,6 @@ export default {
     async editUser(userId) {
       const user = {
         id: this.userId,
-        firstname: this.newFirstname,
         lastname: this.newLastname,
         password: this.newPassword,
         email: this.newEmail,
