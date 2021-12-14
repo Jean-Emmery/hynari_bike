@@ -29,7 +29,7 @@
           >home</i
         ></router-link
       >
-      <router-link v-if="role != '2' || role != '3'" to="/garage" class="sidenav-link"
+      <router-link v-if="role != '2' || role != '3' && role !== '0'" to="/garage" class="sidenav-link"
         ><i
           class="
             material-icons
@@ -44,7 +44,7 @@
           >directions_bike</i
         ></router-link
       >
-      <router-link v-if="role != '1'" to="/dashboard" class="sidenav-link"
+      <router-link v-if="role !== '1' && role !== '0'" to="/dashboard" class="sidenav-link"
         ><i
           class="
             material-icons
@@ -134,6 +134,13 @@ export default defineComponent({
       isSidenavActive: false,
     };
   },
+  beforeCreated() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.role = user.user.role;
+      console.log("role = " + this.role)
+    }
+  },
   created() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
@@ -141,6 +148,22 @@ export default defineComponent({
       console.log("role = " + this.role)
     }
   },
+  mounted() {
+    if (localStorage.getItem('reloaded')) {
+        // The page was just reloaded. Clear the value from local storage
+        // so that it will reload the next time this page is visited.
+        localStorage.removeItem('reloaded');
+    } else {
+        // Set a flag so that we know not to reload the page twice.
+        localStorage.setItem('reloaded', '1');
+        location.reload();
+    }
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.role = user.user.role;
+      console.log("role = " + this.role)
+    }
+  }
 });
 </script>
 

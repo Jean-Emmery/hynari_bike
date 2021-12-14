@@ -1,17 +1,20 @@
 <template>
   <div>
-    <h1>GARAGE :</h1>
-    <button class="btn blue" @click="showGarages">Show List</button>
-    <button class="btn blue" @click="addGarage">Add Garage</button>
-
-    <h1>BIKES :</h1>
-    <button class="btn blue" @click="showBikes">Show List</button>
-    <button class="btn blue" @click="addBike">Add Bike</button>
-
-    <h1>STATIONS :</h1>
-    <button class="btn blue" @click="showStation">Show List</button>
-    <button class="btn blue" @click="addStation">Add Station</button>
-
+    <div v-if="moderator">
+      <h1>GARAGE :</h1>
+      <button class="btn blue" @click="showGarages">Show List</button>
+      <button class="btn blue" @click="addGarage">Add Garage</button>
+    </div>
+    <div v-if="moderator">
+      <h1>BIKES :</h1>
+      <button class="btn blue" @click="showBikes">Show List</button>
+      <button class="btn blue" @click="addBike">Add Bike</button>
+    </div>
+    <div v-if="admin">
+      <h1>STATIONS :</h1>
+      <button class="btn blue" @click="showStation">Show List</button>
+      <button class="btn blue" @click="addStation">Add Station</button>
+    </div>
     <div v-if="admin">
       <h1>USERS :</h1>
       <button class="btn blue" @click="showUser">Show List</button>
