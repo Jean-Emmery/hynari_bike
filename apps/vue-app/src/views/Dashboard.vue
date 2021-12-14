@@ -33,40 +33,6 @@ export default {
       admin: false,
     };
   },
-  beforeCreated() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = user.access_token;
-    console.log("token");
-    console.log(token);
-    console.log("user");
-    console.log(user);
-
-    if (user && user.user.role === "2") {
-      this.moderator = true
-    }
-    if (user && user.user.role === "3") {
-      this.admin = true
-    }
-    console.log(this.moderator);
-    console.log(this.admin);
-  },
-  created() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = user.access_token;
-    console.log("token");
-    console.log(token);
-    console.log("user");
-    console.log(user);
-
-    if (user && user.user.role === "2") {
-      this.moderator = true
-    }
-    if (user && user.user.role === "3") {
-      this.admin = true
-    }
-    console.log(this.moderator);
-    console.log(this.admin);
-  },
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.access_token;
