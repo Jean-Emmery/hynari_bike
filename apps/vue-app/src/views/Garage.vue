@@ -24,13 +24,31 @@
           <div v-for="garage in garages" :key="garage.id">
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker
-              :lat-lng="garages[garage.id]"
+              :lat-lng="[garage.lat, garage.lng]"
               @click="showGarage(garage.id)"
             >
               <l-tooltip>
                 <div>
                   <span v-if="garages[garage.id]">{{
                     garages[garage.id].name
+                  }}</span>
+                </div>
+              </l-tooltip>
+            </l-marker>
+          </div>
+        </div>
+        <div v-if="stationsDisplay">
+          <div v-for="station in stationsDisplay" :key="station.id">
+            <l-tile-layer :url="url" :attribution="attribution" />
+            <l-marker
+            v-if='station.id'
+              :lat-lng="[station.lat, station.lng]"
+              @click="showStation(station.id)"
+            >
+              <l-tooltip>
+                <div>
+                  <span v-if="stations[station.id]">{{
+                    stationsDisplay[station.id].name
                   }}</span>
                 </div>
               </l-tooltip>
@@ -82,6 +100,9 @@ export default {
       }),
       user: {},
       garages: [],
+      garagesDisplay: [],
+      stations: [],
+      stationsDisplay: [],
       bikes: [],
       zoom: 13,
       center: latLng(43.60579000000007, 1.448630000000037),
@@ -119,6 +140,7 @@ export default {
       this.getBikesByUserId();
     }
     this.getAllGarage();
+    this.getAllStation();
   },
   methods: {
     showInfo(bike) {
@@ -139,7 +161,16 @@ export default {
     showGarage(id) {
       console.log("showGarage")
       console.log(this.garages)
-      this.$router.push({ path: '/station/' + this.garages[id].id });
+      console.log("garageId")
+      console.log(id)
+      console.log("garageId2")
+      console.log(this.garages[id - 1])
+      this.$router.push({ path: '/station/' + this.garages[id - 1].id });
+    },
+    showStation(id) {
+      console.log('showStation:id')
+      console.log(id)
+      this.$router.push({ path: '/bikes/' + id });
     },
     getAllGarage() {
     console.log("getAllGarage()")
@@ -149,6 +180,19 @@ export default {
         this.garages = res.data;
         console.log("this.garages")
         console.log(this.garages)
+      });
+    },
+    getAllStation() {
+    console.log("getAllStation()")
+      return Vue.axios.get('/api/station/').then((res) => {
+        console.log("res")
+        console.log(res)
+        this.stations = res.data;
+        this.stationsDisplay = [{ id: 0}].concat(this.stations)
+        console.log("this.stations")
+        console.log(this.stations)
+        console.log("this.stationsDisplay")
+        console.log(this.stationsDisplay)
       });
     },
     getBikesByUserId() {

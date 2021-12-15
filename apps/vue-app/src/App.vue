@@ -126,6 +126,7 @@
 <script>
 import { defineComponent } from '@vue/composition-api'
 import axios from 'axios';
+import Vue from 'vue';
 
 export default defineComponent({
   data() {

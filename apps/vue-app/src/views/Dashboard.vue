@@ -25,15 +25,17 @@
 <script>
 import Vue from 'vue';
 import router from '../router';
+import axios from 'axios';
 
 export default {
   data() {
     return {
       moderator: false,
       admin: false,
+      role: '0'
     };
   },
-  mounted() {
+  mounted() {//JSON.
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.access_token;
     console.log("token");
