@@ -5,18 +5,17 @@ exports.seed = function (knex) {
     .then(function () {
       // Inserts seed entries
       return knex('garage').insert([
-        { id: 1, name: 'mort', lat: '1', lng: '1' },
         {
-          id: 2,
-          name: 'Garage Balma',
-          lat: '43.61166001000052',
-          lng: '1.4933399863044485',
+          id: 1,
+          name: 'Balma',
+          lat: '43.611',
+          lng: '1.498',
         },
         {
-          id: 3,
-          name: 'Garage Toulouse',
-          lat: '43.6105987586592',
-          lng: '1.4303827828545141',
+          id: 2,
+          name: 'Toulouse',
+          lat: '43.604652',
+          lng: '1.444209',
         },
       ]);
     });

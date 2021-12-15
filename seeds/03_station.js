@@ -8,27 +8,35 @@ exports.seed = function (knex) {
       return knex('station').insert([
         {
           id: 1,
-          name: 'GARAGE BALMA : STATION 1',
+          name: 'Métro Arenes',
           capacityMax: '10',
-          garage_id: '2',
+          lat: '43.593842',
+          lng: '1.417388',
+          garage_id: '1',
         },
         {
           id: 2,
-          name: 'GARAGE BALMA : STATION 2',
+          name: 'Métro Mirail',
+          lat: '43.579445',
+          lng: '1.403195',
           capacityMax: '10',
-          garage_id: '2',
+          garage_id: '1',
         },
         {
           id: 3,
-          name: 'GARAGE TOULOUSE : STATION 3',
+          name: "Métro pate d'oie",
+          lat: '43.596927',
+          lng: '1.423121',
           capacityMax: '10',
-          garage_id: '3',
+          garage_id: '2',
         },
         {
           id: 4,
           name: 'GARAGE TOULOUSE : STATION 4',
+          lat: '43.3601',
+          lng: '1.2640',
           capacityMax: '10',
-          garage_id: '3',
+          garage_id: '2',
         },
       ]);
     });

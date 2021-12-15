@@ -3,6 +3,8 @@ exports.up = function (knex) {
     t.increments('id').unsigned().primary();
     t.integer('capacityMax').notNull();
     t.string('name').notNull();
+    t.double('lat').notNull();
+    t.double('lng').notNull();
     t.integer('garage_id').unsigned();
     t.foreign('garage_id')
       .references('garage.id')
