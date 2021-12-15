@@ -1,5 +1,4 @@
 <template>
-
   <div id="app">
     <div
       id="example-sidenav"
@@ -16,61 +15,25 @@
       </div>
       <router-link to="/" class="sidenav-link"
         ><i
-          class="
-            material-icons
-            nav__icon
-            d-block
-            my-auto
-            py-3
-            shadow-3
-            hoverable-3
-            rounded-4
-          "
+          class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4"
           >home</i
         ></router-link
       >
       <router-link v-if="role != '2' || role != '3' && role !== '0'" to="/garage" class="sidenav-link"
         ><i
-          class="
-            material-icons
-            nav__icon
-            d-block
-            my-auto
-            py-3
-            shadow-3
-            hoverable-3
-            rounded-4
-          "
+          class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4"
           >directions_bike</i
         ></router-link
       >
       <router-link v-if="role !== '1' && role !== '0'" to="/dashboard" class="sidenav-link"
         ><i
-          class="
-            material-icons
-            nav__icon
-            d-block
-            my-auto
-            py-3
-            shadow-3
-            hoverable-3
-            rounded-4
-          "
+          class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4"
           >grid_view</i
         ></router-link
       >
       <router-link to="/about" class="sidenav-link"
         ><i
-          class="
-            material-icons
-            nav__icon
-            d-block
-            my-auto
-            py-3
-            shadow-3
-            hoverable-3
-            rounded-4
-          "
+          class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4"
           >help_outline</i
         ></router-link
       >
@@ -78,36 +41,22 @@
       <div class="mt-auto d-block">
         <router-link v-if="role === '0'" to="/login" class="sidenav-link"
           ><i
-            class="
-              material-icons
-              nav__icon
-              d-block
-              my-auto
-              py-3
-              shadow-3
-              hoverable-3
-              rounded-4
-              mt-auto
-              d-block
-            "
+            class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4 mt-auto d-block"
             >login</i
           ></router-link
         >
         <router-link v-if="role === '0'" to="/register" class="sidenav-link"
           ><i
-            class="
-              material-icons
-              nav__icon
-              d-block
-              my-auto
-              py-3
-              shadow-3
-              hoverable-3
-              rounded-4
-            "
+            class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4"
             >how_to_reg</i
-          ></router-link>
-      <router-link to="/profil" class="sidenav-link"><i class="material-icons nav_icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4">account_circle</i></router-link>
+          ></router-link
+        >
+        <router-link to="/profil" class="sidenav-link"
+          ><i
+            class="material-icons nav_icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4"
+            >account_circle</i
+          ></router-link
+        >
       </div>
       <div class="sidenav-footer shadow-5 hoverable-5">
         <a href="https://hynari.fr">HYNARI</a>
@@ -124,7 +73,7 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api';
 import axios from 'axios';
 import Vue from 'vue';
 
@@ -146,7 +95,7 @@ export default defineComponent({
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       this.role = user.user.role;
-      console.log("role = " + this.role)
+      console.log('role = ' + this.role);
     }
   },
   mounted() {
@@ -186,7 +135,12 @@ export default defineComponent({
     display: none !important;
   }
 }
-
+.login-box a {
+  color: white !important;
+}
+.login-box a:hover {
+  color: #ff364f !important;
+}
 .sidenav-footer {
   margin-top: 0 !important;
 }

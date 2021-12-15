@@ -1484,20 +1484,18 @@ class KnexLib {
             yield knex('bikes')
                 .where({ id: bikeId })
                 .then((row) => {
-                console.log("user_id: " + row[0].user_id);
-                return (row[0].user_id);
+                console.log('user_id: ' + row[0].user_id);
+                return row[0].user_id;
             });
         });
     }
     dropBikeDb(bikeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("knex-lib:dropBikeDb");
+            console.log('knex-lib:dropBikeDb');
             console.log('bikeId: ' + bikeId);
             const userId = this.getUserByBikeIdDb(bikeId);
             console.log('userId: ' + userId);
-            yield knex('bikes')
-                .where({ id: bikeId })
-                .update({ user_id: '0' });
+            yield knex('bikes').where({ id: bikeId }).update({ user_id: '0' });
             // pour l'instant userId est une promise, await devant le this.etc marche pas
             //return this.getBikesByUserIdDb(userId)
         });
@@ -1506,16 +1504,14 @@ class KnexLib {
     //   return knex('bikes').select('*').where({ station_id: id });
     // }
     getBikesUpByStationIdDb(id) {
-        return knex('bikes')
-            .select('*')
-            .where({ station_id: id, user_id: '0' });
+        return knex('bikes').select('*').where({ station_id: id, user_id: '0' });
     }
     getUsers() {
         console.log("knex-lib:getUsers");
         return knex('users').select('*');
     }
     getBikesByUserIdDb(id) {
-        console.log("knex-lib:getBikesByUserIdDb:id=" + id);
+        console.log('knex-lib:getBikesByUserIdDb:id=' + id);
         return knex('bikes').select('*').where({ user_id: id });
     }
     getStationByGarageIdDb(id) {
@@ -1568,7 +1564,7 @@ class KnexLib {
         });
     }
     findUser(username) {
-        console.log("knexlib:findUser:username");
+        console.log('knexlib:findUser:username');
         console.log(username);
         return knex('users')
             .select('email', 'firstname', 'lastname', 'password', 'role', 'id')
@@ -1576,9 +1572,9 @@ class KnexLib {
             email: username,
         })
             .then((el) => {
-            console.log("el");
+            console.log('el');
             console.log(el[0]);
-            return (el[0]);
+            return el[0];
         })
             .catch((err) => console.log(err));
         return null;
@@ -1608,7 +1604,7 @@ class KnexLib {
             firstname: user.firstname,
             lastname: user.lastname,
             password: user.password,
-            role: '1'
+            role: '1',
         });
     }
     getStationIdByNameDb(stationName) {
