@@ -19,7 +19,7 @@
           >home</i
         ></router-link
       >
-      <router-link v-if="role != '2' || role != '3' && role !== '0'" to="/garage" class="sidenav-link"
+      <router-link v-if="role != '2' && role !== '3' && role !== '0'" to="/garage" class="sidenav-link"
         ><i
           class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4"
           >directions_bike</i
