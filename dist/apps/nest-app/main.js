@@ -1039,6 +1039,7 @@ function bootstrap() {
         const globalPrefix = 'api';
         app.setGlobalPrefix(globalPrefix);
         const port = process.env.PORT || 3333;
+        //const server = require('http').createServer(app)
         yield app.listen(port, () => {
             common_1.Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
         });

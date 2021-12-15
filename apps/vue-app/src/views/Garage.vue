@@ -47,7 +47,7 @@
             <l-marker
             v-if='station.id'
               :lat-lng="[station.lat, station.lng]"
-              @click="showStation(station)"
+              @click="showStation(station.id)"
             >
               <l-tooltip>
                 <div>
@@ -77,9 +77,13 @@
             </l-marker>
           </div>
         </div>
-
       </l-map>
     </div>
+  <div>
+    <p v-if="isConnected">We're connected to the server!</p>
+    <p>Message from server: "{{socketMessage}}"</p>
+    <button @click="pingServer()">Ping Server</button>
+  </div>
   </div>
 </template>
 
@@ -87,6 +91,8 @@
 import { latLng, icon } from 'leaflet';
 import { LMap, LTileLayer, LMarker, LTooltip, LIcon } from 'vue2-leaflet';
 import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import {Action, Getter, Mutation} from "vuex-class";
 
 export default {
   components: {
@@ -131,7 +137,25 @@ export default {
       userId: '',
       staticAnchor: [16, 37],
       iconSize: 64,
+
+      isConnected: false,
+      socketMessage: '',
     };
+  },
+  sockets: {
+    connect() {
+      // Fired when the socket connects.
+      this.isConnected = true;
+    },
+
+    disconnect() {
+      this.isConnected = false;
+    },
+
+    // Fired when the server sends something on the "messageChannel" channel.
+    messageChannel(data) {
+      this.socketMessage = data
+    }
   },
   computed: {
     dynamicSize() {
@@ -140,6 +164,9 @@ export default {
     dynamicAnchor() {
       return [this.iconSize / 2, this.iconSize * 1.15];
     }
+  },
+  created() {
+    console.log("Starting connection with websocket server")
   },
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -150,8 +177,36 @@ export default {
     }
     this.getAllGarage();
     this.getAllStation();
+
+    this.$socket.on("user-connected", (data) => {
+      debugger;
+      console.log(data);
+      this.$socket.emit("users");
+    });
+    this.$socket.emit("users");
+    this.$socket.on("users", (data) => {
+      console.log("users", data);
+    });
   },
   methods: {
+    pingServer() {
+      // Send the "pingServer" event to the server.
+      this.$socket.emit('pingServer', 'PING!')
+    },
+    AsendMessage: function(message) {
+      console.log(this.message)
+      console.log(message)
+      this.connection.send(message)
+    },
+    sendMessage() {
+            const msg = {
+                username: this.Username,
+                content: this.messageContent
+            };
+            this.$socket.emit('message', msg);
+            this.addMessage(msg)
+            this.messageContent = null;
+    },
     showInfo(bike) {
       console.log("showInfo")
       console.log(bike)

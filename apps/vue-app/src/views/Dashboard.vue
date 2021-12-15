@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="height: 500px; width: 100%">
+    <div style="height: 500px; width: 100%" v-if="role === '2'">
       <!-- <div style="height: 200px; overflow: auto">
         <p v-if="garages[0]">
           1 GARAGE {{ garages[0].lat }}, {{ garages[0].lng }}

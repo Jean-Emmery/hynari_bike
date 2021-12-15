@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import socketio from 'socket.io-client';
+import VueSocketIO from 'vue-socket.io';
 import App from './App.vue';
 import router from './router';
 //import store from './store';
@@ -21,9 +23,13 @@ import { Icon } from 'leaflet';
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import MyVuexStore from "./my-vuex-store"
+import * as io from "socket.io-client";
+
 library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt);
 
 Vue.config.productionTip = false;
+export const SocketInstance = socketio('http://localhost:4113');
 
 //Vue.use(VeeValidate);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -43,8 +49,15 @@ L.Icon.Default.mergeOptions({
 });
 
 Vue.use(VueAxios, axios);
+
+Vue.use(
+  new VueSocketIO({
+    debug: true,
+    connection: socketio('http://localhost:3000'), // options object is Optional
+  })
+);
+
 new Vue({
   router,
-  //store,
   render: (h) => h(App),
 }).$mount('#app');
