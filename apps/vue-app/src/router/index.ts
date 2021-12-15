@@ -179,7 +179,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  let user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   if (
     from.name !== 'Login' &&
@@ -206,7 +206,7 @@ router.beforeEach((to, from, next) => {
         next();
       }
     }
-    if (user.user.role === '2') {
+    if (user.user.role === '2') { // Gestionnaire
       if (
         to.name === 'Register' ||
         to.name === 'Garage' ||
@@ -216,8 +216,12 @@ router.beforeEach((to, from, next) => {
       } else {
         next();
       }
-    } else if (user.user.role === '3') {
-      if (to.name === 'Register' || to.name === 'Login') {
+    } else if (user.user.role === '3') { //admin
+      if (
+        to.name === 'Register' ||
+        to.name === 'Login' ||
+        to.name === 'Garage'
+      ) {
         next(false);
       } else {
         next();

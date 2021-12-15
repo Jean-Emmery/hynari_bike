@@ -20,39 +20,44 @@
         :center="center"
 
       >
-        <div v-if="garages">
-          <div v-for="garage in garages" :key="garage.id">
+        <div v-if="garagesDisplay">
+          <div v-for="garage in garagesDisplay" :key="garage.id">
+            <div v-if="garage.id > 0">
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker
+              :icon="myIconGarage"
               :lat-lng="[garage.lat, garage.lng]"
               @click="showGarage(garage.id)"
             >
               <l-tooltip>
                 <div>
-                  <span v-if="garages[garage.id]">{{
-                    garages[garage.id].name
+                  <span v-if="garage.name">{{
+                    garage.name
                   }}</span>
                 </div>
               </l-tooltip>
             </l-marker>
+            </div>
           </div>
         </div>
         <div v-if="stationsDisplay">
           <div v-for="station in stationsDisplay" :key="station.id">
+            <div v-if="station.id > 0">
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker
             v-if='station.id'
               :lat-lng="[station.lat, station.lng]"
-              @click="showStation(station.id)"
+              @click="showStation(station)"
             >
               <l-tooltip>
                 <div>
-                  <span v-if="stations[station.id]">{{
-                    stationsDisplay[station.id].name
+                  <span v-if="station.name">{{
+                    station.name
                   }}</span>
                 </div>
               </l-tooltip>
             </l-marker>
+            </div>
           </div>
         </div>
         <div v-if="bikes">
@@ -98,6 +103,11 @@ export default {
         iconSize: [32, 64],
         iconAnchor: [16, 37]
       }),
+      myIconGarage: icon({
+        iconUrl: "https://costesromain.fr/pin_rouge.png",
+        iconSize: [64, 64],
+        iconAnchor: [16, 37]
+      }),
       user: {},
       garages: [],
       garagesDisplay: [],
@@ -121,7 +131,6 @@ export default {
       userId: '',
       staticAnchor: [16, 37],
       iconSize: 64,
-      bike_headline: "",
     };
   },
   computed: {
@@ -147,14 +156,12 @@ export default {
       console.log("showInfo")
       console.log(bike)
     },
-
     zoomUpdate(zoom) {
       this.zoom = zoom;
     },
     centerUpdate(center) {
       this.center = center;
     },
-
     showLongText() {
       this.showParagraph = !this.showParagraph;
     },
@@ -178,8 +185,12 @@ export default {
         console.log("res")
         console.log(res)
         this.garages = res.data;
+        this.garagesDisplay = [{ id: 0 }].concat(this.garages)
         console.log("this.garages")
         console.log(this.garages)
+        console.log("this.garagesDisplay")
+        console.log(this.garagesDisplay)
+        console.log("fin getAllGarage()")
       });
     },
     getAllStation() {
@@ -188,7 +199,7 @@ export default {
         console.log("res")
         console.log(res)
         this.stations = res.data;
-        this.stationsDisplay = [{ id: 0}].concat(this.stations)
+        this.stationsDisplay = [{ id: 0 }].concat(this.stations)
         console.log("this.stations")
         console.log(this.stations)
         console.log("this.stationsDisplay")

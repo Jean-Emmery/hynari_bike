@@ -1,12 +1,12 @@
 <template>
   <div class="d-flex fx-wrap" style="place-content: center">
     <div style="width: 80%" class="d-flex fx-wrap">
-      <div class="grix xs2 gutter-xs4">
+      <div class="grix xs4 gutter-xs4">
         <div class="m-1" v-for="user in users" v-bind:key="user.id">
           <div class="card shadow-3 rounded-3 grey light-4">
             <div class="card-image">
               <img
-                src="https://images.unsplash.com/photo-1614417599343-c7d4f6da5318?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80"
+                src="https://costesromain.fr/user_icon.png"
                 alt="logo"
                 class="responsive-media"
                 style="height: 276px"
@@ -15,7 +15,7 @@
             <div class="card-header">{{ user.firstname }} {{ user.lastname }}</div>
             <div class="card-content">
               Email: {{ user.email }}<br>
-              role :
+              Role :
               <span v-if="user.role === '1'">User</span>
               <span v-if="user.role === '2'">Modérateur</span>
               <span v-if="user.role === '3'">Admin</span>
