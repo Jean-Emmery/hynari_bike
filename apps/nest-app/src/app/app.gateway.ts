@@ -27,6 +27,7 @@ import {
   handlePosition(client: Socket, payload: string): void {
     if (payload) {
       this.server.emit('msgToClient', payload);
+      console.log(payload)
       k.updateBikeLatLngDb(payload)
     }
   }

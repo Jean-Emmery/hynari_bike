@@ -241,6 +241,7 @@ let AppGateway = class AppGateway {
     handlePosition(client, payload) {
         if (payload) {
             this.server.emit('msgToClient', payload);
+            console.log(payload);
             knex_lib_1.k.updateBikeLatLngDb(payload);
         }
     }
@@ -1478,6 +1479,9 @@ class KnexLib {
         return knex('bikes').where({ id: bikeInfo.id }).update({
             lat: bikeInfo.lat,
             lng: bikeInfo.lng
+        }).then((el) => {
+            console.log('el');
+            console.log(el);
         });
     }
     getAllGarageDb() {
