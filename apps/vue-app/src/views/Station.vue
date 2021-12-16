@@ -70,11 +70,8 @@ export default {
     //   });
     // },
     getStationByGarageId(garageId) {
-      console.log('garageId' + garageId);
       return Vue.axios.get('/api/station/' + garageId).then((res) => {
         this.stations = res.data;
-        console.log("res")
-        console.log(res)
       });
     },
     showBikes(stationId) {

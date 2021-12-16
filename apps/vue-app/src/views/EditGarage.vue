@@ -87,18 +87,14 @@ export default {
       });
     },
     editGarage(garageId) {
-      console.log('garageid' + garageId);
       const garage = {
         id: garageId,
         name: this.newName,
         lat: this.newLat,
         lng: this.newLng,
       };
-      console.log(this.name);
-      console.log(garage);
       return axios
-        .post('/api/garage/editGarage', garage)
-        .then(console.log('edit garage'));
+        .post('/api/garage/editGarage', garage);
     },
   },
 };

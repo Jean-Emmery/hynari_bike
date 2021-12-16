@@ -74,8 +74,7 @@ export default {
         name: this.name,
         garage: this.garage,
       };
-      console.log(station);
-      return axios.post('/api/station/new', station).then(console.log('post'));
+      return axios.post('/api/station/new', station);
     },
     getGarage() {
       return Vue.axios.get('/api/garage/garageList').then((res) => {

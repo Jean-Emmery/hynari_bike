@@ -16,7 +16,7 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3333;
   //const server = require('http').createServer(app)
-  app.useStaticAssets(join(__dirname, '..', 'static'));
+  //app.useStaticAssets(join(__dirname, '..', 'static'));
   await app.listen(port, () => {
     Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });

@@ -8,7 +8,6 @@ export class StationController {
 
   @Get('/')
   getAllStation() {
-    console.log('station contro');
     return this.stationService.getAllStation();
   }
 

@@ -73,23 +73,14 @@ export default {
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.access_token;
-    console.log("token");
-    console.log(token);
-    console.log("user");
-    console.log(user);
     this.my_role = user.user.role
-    console.log("my_role");
-    console.log(this.my_role);
 
     this.getAllUser();
   },
   methods: {
     getAllUser() {
-      console.log('GestionUser:getAllUser')
       return Vue.axios.get('/api/user/getAll').then((res) => {
         if (res.status === 200) {
-          console.log('GestionUser:res')
-          console.log(res)
           this.users = res.data;
         } else {
           console.error(res);
@@ -100,11 +91,7 @@ export default {
       this.$router.push({ path: '/user/show/' + userId });
     },
     deleteUser(userId) {
-      console.log('deleteUser:userId');
-      console.log(userId)
       return Vue.axios.delete('/api/user/' + userId).then((res) => {
-        console.log("res")
-        console.log(res)
         this.getAllUser();
       });
     },

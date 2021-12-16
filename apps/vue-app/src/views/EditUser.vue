@@ -110,22 +110,12 @@ export default {
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.access_token;
-    console.log("token");
-    console.log(token);
-    console.log("user");
-    console.log(user);
     this.my_role = user.user.role
-    console.log("my_role");
-    console.log(this.my_role);
     this.getUser(this.userId);
   },
   methods: {
     getUser(id) {
-      console.log("getUser:id")
-      console.log(id)
       return axios.get(`/api/user/show/${id}`).then((res) => {
-        console.log("res:")
-        console.log(res.data[0])
         this.user = res.data[0];
       });
     },
@@ -137,17 +127,12 @@ export default {
         email: this.newEmail,
         role: this.newRole,
       };
-      console.log("EditUser:user");
-      console.log(user);
       return axios
-        .post('/api/user/editUser', user)
-        .then(console.log('edit user'));
+        .post('/api/user/editUser', user);
     },
     getGarage() {
       return Vue.axios.get('/api/garage/garageList').then((res) => {
         if (res.status === 200) {
-          console.log("res.data")
-          console.log(res.data);
           this.garages = res.data;
         } else {
           console.error(res);

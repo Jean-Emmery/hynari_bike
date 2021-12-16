@@ -42,7 +42,6 @@ export class BikesController {
   }
   @Post('pickUpBike')
   pickUpBike(@Body() bike: IBike) {
-    console.log("Post:PickupBike")
     return this.bikesService.pickUpBike(bike);
   }
 

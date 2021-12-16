@@ -46,14 +46,6 @@ L.Icon.Default.mergeOptions({
 
 Vue.use(VueAxios, axios);
 
-
-Vue.use(
-  new VueSocketIO({
-    debug: true,
-    connection: socketio('http://localhost:4143'), // options object is Optional
-  })
-);
-
 new Vue({
   router,
   render: (h) => h(App),

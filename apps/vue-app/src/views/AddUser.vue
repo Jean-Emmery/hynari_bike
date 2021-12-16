@@ -87,46 +87,30 @@ export default {
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.access_token;
-    console.log("token");
-    console.log(token);
-    console.log("user");
-    console.log(user);
     this.my_role = user.user.role
-    console.log("my_role");
-    console.log(this.my_role);
   },
   methods: {
       onSubmit () {
-        console.log('on submit')
       this.errors = [];
 
       if (this.email) {
-        console.log('on submit 2')
         this.errors.push('Email required.');
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
-          console.log('on submit 3')
           this.errors.push('Nicely formated email required.');
         } else {
           this.addUser()
-          .then((el) => {
-            console.log(el)
-          })
           .catch((res) => {
             console.error(res)
           })
           this.email = ''
           this.password = ''
         }
-      } else {
-        console.log('on submit 4')
       }
       if (!this.password) {
         this.errors.push('Password required.');
       }
     },
     addUser() {
-    console.log('this.email')
-    console.log(this.email)
       const user = {
         email: this.email,
         firstname: this.firstname,
@@ -134,9 +118,7 @@ export default {
         password: this.password,
         role: this.role,
       };
-      console.log('user')
-      console.log(user);
-      return axios.post('/api/user/new', user).then(console.log('post'));
+      return axios.post('/api/user/new', user);
     },
   },
 };

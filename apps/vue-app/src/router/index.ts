@@ -170,6 +170,12 @@ const routes: Array<RouteConfig> = [
     component: () =>
     import(/* webpackChunkName: "about" */ '../views/AddUser.vue'),
   },
+  {
+    path: '/about',
+    name: 'About',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/About.vue'),
+  },
 ];
 
 const router = new VueRouter({
@@ -209,7 +215,6 @@ router.beforeEach((to, from, next) => {
     if (user.user.role === '2') { // Gestionnaire
       if (
         to.name === 'Register' ||
-        to.name === 'Garage' ||
         to.name === 'Login'
       ) {
         next(false);

@@ -60,13 +60,12 @@
             </div>
           </div>
         </div>
-        <div v-if="bikes">
-          <div v-for="bike in bikes" :key="bike.id">
+        <div>
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker
               :icon="myIcon"
-              :lat-lng="[bikes.lat,bikes.lng]"
-              @click="showInfo(bikes)"
+              :lat-lng="[my_lat,my_lng]"
+              @click="showInfo(my_lat, my_lng)"
             >
             <l-icon
               :icon-anchor="staticAnchor"
@@ -76,7 +75,6 @@
             </l-icon>
             </l-marker>
           </div>
-        </div>
       </l-map>
     </div>
   <div>
@@ -84,6 +82,29 @@
     <p>Message from server: "{{socketMessage}}"</p>
     <button @click="pingServer()">Ping Server</button>
   </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-sm-12">
+                    <h1 class="text-center">{{ title }}</h1>
+                    <br>
+                    <div id="status"></div>
+                    <div id="chat">
+                        <input type="text" v-model="name" id="username" class="form-control" placeholder="Enter name...">
+                        <br>
+                        <div class="card">
+                            <div id="messages" class="card-block">
+                                <ul>
+                                    <li v-for="message of messages" :key="message">{{ message.name }}: {{ message.text }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br>
+                        <textarea id="textarea" class="form-control" v-model="text" placeholder="Enter message..."></textarea>
+                        <br>
+                        <button id="send" class="btn" @click.prevent="sendMessage">Send</button>
+                    </div>
+                </div>
+            </div>
   </div>
 </template>
 
@@ -93,6 +114,8 @@ import { LMap, LTileLayer, LMarker, LTooltip, LIcon } from 'vue2-leaflet';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator'
 import {Action, Getter, Mutation} from "vuex-class"
+import io from 'socket.io-client';
+import { setInterval } from 'timers';
 
 export default {
   components: {
@@ -139,25 +162,16 @@ export default {
       iconSize: 64,
 
       isConnected: false,
-      socketMessage: '',text: '',
+      socketMessage: '',
+      title: 'Nestjs Websockets Chat',
+      name: '',
+      text: '',
       messages: [],
       socket: null,
+
+      my_lat: 0,
+      my_lng: 0,
     };
-  },
-  sockets: {
-    connect() {
-      // Fired when the socket connects.
-      this.isConnected = true;
-    },
-
-    disconnect() {
-      this.isConnected = false;
-    },
-
-    // Fired when the server sends something on the "messageChannel" channel.
-    messageChannel(data) {
-      this.socketMessage = data
-    }
   },
   computed: {
     dynamicSize() {
@@ -167,53 +181,60 @@ export default {
       return [this.iconSize / 2, this.iconSize * 1.15];
     }
   },
-  mounted() {
+  created() {
     console.log("Starting connection with websocket server")
-    this.socket = io('http://192.168.1.94:4143')
+    this.socket = io('http://localhost:3333/', {transports: ['websocket'], secure: false})
     this.socket.on('msgToClient', (message) => {
       this.receivedMessage(message)
     })
+  },
+  mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user.user != null) {
+      console.log("USER")
       console.log(user.user)
       this.userId = user.user.id
       this.getBikesByUserId();
     }
     this.getAllGarage();
     this.getAllStation();
-
-    this.$socket.on("user-connected", (data) => {
-      debugger;
-      console.log(data);
-      this.$socket.emit("users");
-    });
-    this.$socket.emit("users");
-    this.$socket.on("users", (data) => {
-      console.log("users", data);
-    });
+    setInterval(() => {
+      this.getActualPosition().then((pos) => {
+        console.log("pos")
+        console.log(pos)
+        this.my_lat = pos.coords.latitude
+        this.my_lng = pos.coords.longitude
+        console.log(this.my_lat)
+        console.log(this.my_lng)
+        this.sendPosition()
+      });
+    }, 2000);
   },
   methods: {
-    pingServer() {
-      // Send the "pingServer" event to the server.
-      this.$socket.emit('pingServer', 'PING!')
+    getActualPosition() {
+      return new Promise((res, rej) => {
+        navigator.geolocation.getCurrentPosition(res, rej)
+      });
     },
-    AsendMessage: function(message) {
-      console.log(this.message)
-      console.log(message)
-      this.connection.send(message)
+    sendPosition() {
+      console.log("this.bike")
+      console.log(this.bikes)
+      if(this.my_lat && this.my_lng) {
+        const position = {
+          id: this.bikes.id,
+          lat: this.my_lat,
+          lng: this.my_lng
+        }
+      this.socket.emit('posToServer', position)
+      this.text = ''
+      }
     },
-    sendMessage() {
-            const msg = {
-                username: this.Username,
-                content: this.messageContent
-            };
-            this.$socket.emit('message', msg);
-            this.addMessage(msg)
-            this.messageContent = null;
+    receivedMessage(message) {
+      this.messages.push(message)
     },
-    showInfo(bike) {
+    showInfo(a, b) {
       console.log("showInfo")
-      console.log(bike)
+      console.log(a  + '+' + b)
     },
     zoomUpdate(zoom) {
       this.zoom = zoom;

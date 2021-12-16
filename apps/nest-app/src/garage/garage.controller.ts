@@ -13,14 +13,11 @@ export class GarageController {
 
   @Get('bikes')
   getAllBikes() {
-    console.log('contro');
     return this.garageService.getAllBikes();
   }
 
   @Get('getId/:name')
   getGarageIdByName(@Param() data) {
-    console.log("garage.controller:getId:data")
-    console.log(data)
     return this.garageService.getGarageIdByName(data.name)
   }
 
@@ -39,7 +36,6 @@ export class GarageController {
   }
   @Post('editGarage')
   editGarage(@Body() garage: IGarage) {
-    console.log('editcontroller');
     return this.garageService.editGarage(garage);
   }
   @Get('show/:id')

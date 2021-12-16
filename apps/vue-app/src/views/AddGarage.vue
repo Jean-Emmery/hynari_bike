@@ -68,10 +68,8 @@ export default {
         lat: this.lat,
         lng: this.lng,
       };
-      console.log(garage);
       return axios
         .post('/api/garage/new', garage)
-        .then(console.log('post garage'));
     },
   },
 };

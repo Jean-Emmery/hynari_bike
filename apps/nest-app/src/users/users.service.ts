@@ -30,25 +30,16 @@ export class UsersService {
   // }
 
   getAll() {
-    console.log("usersService:getAll")
     return k.getUsers();
   }
 
   async addNew(user: any) {
-    console.log("users.service:user")
-    console.log(user)
     k.registerUser(user)
-    .then((el) => console.log(el))
-    .catch((err) => console.log(err))
     return ;
   }
 
   async findOne(username: string): Promise<User | undefined> {
-    console.log("usersService:findOne:username")
-    console.log(username)
     const user = await k.findUser(username)
-    console.log("usersService:findOne:user")
-    console.log(user)
     return user;
   }
 
@@ -57,34 +48,23 @@ export class UsersService {
   }
 
   async register(user: any) {
-    console.log("user");
-    console.log(user);
     k.registerUser(user)
-    .then((el) => console.log(el))
-    .catch((err) => console.log(err))
     return ;
   }
 
   async profile(user: any) {
-    console.log("users.services:profile:user");
-    console.log(user);
     return user;
   }
 
   delete(userId: number) {
-    console.log("users.services:delete:userId");
-    console.log(userId);
     return k.deleteUserDb(userId);
   }
 
   getUserById(id: string) {
-    console.log("users.services:getUserbyId");
     return k.getUserByIdDb(id);
   }
 
   editUser(user: IUser) {
-    console.log('user.services:editUser')
-    console.log(user);
     return k.editUserDb(user);
   }
 }

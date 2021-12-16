@@ -19,7 +19,7 @@
           >home</i
         ></router-link
       >
-      <router-link v-if="role != '2' && role !== '3' && role !== '0'" to="/garage" class="sidenav-link"
+      <router-link v-if="role !== '3' && role !== '0'" to="/garage" class="sidenav-link"
         ><i
           class="material-icons nav__icon d-block my-auto py-3 shadow-3 hoverable-3 rounded-4"
           >directions_bike</i
@@ -77,6 +77,8 @@ import { defineComponent } from '@vue/composition-api';
 import axios from 'axios';
 import Vue from 'vue';
 
+//import SocketioService from '../services/socketio.service'
+
 export default defineComponent({
   data() {
     return {
@@ -88,14 +90,12 @@ export default defineComponent({
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       this.role = user.user.role;
-      console.log("role = " + this.role)
     }
   },
   created() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       this.role = user.user.role;
-      console.log('role = ' + this.role);
     }
   },
   mounted() {
@@ -111,7 +111,6 @@ export default defineComponent({
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       this.role = user.user.role;
-      console.log("role = " + this.role)
     }
   }
 });

@@ -21,7 +21,6 @@ export class GarageService {
     return k.deleteGarageDb(id);
   }
   editGarage(garage: IGarage) {
-    console.log('service' + garage);
     return k.editGarageDb(garage);
   }
   getGarageById(id: string) {

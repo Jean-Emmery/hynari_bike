@@ -100,17 +100,12 @@ export default {
         name: this.newName,
         garage_id: this.garageId,
       };
-      console.log("station");
-      console.log(station);
       return axios
-        .post('/api/station/editStation', station)
-        .then(console.log('edit'));
+        .post('/api/station/editStation', station);
     },
     async getGarageIdByName(garageName) {
-      console.log("stationName: " + garageName)
       await Vue.axios.get('/api/garage/getId/' + garageName)
       .then((el) => {
-        console.log(el.data[0].id)
         this.garageId = el.data[0].id
         return el.data[0].id
       })
@@ -118,8 +113,6 @@ export default {
     getGarage() {
       return Vue.axios.get('/api/garage/garageList').then((res) => {
         if (res.status === 200) {
-          console.log("res.data")
-          console.log(res.data);
           this.garages = res.data;
         } else {
           console.error(res);

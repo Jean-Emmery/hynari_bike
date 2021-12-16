@@ -12,22 +12,14 @@ export class AuthService {
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
-    console.log("authService:validateUser:user")
-    console.log(user)
-    console.log("authService:validateUser:password&pass")
-    console.log(user.password + " - " + pass)
     if (user && user.password === pass) {
       const { password, ...result } = user;
-      console.log("authService:validateUser:result")
-      console.log(result)
       return result;
     }
     return null;
   }
 
   async login(user: any) {
-    console.log("authService:login:user")
-    console.log(user);
     const payload = {
       id: user.id,
       username: user.email,
@@ -36,13 +28,6 @@ export class AuthService {
       role: user.role,
     };
     const access_token = this.jwtService.sign(payload);
-
-    console.log("authService:login:access_token")
-    console.log(access_token);
-    console.log("authService:login:payload")
-    console.log(payload);
-    console.log("authService:login:user")
-    console.log(user);
 
     return {
       access_token,

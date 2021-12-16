@@ -105,14 +105,12 @@ export default {
         station: this.station,
         user_id: '0',
       };
-      console.log(bike);
-      return axios.post('/api/bikes/new', bike).then(console.log('post'));
+      return axios.post('/api/bikes/new', bike);
     },
     getStation() {
       return Vue.axios.get('/api/station').then((res) => {
         if (res.status === 200) {
           this.stations = res.data;
-          console.log('getstation : ' + this.stations);
         } else {
           console.error(res);
         }

@@ -12,7 +12,6 @@ export class StationService {
     return k.getAllStationDb();
   }
   editStation(station: IStation) {
-    console.log('service' + station);
     return k.editStationDb(station);
   }
   async deleteStation(id) {

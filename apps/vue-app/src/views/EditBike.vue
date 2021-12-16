@@ -102,14 +102,11 @@ export default {
         pictureUrl: this.newPictureUrl,
         station: this.newStation,
       };
-      console.log(this.capacityMax);
-      console.log(bike);
-      return axios.post('/api/bikes/editBike', bike).then(console.log('edit'));
+      return axios.post('/api/bikes/editBike', bike);
     },
     getStation() {
       return Vue.axios.get('/api/station').then((res) => {
         if (res.status === 200) {
-          console.log(res.data);
           this.stations = res.data;
         } else {
           console.error(res);

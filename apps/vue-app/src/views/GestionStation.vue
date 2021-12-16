@@ -78,7 +78,6 @@ export default {
       this.$router.push({ path: '/station/show/' + stationId });
     },
     deleteStation(stationId) {
-      console.log('testDelete');
       return Vue.axios.delete('/api/station/' + stationId).then((res) => {
         this.getAllStation();
       });

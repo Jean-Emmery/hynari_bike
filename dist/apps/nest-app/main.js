@@ -115,49 +115,34 @@ let AppController = class AppController {
     }
     login(req) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("req.user");
-            console.log(req.user);
             return this.authService.login(req.user);
         });
     }
     getProfile(req) {
-        console.log("app.controller:profile:req.user");
-        console.log(req.user);
         return this.usersService.profile(req.user);
     }
     register(req) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("app.controller:register()");
-            console.log("req.body");
-            console.log(req.body);
             return this.usersService.register(req.body);
         });
     }
     getAll() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("app.controller:getAll()");
             return this.usersService.getAll();
         });
     }
     addNew(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("app.controller:addNew()");
             return this.usersService.addNew(user);
         });
     }
     deleteUser(data) {
-        console.log("app.controller:DeleteUser()");
-        console.log(data);
         return this.usersService.delete(data.id);
     }
     getUSerById(data) {
-        console.log('app.controller:getUSerById');
-        console.log(data);
         return this.usersService.getUserById(data.id);
     }
     editUser(user) {
-        console.log("app.controller:editUser:user");
-        console.log(user);
         return this.usersService.editUser(user);
     }
 };
@@ -237,20 +222,37 @@ exports.AppController = AppController;
 
 "use strict";
 
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppGateway = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const websockets_1 = __webpack_require__(/*! @nestjs/websockets */ "@nestjs/websockets");
-const websockets_2 = __webpack_require__(/*! @nestjs/websockets */ "@nestjs/websockets");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const socket_io_1 = __webpack_require__(/*! socket.io */ "socket.io");
+const knex_lib_1 = __webpack_require__(/*! @hynari_bike/knex-lib */ "./libs/knex-lib/src/index.ts");
 let AppGateway = class AppGateway {
     constructor() {
         this.logger = new common_1.Logger('AppGateway');
+        this.users = 0;
     }
     handleMessage(client, payload) {
         this.server.emit('msgToClient', payload);
+    }
+    handlePosition(client, payload) {
+        console.log("suscribeMessage");
+        if (payload) {
+            console.log(payload);
+            this.server.emit('msgToClient', payload);
+            knex_lib_1.k.getBikeLatLngDb(payload).then((res) => {
+                console.log("res");
+                console.log(res);
+            });
+            const res = knex_lib_1.k.updateBikeLatLngDb(payload);
+            //console.log(res)
+        }
+        else {
+            console.log("no payload");
+        }
     }
     afterInit(server) {
         this.logger.log('Init');
@@ -259,11 +261,13 @@ let AppGateway = class AppGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     handleConnection(client, ...args) {
+        this.users++;
+        //this.logger.log(client)
         this.logger.log(`Client connected: ${client.id}`);
     }
 };
 tslib_1.__decorate([
-    websockets_2.WebSocketServer(),
+    websockets_1.WebSocketServer(),
     tslib_1.__metadata("design:type", typeof (_a = typeof socket_io_1.Server !== "undefined" && socket_io_1.Server) === "function" ? _a : Object)
 ], AppGateway.prototype, "server", void 0);
 tslib_1.__decorate([
@@ -272,6 +276,12 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _b : Object, String]),
     tslib_1.__metadata("design:returntype", void 0)
 ], AppGateway.prototype, "handleMessage", null);
+tslib_1.__decorate([
+    websockets_1.SubscribeMessage('posToServer'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_c = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _c : Object, String]),
+    tslib_1.__metadata("design:returntype", void 0)
+], AppGateway.prototype, "handlePosition", null);
 AppGateway = tslib_1.__decorate([
     websockets_1.WebSocketGateway()
 ], AppGateway);
@@ -448,14 +458,8 @@ let AuthService = class AuthService {
     validateUser(username, pass) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const user = yield this.usersService.findOne(username);
-            console.log("authService:validateUser:user");
-            console.log(user);
-            console.log("authService:validateUser:password&pass");
-            console.log(user.password + " - " + pass);
             if (user && user.password === pass) {
                 const { password } = user, result = tslib_1.__rest(user, ["password"]);
-                console.log("authService:validateUser:result");
-                console.log(result);
                 return result;
             }
             return null;
@@ -463,8 +467,6 @@ let AuthService = class AuthService {
     }
     login(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("authService:login:user");
-            console.log(user);
             const payload = {
                 id: user.id,
                 username: user.email,
@@ -473,12 +475,6 @@ let AuthService = class AuthService {
                 role: user.role,
             };
             const access_token = this.jwtService.sign(payload);
-            console.log("authService:login:access_token");
-            console.log(access_token);
-            console.log("authService:login:payload");
-            console.log(payload);
-            console.log("authService:login:user");
-            console.log(user);
             return {
                 access_token,
                 user: user
@@ -575,8 +571,6 @@ let JwtStrategy = class JwtStrategy extends passport_1.PassportStrategy(passport
     }
     validate(payload) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("jwt.strategy:valide:payload");
-            console.log(payload);
             return {
                 userId: payload.id,
                 username: payload.username,
@@ -643,9 +637,6 @@ let LocalStrategy = class LocalStrategy extends passport_1.PassportStrategy(pass
     }
     validate(username, password) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("local.strategy:valide:username&password");
-            console.log(username);
-            console.log(password);
             const user = yield this.authService.validateUser(username, password);
             if (!user) {
                 throw new common_1.UnauthorizedException();
@@ -706,7 +697,6 @@ let BikesController = class BikesController {
         return this.bikesService.editBike(bike);
     }
     pickUpBike(bike) {
-        console.log("Post:PickupBike");
         return this.bikesService.pickUpBike(bike);
     }
     getBikeById(data) {
@@ -845,12 +835,9 @@ let BikesService = class BikesService {
         return knex_lib_1.k.addBikeDb(bike);
     }
     editBike(bike) {
-        console.log('service');
-        console.log(bike);
         return knex_lib_1.k.editBikeDb(bike);
     }
     pickUpBike(bike) {
-        console.log('service' + bike);
         return knex_lib_1.k.pickUpBikeDb(bike);
     }
     getBikeById(id) {
@@ -902,12 +889,9 @@ let GarageController = class GarageController {
         return this.garageService.getAllGarage();
     }
     getAllBikes() {
-        console.log('contro');
         return this.garageService.getAllBikes();
     }
     getGarageIdByName(data) {
-        console.log("garage.controller:getId:data");
-        console.log(data);
         return this.garageService.getGarageIdByName(data.name);
     }
     getGarage() {
@@ -920,7 +904,6 @@ let GarageController = class GarageController {
         return this.garageService.deleteGarage(data.id);
     }
     editGarage(garage) {
-        console.log('editcontroller');
         return this.garageService.editGarage(garage);
     }
     getGarageById(data) {
@@ -1050,7 +1033,6 @@ let GarageService = class GarageService {
         });
     }
     editGarage(garage) {
-        console.log('service' + garage);
         return knex_lib_1.k.editGarageDb(garage);
     }
     getGarageById(id) {
@@ -1085,7 +1067,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
-const path_1 = __webpack_require__(/*! path */ "path");
 const app_module_1 = __webpack_require__(/*! ./app/app.module */ "./apps/nest-app/src/app/app.module.ts");
 function bootstrap() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -1095,7 +1076,7 @@ function bootstrap() {
         app.setGlobalPrefix(globalPrefix);
         const port = process.env.PORT || 3333;
         //const server = require('http').createServer(app)
-        app.useStaticAssets(path_1.join(__dirname, '..', 'static'));
+        //app.useStaticAssets(join(__dirname, '..', 'static'));
         yield app.listen(port, () => {
             common_1.Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
         });
@@ -1127,7 +1108,6 @@ let StationController = class StationController {
         this.stationService = stationService;
     }
     getAllStation() {
-        console.log('station contro');
         return this.stationService.getAllStation();
     }
     getStationByGarageId(data) {
@@ -1267,7 +1247,6 @@ let StationService = class StationService {
         return knex_lib_1.k.getAllStationDb();
     }
     editStation(station) {
-        console.log('service' + station);
         return knex_lib_1.k.editStationDb(station);
     }
     deleteStation(id) {
@@ -1360,26 +1339,17 @@ let UsersService = class UsersService {
     //   return this.users.find(user => user.username === username);
     // }
     getAll() {
-        console.log("usersService:getAll");
         return knex_lib_1.k.getUsers();
     }
     addNew(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("users.service:user");
-            console.log(user);
-            knex_lib_1.k.registerUser(user)
-                .then((el) => console.log(el))
-                .catch((err) => console.log(err));
+            knex_lib_1.k.registerUser(user);
             return;
         });
     }
     findOne(username) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("usersService:findOne:username");
-            console.log(username);
             const user = yield knex_lib_1.k.findUser(username);
-            console.log("usersService:findOne:user");
-            console.log(user);
             return user;
         });
     }
@@ -1390,33 +1360,22 @@ let UsersService = class UsersService {
     }
     register(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("user");
-            console.log(user);
-            knex_lib_1.k.registerUser(user)
-                .then((el) => console.log(el))
-                .catch((err) => console.log(err));
+            knex_lib_1.k.registerUser(user);
             return;
         });
     }
     profile(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            console.log("users.services:profile:user");
-            console.log(user);
             return user;
         });
     }
     delete(userId) {
-        console.log("users.services:delete:userId");
-        console.log(userId);
         return knex_lib_1.k.deleteUserDb(userId);
     }
     getUserById(id) {
-        console.log("users.services:getUserbyId");
         return knex_lib_1.k.getUserByIdDb(id);
     }
     editUser(user) {
-        console.log('user.services:editUser');
-        console.log(user);
         return knex_lib_1.k.editUserDb(user);
     }
 };
@@ -1527,6 +1486,21 @@ const options = {
 };
 const knex = __webpack_require__(/*! knex */ "knex")(options);
 class KnexLib {
+    getBikeLatLngDb(bikeInfo) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            console.log("getBikeLatLng:bikeid");
+            console.log(bikeInfo.id);
+            knex('bikes').select('lat', 'lng').where({ id: bikeInfo.id })
+                .then((el) => el);
+        });
+    }
+    updateBikeLatLngDb(bikeInfo) {
+        console.log(bikeInfo);
+        return knex('bikes').where({ id: bikeInfo.id }).update({
+            lat: bikeInfo.lat,
+            lng: bikeInfo.lng
+        });
+    }
     getAllGarageDb() {
         return knex('garage').select('*');
     }
@@ -1891,17 +1865,6 @@ module.exports = require("passport-jwt");
 /***/ (function(module, exports) {
 
 module.exports = require("passport-local");
-
-/***/ }),
-
-/***/ "path":
-/*!***********************!*\
-  !*** external "path" ***!
-  \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("path");
 
 /***/ }),
 

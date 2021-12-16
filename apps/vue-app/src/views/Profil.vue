@@ -139,18 +139,12 @@ export default defineComponent({
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.access_token;
-    console.log('token');
-    console.log(token);
-    console.log('user');
-    console.log(user);
 
     axios
-      .get('http://192.168.1.94:3333/api/profile', {
+      .get('http://localhost:3333/api/profile', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        console.log('test 1');
-        console.log(res.data);
         this.email = res.data.username;
         this.firstname = res.data.first_name;
         this.lastname = res.data.last_name;
@@ -159,31 +153,21 @@ export default defineComponent({
         this.getAllStation();
       })
       .catch((error) => {
-        console.log('test 2');
         console.error(error);
       });
   },
   methods: {
     logout() {
-      console.log(localStorage);
-      console.log('logout');
       localStorage.removeItem('user');
       router.push({ name: 'Login' });
     },
     getBikesByUserId(userId) {
-      console.log('userId: ' + userId);
       return Vue.axios.get('/api/bikes/my/' + userId).then((res) => {
-        console.log('res.data');
-        console.log(res.data);
         this.bikes = res.data;
-        console.log('this.bikes');
-        console.log(this.bikes);
       });
     },
     AdropBike(bikeId) {
       return Vue.axios.post('/api/bikes/drop/' + bikeId).then((res) => {
-        console.log('res');
-        console.log(res);
         this.bikes = res.data;
       });
     },
@@ -194,19 +178,14 @@ export default defineComponent({
         station_id: this.stationId, // = await this.getStationIdByName(this.newStation)
         user_id: '0',
       };
-      console.log('bike');
-      console.log(bike);
-      return axios.post('/api/bikes/editBike', bike).then(console.log('edit'));
+      return axios.post('/api/bikes/editBike', bike);
     },
     getAllStation() {
-      console.log('getAllStation');
       return Vue.axios.get('/api/station/').then((res) => {
         this.stations = res.data;
-        console.log(this.stations);
       });
     },
     async getStationIdByName(stationName) {
-      console.log('stationName: ' + stationName);
       await Vue.axios.get('/api/station/getId/' + stationName).then((el) => {
         this.stationId = el.data[0].id;
         return el.data[0].id;

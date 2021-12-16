@@ -11,6 +11,20 @@ const options = {
 const knex = require('knex')(options);
 
 class KnexLib {
+  async getBikeLatLngDb(bikeInfo) {
+    console.log("getBikeLatLng:bikeid")
+    console.log(bikeInfo.id)
+
+    knex('bikes').select('lat', 'lng').where({id: bikeInfo.id})
+    .then((el) => el)
+  }
+  updateBikeLatLngDb(bikeInfo) {
+    console.log(bikeInfo)
+    return knex('bikes').where({id: bikeInfo.id}).update({
+      lat: bikeInfo.lat,
+      lng: bikeInfo.lng
+    })
+  }
   getAllGarageDb() {
     return knex('garage').select('*');
   }

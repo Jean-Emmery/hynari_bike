@@ -51,12 +51,7 @@ export default defineComponent({
   },
   methods: {
     signUp() {
-      console.log('signUp');
-      console.log(this.email);
-      console.log(this.firstname);
-      console.log(this.lastname);
-      console.log(this.password);
-      return axios.post('http://192.168.1.94:3333/api/user/register', {
+      return axios.post('http://localhost:3333/api/user/register', {
         email: this.email,
         password: this.password,
         firstname: this.firstname,
@@ -64,8 +59,6 @@ export default defineComponent({
         role: '1'
       })
       .then(el => {
-        console.log("el: ");
-        console.log(el);
         router.push({ name: 'Login' })
       })
       .catch(err => console.error(err))

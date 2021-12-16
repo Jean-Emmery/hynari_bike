@@ -64,10 +64,7 @@ export default {
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
-      console.log('user found');
       this.user = user;
-    } else {
-      console.log('user not found');
     }
     this.getBikesUpByStationId(this.stationId);
     //getBikesUpByStationId(this.stationId);
@@ -79,23 +76,16 @@ export default {
     //   });
     // },
     // getBikesByStationId(stationId) {
-    //   console.log('stationId' + stationId);
     //   return Vue.axios.get('/api/bikes/' + stationId).then((res) => {
     //     this.bikes = res.data;
     //   });
     // },
     getBikesUpByStationId(stationId) {
-      console.log('stationId' + stationId);
       return Vue.axios.get('/api/bikes/' + stationId).then((res) => {
-        console.log('res.data');
-        console.log(res.data);
         this.bikes = res.data;
       });
     },
     pickUpBike(bikeId) {
-      console.log('veloid id' + bikeId);
-      console.log('user: ');
-      console.log(this.user.user.id);
       const bike = {
         id: bikeId,
         user_id: this.user.user.id,

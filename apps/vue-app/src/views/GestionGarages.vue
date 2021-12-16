@@ -143,7 +143,6 @@ export default {
     getAllGarage() {
       return Vue.axios.get('/api/garage').then((res) => {
         this.garages = res.data;
-        console.log(this.garages);
       });
     },
     showGarage(garageId) {
@@ -152,11 +151,9 @@ export default {
     getAllBikes() {
       return Vue.axios.get('/api/garage/bikes').then((res) => {
         this.bikes = res.data;
-        console.log(this.bikes);
       });
     },
     deleteGarage(garageId) {
-      console.log('testDeleteG');
       return Vue.axios.delete('/api/garage/' + garageId).then((res) => {
         this.getAllGarage();
       });

@@ -232,10 +232,6 @@ export default {
   mounted() {//JSON.
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.access_token;
-    console.log("token");
-    console.log(token);
-    console.log("user");
-    console.log(user);
 
     if (user && user.user.role === "2") {
       this.moderator = true
@@ -245,11 +241,8 @@ export default {
       this.admin = true
       this.role = user.user.role
     }
-    console.log(this.moderator);
-    console.log(this.admin);
 
     if (user.user != null) {
-      console.log(user.user)
       this.userId = user.user.id
     }
       this.getAllBikes();
@@ -261,38 +254,22 @@ export default {
       console.log(bike)
     },
     getStation(id) {
-      console.log('showStation:id')
-      console.log(id)
       this.$router.push({ path: '/bikes/' + id });
     },
     getAllStation() {
-    console.log("getAllStation()")
       return Vue.axios.get('/api/station/')
       .then((res) => {
-        console.log("res")
-        console.log(res)
         this.stations = res.data;
         this.stationsDisplay = [{ id: 0, lat: 1.01, lng: 1.01, name: "1" }].concat(this.stations)
-        console.log("this.stations")
-        console.log(this.stations)
-        console.log("this.stationsDisplay")
-        console.log(this.stationsDisplay)
       })
       .catch((err) => {
         console.error(err)
       })
     },
     getAllBikes() {
-      console.log('getAllBikes'); // marchze
       return Vue.axios.get('/api/bikes/').then((res) => { //donc erreur ici
-        console.log("res")
-        console.log(res)
         this.bikes = res.data;
         this.bikesDisplay = [{ id: 0, lat: 1.01, lng: 1.01, name: "1" }].concat(this.bikes)
-        console.log("this.bikes")
-        console.log(this.bikes)
-        console.log("this.bikesDisplay")
-        console.log(this.bikesDisplay)
       })
       .catch((err) => {
         console.error(err)
