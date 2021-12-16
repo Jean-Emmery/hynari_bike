@@ -63,34 +63,6 @@
           </div>
       </l-map>
     </div>
-  <div>
-    <p v-if="isConnected">We're connected to the server!</p>
-    <p>Message from server: "{{socketMessage}}"</p>
-    <button @click="pingServer()">Ping Server</button>
-  </div>
-
-            <div class="row">
-                <div class="col-md-6 offset-md-3 col-sm-12">
-                    <h1 class="text-center">{{ title }}</h1>
-                    <br>
-                    <div id="status"></div>
-                    <div id="chat">
-                        <input type="text" v-model="name" id="username" class="form-control" placeholder="Enter name...">
-                        <br>
-                        <div class="card">
-                            <div id="messages" class="card-block">
-                                <ul>
-                                    <li v-for="message of messages" :key="message">{{ message.name }}: {{ message.text }}</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <br>
-                        <textarea id="textarea" class="form-control" v-model="text" placeholder="Enter message..."></textarea>
-                        <br>
-                        <button id="send" class="btn" @click.prevent="sendMessage">Send</button>
-                    </div>
-                </div>
-            </div>
   </div>
 </template>
 
