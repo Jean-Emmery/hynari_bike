@@ -19,13 +19,13 @@
             ></div>
             <div class="card-footer">
               <button
-                class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
+                class="btn airforce dark-2 mr-2 rounded-2 hoverable-3"
                 @click="editBike(bike.id)"
               >
                 <i class="material-icons font-s2">edit</i>
               </button>
               <button
-                class="btn error airforce ml-2 rounded-full hoverable-3"
+                class="btn error airforce ml-2 rounded-2 hoverable-3"
                 @click="deleteBike(bike.id)"
               >
                 <i class="material-icons font-s2">delete</i>

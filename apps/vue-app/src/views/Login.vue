@@ -37,7 +37,7 @@ export default defineComponent({
   },
   methods: {
     login() {
-      return axios.post('http://localhost:3333/api/auth/login', {
+      return axios.post('http://192.168.1.94:3333/api/auth/login', {
         username: this.username,
         password: this.password,
       })

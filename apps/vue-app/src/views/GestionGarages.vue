@@ -1,4 +1,4 @@
-<template>
+T<template>
   <div>
     <div style="height: 500px; width: 100%">
       <div style="height: 200px; overflow: auto">
@@ -46,7 +46,7 @@
         <div v-if="bikes">
           <div v-for="bike in bikes" :key="bike.id">
             <l-tile-layer :url="url" :attribution="attribution" />
-            <l-marker :lat-lng="bikes[bike.id]" @click="showBike(bike.id)">
+            <l-marker :lat-lng="[bike.lat, bike.lng]" @click="showBike(bike.id)">
               <l-tooltip :options="{ permanent: true, interactive: true }">
                 <div @click="showBike(bike.id)">
                   <span v-if="bikes[bike.id]">{{ bikes[bike.id].name }}</span>
@@ -67,27 +67,22 @@
         <div class="card shadow-3 rounded-3 grey light-4">
           <div class="card-image">
             <img
-              src="https://www.citycle.com/wp-content/uploads/2016/09/parking-stationnement-pour-velos-securis.jpg"
+              src="https://images-ext-1.discordapp.net/external/s7YspjgqoQ9fj6fbVO5rsUhxaV1TAeTo8gFB1aHsIZk/https/triathlondeauville.com/wp-content/uploads/2017/06/TID-parcavelos.jpg"
               alt="logo"
               class="responsive-media"
               style="height: 276px"
             />
           </div>
           <div class="card-header">{{ garage.name }}</div>
-          <div class="card-content">
-            Quantity :{{ garage.capacityMax }}<br />
-            Latitude : {{ garage.lat }}<br />
-            Longitude : {{ garage.lng }}
-          </div>
           <div class="card-footer">
             <button
-              class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
+              class="btn airforce dark-2 mr-2 rounded-2 hoverable-3"
               @click="showGarage(garage.id)"
             >
               <i class="material-icons font-s2">edit</i>
             </button>
             <button
-              class="btn error airforce ml-2 rounded-full hoverable-3"
+              class="btn error airforce ml-2 rounded-2 hoverable-3"
               @click="deleteGarage(garage.id)"
             >
               <i class="material-icons font-s2">delete</i>
@@ -109,7 +104,6 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LPopup,
     LTooltip,
   },
   data() {

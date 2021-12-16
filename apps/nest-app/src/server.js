@@ -1,9 +1,11 @@
 const express = require("express");
+const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const io = require('socket.io')(server);
+const server = require('http').createServer(app);
 
-const app = express();
-
+io.on('connection', () => { console.log("Socket connected")});
 var corsOptions = {
   origin: "http://localhost:8081"
 };
@@ -11,7 +13,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json());
+app.use(bodyParser.sjson());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -23,6 +25,8 @@ app.get("/", (req, res) => {
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+const serverSocket = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+serverSocket.listen(1234);

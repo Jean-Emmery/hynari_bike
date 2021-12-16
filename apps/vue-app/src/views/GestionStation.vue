@@ -12,19 +12,19 @@
                 style="height: 276px"
               />
             </div>
-            <div class="card-header">{{ station.id }}<br>{{ station.name }}</div>
+            <div class="card-header">{{ station.name }}</div>
             <div class="card-content">
               Bikes available : {{ station.capacityMax }}
             </div>
             <div class="card-footer">
               <button
-                class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
+                class="btn airforce dark-2 mr-2 rounded-2 hoverable-3"
                 @click="editStation(station.id)"
               >
                 <i class="material-icons font-s2">edit</i>
               </button>
               <button
-                class="btn error airforce ml-2 rounded-full hoverable-3"
+                class="btn error airforce ml-2 rounded-2 hoverable-3"
                 @click="deleteStation(station.id)"
               >
                 <i class="material-icons font-s2">delete</i>

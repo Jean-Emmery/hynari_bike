@@ -1,6 +1,6 @@
   <template>
   <div>
-    <div style="height: 500px; width: 100%">
+    <div style="height: 730px; width: 100%">
       <!-- <div style="height: 200px; overflow: auto">
         <p v-if="garages[0]">
           1 GARAGE {{ garages[0].lat }}, {{ garages[0].lng }}
@@ -91,8 +91,8 @@
 import { latLng, icon } from 'leaflet';
 import { LMap, LTileLayer, LMarker, LTooltip, LIcon } from 'vue2-leaflet';
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
-import {Action, Getter, Mutation} from "vuex-class";
+import { Component } from 'vue-property-decorator'
+import {Action, Getter, Mutation} from "vuex-class"
 
 export default {
   components: {
@@ -139,7 +139,9 @@ export default {
       iconSize: 64,
 
       isConnected: false,
-      socketMessage: '',
+      socketMessage: '',text: '',
+      messages: [],
+      socket: null,
     };
   },
   sockets: {
@@ -165,10 +167,12 @@ export default {
       return [this.iconSize / 2, this.iconSize * 1.15];
     }
   },
-  created() {
-    console.log("Starting connection with websocket server")
-  },
   mounted() {
+    console.log("Starting connection with websocket server")
+    this.socket = io('http://192.168.1.94:4143')
+    this.socket.on('msgToClient', (message) => {
+      this.receivedMessage(message)
+    })
     const user = JSON.parse(localStorage.getItem('user'));
     if (user.user != null) {
       console.log(user.user)

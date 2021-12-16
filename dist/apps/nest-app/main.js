@@ -228,6 +228,38 @@ exports.AppController = AppController;
 
 /***/ }),
 
+/***/ "./apps/nest-app/src/app/app.gateway.ts":
+/*!**********************************************!*\
+  !*** ./apps/nest-app/src/app/app.gateway.ts ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppGateway = void 0;
+const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
+const websockets_1 = __webpack_require__(/*! @nestjs/websockets */ "@nestjs/websockets");
+let AppGateway = class AppGateway {
+    handleMessage(client, payload) {
+        return 'Hello world!';
+    }
+};
+tslib_1.__decorate([
+    websockets_1.SubscribeMessage('message'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object, Object]),
+    tslib_1.__metadata("design:returntype", String)
+], AppGateway.prototype, "handleMessage", null);
+AppGateway = tslib_1.__decorate([
+    websockets_1.WebSocketGateway()
+], AppGateway);
+exports.AppGateway = AppGateway;
+
+
+/***/ }),
+
 /***/ "./apps/nest-app/src/app/app.module.ts":
 /*!*********************************************!*\
   !*** ./apps/nest-app/src/app/app.module.ts ***!
@@ -248,6 +280,7 @@ const app_service_1 = __webpack_require__(/*! ./app.service */ "./apps/nest-app/
 const garage_module_1 = __webpack_require__(/*! ../garage/garage.module */ "./apps/nest-app/src/garage/garage.module.ts");
 const bikes_module_1 = __webpack_require__(/*! ../bikes/bikes.module */ "./apps/nest-app/src/bikes/bikes.module.ts");
 const station_module_1 = __webpack_require__(/*! ../station/station.module */ "./apps/nest-app/src/station/station.module.ts");
+const app_gateway_1 = __webpack_require__(/*! ./app.gateway */ "./apps/nest-app/src/app/app.gateway.ts");
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
@@ -264,6 +297,7 @@ AppModule = tslib_1.__decorate([
         ],
         providers: [
             app_service_1.AppService,
+            app_gateway_1.AppGateway
         ],
     })
 ], AppModule);
@@ -1791,6 +1825,17 @@ module.exports = require("@nestjs/jwt");
 /***/ (function(module, exports) {
 
 module.exports = require("@nestjs/passport");
+
+/***/ }),
+
+/***/ "@nestjs/websockets":
+/*!*************************************!*\
+  !*** external "@nestjs/websockets" ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@nestjs/websockets");
 
 /***/ }),
 

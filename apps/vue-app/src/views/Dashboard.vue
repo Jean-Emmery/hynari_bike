@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="height: 500px; width: 100%" v-if="role === '2'">
+    <div style="height: 500px; width: 100%" v-if="role == '2'">
       <!-- <div style="height: 200px; overflow: auto">
         <p v-if="garages[0]">
           1 GARAGE {{ garages[0].lat }}, {{ garages[0].lng }}
@@ -63,24 +63,117 @@
       </l-map>
     </div>
     <div v-if="admin">
-      <h1>GARAGE :</h1>
-      <button class="btn blue" @click="showGarages">Show List</button>
-      <button class="btn blue" @click="addGarage">Add Garage</button>
+      <div class="card shadow-1 fx-row">
+        <div
+          class="d-flex vcenter fx-center px-4 text-white"
+          style="background-color: #ff364f; width: 15%"
+        >
+          <h4>PARC</h4>
+        </div>
+        <div class="flex fx-col fx-grow">
+          <div class="card-header">
+            <button
+              class="btn dark-2 mr-2 rounded-2 hoverable-3 white"
+              style="background-color: #ff364f; color: white"
+              @click="showGarages"
+            >
+              <i class="material-icons font-s2">visibility</i>
+            </button>
+            <button
+              class="btn dark-2 mr-2 rounded-2 hoverable-3"
+              style="background-color: #ff364f; color: white"
+              @click="addGarage"
+            >
+              <i class="material-icons font-s2">add_circle_outline</i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div v-if="moderator">
-      <h1>BIKES :</h1>
-      <button class="btn blue" @click="showBikes">Show List</button>
-      <button class="btn blue" @click="addBike">Add Bike</button>
-    </div>
-    <div v-if="moderator">
-      <h1>STATIONS :</h1>
-      <button class="btn blue" @click="showStation">Show List</button>
-      <button class="btn blue" @click="addStation">Add Station</button>
-    </div>
+
     <div v-if="admin">
-      <h1>USERS :</h1>
-      <button class="btn blue" @click="showUser">Show List</button>
-      <button class="btn blue" @click="addUser">Add User</button>
+      <div class="card shadow-1 fx-row">
+        <div
+          class="d-flex vcenter fx-center px-4 text-white"
+          style="background-color: #ff364f; width: 15%"
+        >
+          <h4>USERS</h4>
+        </div>
+        <div class="flex fx-col fx-grow">
+          <div class="card-header">
+            <button
+              class="btn dark-2 mr-2 rounded-2 hoverable-3 white"
+              style="background-color: #ff364f; color: white"
+              @click="showUser"
+            >
+              <i class="material-icons font-s2">visibility</i>
+            </button>
+            <button
+              class="btn dark-2 mr-2 rounded-2 hoverable-3"
+              style="background-color: #ff364f; color: white"
+              @click="addUser"
+            >
+              <i class="material-icons font-s2">add_circle_outline</i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="moderator">
+      <div class="card shadow-1 fx-row">
+        <div
+          class="d-flex vcenter fx-center px-4 text-white"
+          style="background-color: #ff364f; width: 15%"
+        >
+          <h4>BIKES</h4>
+        </div>
+        <div class="flex fx-col fx-grow">
+          <div class="card-header">
+            <button
+              class="btn dark-2 mr-2 rounded-2 hoverable-3 white"
+              style="background-color: #ff364f; color: white"
+              @click="showBikes"
+            >
+              <i class="material-icons font-s2">visibility</i>
+            </button>
+            <button
+              class="btn dark-2 mr-2 rounded-2 hoverable-3"
+              style="background-color: #ff364f; color: white"
+              @click="addBike"
+            >
+              <i class="material-icons font-s2">add_circle_outline</i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="moderator">
+      <div class="card shadow-1 fx-row">
+        <div
+          class="d-flex vcenter fx-center px-4 text-white"
+          style="background-color: #ff364f; width: 15%"
+        >
+          <h4>STATIONS</h4>
+        </div>
+        <div class="flex fx-col fx-grow">
+          <div class="card-header">
+            <button
+              class="btn dark-2 mr-2 rounded-2 hoverable-3 white"
+              style="background-color: #ff364f; color: white"
+              @click="showStation"
+            >
+              <i class="material-icons font-s2">visibility</i>
+            </button>
+            <button
+              class="btn dark-2 mr-2 rounded-2 hoverable-3"
+              style="background-color: #ff364f; color: white"
+              @click="addStation"
+            >
+              <i class="material-icons font-s2">add_circle_outline</i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -146,9 +239,11 @@ export default {
 
     if (user && user.user.role === "2") {
       this.moderator = true
+      this.role = user.user.role
     }
     if (user && user.user.role === "3") {
       this.admin = true
+      this.role = user.user.role
     }
     console.log(this.moderator);
     console.log(this.admin);

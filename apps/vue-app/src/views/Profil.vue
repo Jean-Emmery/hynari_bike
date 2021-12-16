@@ -89,7 +89,7 @@
                 </select>
 
                 <button
-                  class="btn airforce dark-2 rounded-full hoverable-3 mt-3"
+                  class="btn airforce dark-2 rounded-2 hoverable-3 mt-3"
                   @click="dropBike(bike.id)"
                 >
                   DROP
@@ -145,7 +145,7 @@ export default defineComponent({
     console.log(user);
 
     axios
-      .get('http://localhost:3333/api/profile', {
+      .get('http://192.168.1.94:3333/api/profile', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

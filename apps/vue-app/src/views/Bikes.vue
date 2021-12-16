@@ -16,7 +16,7 @@
             <div class="card-content"></div>
             <div class="card-footer">
               <button
-                class="btn airforce dark-2 mr-2 rounded-full hoverable-3"
+                class="btn airforce dark-2 mr-2 rounded-2 hoverable-3"
                 @click="pickUpBike(bike.id)"
               >
                 <i class="material-icons font-s2">check_circle</i>
