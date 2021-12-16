@@ -25,18 +25,9 @@ import {
 
   @SubscribeMessage('posToServer')
   handlePosition(client: Socket, payload: string): void {
-    console.log("suscribeMessage")
     if (payload) {
-      console.log(payload)
       this.server.emit('msgToClient', payload);
-      k.getBikeLatLngDb(payload).then((res) => {
-        console.log("res")
-        console.log(res)
-      })
-      const res =  k.updateBikeLatLngDb(payload)
-      //console.log(res)
-    } else {
-      console.log("no payload")
+      k.updateBikeLatLngDb(payload)
     }
   }
 

@@ -34,7 +34,6 @@ export class UsersService {
   }
 
   async addNew(user: any) {
-    k.registerUser(user)
     return ;
   }
 
@@ -48,7 +47,6 @@ export class UsersService {
   }
 
   async register(user: any) {
-    k.registerUser(user)
     return ;
   }
 

@@ -1,19 +1,6 @@
   <template>
   <div>
     <div style="height: 730px; width: 100%">
-      <!-- <div style="height: 200px; overflow: auto">
-        <p v-if="garages[0]">
-          1 GARAGE {{ garages[0].lat }}, {{ garages[0].lng }}
-        </p>
-        <p v-if="garages[1]">
-          2 GARAGE {{ garages[1].lat }}, {{ garages[1].lng }}
-        </p>
-        <p>2 GARAGE {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
-              @click="showGarage(garage.id)"
-        :options="mapOptions"
-        @update:center="centerUpdate"
-        @update:zoom="zoomUpdate"
-      </div> -->
       <l-map
         v-if="showMap"
         :zoom="zoom"
@@ -65,7 +52,6 @@
             <l-marker
               :icon="myIcon"
               :lat-lng="[my_lat,my_lng]"
-              @click="showInfo(my_lat, my_lng)"
             >
             <l-icon
               :icon-anchor="staticAnchor"
@@ -182,7 +168,6 @@ export default {
     }
   },
   created() {
-    console.log("Starting connection with websocket server")
     this.socket = io('http://localhost:3333/', {transports: ['websocket'], secure: false})
     this.socket.on('msgToClient', (message) => {
       this.receivedMessage(message)
@@ -191,8 +176,6 @@ export default {
   mounted() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user.user != null) {
-      console.log("USER")
-      console.log(user.user)
       this.userId = user.user.id
       this.getBikesByUserId();
     }
@@ -200,15 +183,11 @@ export default {
     this.getAllStation();
     setInterval(() => {
       this.getActualPosition().then((pos) => {
-        console.log("pos")
-        console.log(pos)
         this.my_lat = pos.coords.latitude
         this.my_lng = pos.coords.longitude
-        console.log(this.my_lat)
-        console.log(this.my_lng)
         this.sendPosition()
       });
-    }, 2000);
+    }, 3000);
   },
   methods: {
     getActualPosition() {
@@ -217,8 +196,6 @@ export default {
       });
     },
     sendPosition() {
-      console.log("this.bike")
-      console.log(this.bikes)
       if(this.my_lat && this.my_lng) {
         const position = {
           id: this.bikes.id,
@@ -232,10 +209,6 @@ export default {
     receivedMessage(message) {
       this.messages.push(message)
     },
-    showInfo(a, b) {
-      console.log("showInfo")
-      console.log(a  + '+' + b)
-    },
     zoomUpdate(zoom) {
       this.zoom = zoom;
     },
@@ -246,55 +219,26 @@ export default {
       this.showParagraph = !this.showParagraph;
     },
     showGarage(id) {
-      console.log("showGarage")
-      console.log(this.garages)
-      console.log("garageId")
-      console.log(id)
-      console.log("garageId2")
-      console.log(this.garages[id - 1])
       this.$router.push({ path: '/station/' + this.garages[id - 1].id });
     },
     showStation(id) {
-      console.log('showStation:id')
-      console.log(id)
       this.$router.push({ path: '/bikes/' + id });
     },
     getAllGarage() {
-    console.log("getAllGarage()")
       return Vue.axios.get('/api/garage').then((res) => {
-        console.log("res")
-        console.log(res)
         this.garages = res.data;
         this.garagesDisplay = [{ id: 0 }].concat(this.garages)
-        console.log("this.garages")
-        console.log(this.garages)
-        console.log("this.garagesDisplay")
-        console.log(this.garagesDisplay)
-        console.log("fin getAllGarage()")
       });
     },
     getAllStation() {
-    console.log("getAllStation()")
       return Vue.axios.get('/api/station/').then((res) => {
-        console.log("res")
-        console.log(res)
         this.stations = res.data;
         this.stationsDisplay = [{ id: 0 }].concat(this.stations)
-        console.log("this.stations")
-        console.log(this.stations)
-        console.log("this.stationsDisplay")
-        console.log(this.stationsDisplay)
       });
     },
     getBikesByUserId() {
-      console.log('userId: ' + this.userId); // marchze
       return Vue.axios.get('/api/bikes/my/' + this.userId).then((res) => { //donc erreur ici
-      console.log(res)
         this.bikes = res.data[0];
-        console.log("this.res.data[0]")
-        console.log( res.data);
-        console.log("this.bikes")
-        console.log(this.bikes);
       });
     },
   },

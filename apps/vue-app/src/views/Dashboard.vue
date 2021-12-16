@@ -47,7 +47,6 @@
               <l-marker
                 :icon="myIcon"
                 :lat-lng="[bike.lat,bike.lng]"
-                @click="showInfo(bike)"
               >
               <l-icon
                 :icon-anchor="staticAnchor"
@@ -249,10 +248,6 @@ export default {
     this.getAllStation();
   },
   methods: {
-    showInfo(bike) {
-      console.log("showInfo")
-      console.log(bike)
-    },
     getStation(id) {
       this.$router.push({ path: '/bikes/' + id });
     },

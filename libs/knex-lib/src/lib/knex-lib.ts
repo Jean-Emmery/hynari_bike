@@ -11,15 +11,7 @@ const options = {
 const knex = require('knex')(options);
 
 class KnexLib {
-  async getBikeLatLngDb(bikeInfo) {
-    console.log("getBikeLatLng:bikeid")
-    console.log(bikeInfo.id)
-
-    knex('bikes').select('lat', 'lng').where({id: bikeInfo.id})
-    .then((el) => el)
-  }
   updateBikeLatLngDb(bikeInfo) {
-    console.log(bikeInfo)
     return knex('bikes').where({id: bikeInfo.id}).update({
       lat: bikeInfo.lat,
       lng: bikeInfo.lng
@@ -38,15 +30,11 @@ class KnexLib {
     await knex('bikes')
       .where({ id: bikeId })
       .then((row) => {
-        console.log('user_id: ' + row[0].user_id);
         return row[0].user_id;
       });
   }
   async dropBikeDb(bikeId) {
-    console.log('knex-lib:dropBikeDb');
-    console.log('bikeId: ' + bikeId);
     const userId = this.getUserByBikeIdDb(bikeId);
-    console.log('userId: ' + userId);
     await knex('bikes').where({ id: bikeId }).update({ user_id: '0' });
     // pour l'instant userId est une promise, await devant le this.etc marche pas
     //return this.getBikesByUserIdDb(userId)
@@ -58,12 +46,10 @@ class KnexLib {
     return knex('bikes').select('*').where({ station_id: id, user_id: '0' });
   }
   getUsers() {
-    console.log("knex-lib:getUsers")
     return knex('users').select('*')
 
   }
   getBikesByUserIdDb(id) {
-    console.log('knex-lib:getBikesByUserIdDb:id=' + id);
     return knex('bikes').select('*').where({ user_id: id });
   }
   getStationByGarageIdDb(id) {
@@ -93,7 +79,6 @@ class KnexLib {
     });
   }
   editBikeDb(bike) {
-    console.log('db' + bike.id);
     return knex('bikes').where({ id: bike.id }).update({
       id: bike.id,
       name: bike.name,
@@ -106,9 +91,6 @@ class KnexLib {
     return knex('bikes').select('*').where({ id: id });
   }
   pickUpBikeDb(bike) {
-    console.log('db' + bike.id);
-    console.log('bike');
-    console.log(bike);
     return knex('bikes').where({ id: bike.id }).update({
       id: bike.id,
       user_id: bike.user_id,
@@ -117,19 +99,15 @@ class KnexLib {
   }
 
   findUser(username: string) {
-    console.log('knexlib:findUser:username');
-    console.log(username);
     return knex('users')
       .select('email', 'firstname', 'lastname', 'password', 'role', 'id')
       .where({
         email: username,
       })
       .then((el) => {
-        console.log('el');
-        console.log(el[0]);
         return el[0];
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
     return null;
   }
 
@@ -137,22 +115,18 @@ class KnexLib {
     return knex('users');
   }
   deleteUserDb(id) {
-    console.log("knex-lib:deleteUSerDb:userId")
-    console.log(id)
     return knex('users').where({id: id}).del()
   }
 
   registerUser(user: any) {
-    console.log('knex-lib:registerUser:user')
-    console.log(user)
     if (user && user.role !== 3) {
-      return knex('users').insert({
+      knex('users').insert({
          email: user.email,
          firstname: user.firstname,
          lastname: user.lastname,
          password: user.password,
          role: user.role
-       });
+       })
     }
    return knex('users').insert({
       email: user.username,
@@ -179,16 +153,12 @@ class KnexLib {
     return knex('garage').select('*').where({ id: id });
   }
   deleteBikeDb(id) {
-    console.log("knex-lib:deleteBikeDb:id")
-    console.log(id)
     return knex('bikes').where({ id: id }).del();
   }
   deleteGarageDb(id) {
     return knex('garage').where({ id: id }).del();
   }
   editStationDb(station) {
-    console.log('station');
-    console.log(station);
     return knex('station').where({ id: station.id }).update({
       id: station.id,
       capacityMax: station.capacityMax,
@@ -197,8 +167,6 @@ class KnexLib {
     });
   }
   editUserDb(user) {
-    console.log('knex-lib:editUserDb:user');
-    console.log(user);
     return knex('users').where({ id: user.id }).update({
       id: user.id,
       firstname: user.firstname,
@@ -209,7 +177,6 @@ class KnexLib {
     });
   }
   editGarageDb(garage) {
-    console.log('db' + garage.id);
     return knex('garage').where({ id: garage.id }).update({
       id: garage.id,
       name: garage.name,
