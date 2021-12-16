@@ -237,20 +237,40 @@ exports.AppController = AppController;
 
 "use strict";
 
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppGateway = void 0;
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const websockets_1 = __webpack_require__(/*! @nestjs/websockets */ "@nestjs/websockets");
+const websockets_2 = __webpack_require__(/*! @nestjs/websockets */ "@nestjs/websockets");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const socket_io_1 = __webpack_require__(/*! socket.io */ "socket.io");
 let AppGateway = class AppGateway {
+    constructor() {
+        this.logger = new common_1.Logger('AppGateway');
+    }
     handleMessage(client, payload) {
-        return 'Hello world!';
+        this.server.emit('msgToClient', payload);
+    }
+    afterInit(server) {
+        this.logger.log('Init');
+    }
+    handleDisconnect(client) {
+        this.logger.log(`Client disconnected: ${client.id}`);
+    }
+    handleConnection(client, ...args) {
+        this.logger.log(`Client connected: ${client.id}`);
     }
 };
 tslib_1.__decorate([
-    websockets_1.SubscribeMessage('message'),
+    websockets_2.WebSocketServer(),
+    tslib_1.__metadata("design:type", typeof (_a = typeof socket_io_1.Server !== "undefined" && socket_io_1.Server) === "function" ? _a : Object)
+], AppGateway.prototype, "server", void 0);
+tslib_1.__decorate([
+    websockets_1.SubscribeMessage('msgToServer'),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Object, Object]),
-    tslib_1.__metadata("design:returntype", String)
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _b : Object, String]),
+    tslib_1.__metadata("design:returntype", void 0)
 ], AppGateway.prototype, "handleMessage", null);
 AppGateway = tslib_1.__decorate([
     websockets_1.WebSocketGateway()
@@ -1065,6 +1085,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(/*! tslib */ "tslib");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
+const path_1 = __webpack_require__(/*! path */ "path");
 const app_module_1 = __webpack_require__(/*! ./app/app.module */ "./apps/nest-app/src/app/app.module.ts");
 function bootstrap() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -1074,6 +1095,7 @@ function bootstrap() {
         app.setGlobalPrefix(globalPrefix);
         const port = process.env.PORT || 3333;
         //const server = require('http').createServer(app)
+        app.useStaticAssets(path_1.join(__dirname, '..', 'static'));
         yield app.listen(port, () => {
             common_1.Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
         });
@@ -1869,6 +1891,28 @@ module.exports = require("passport-jwt");
 /***/ (function(module, exports) {
 
 module.exports = require("passport-local");
+
+/***/ }),
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+
+/***/ "socket.io":
+/*!****************************!*\
+  !*** external "socket.io" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("socket.io");
 
 /***/ }),
 
