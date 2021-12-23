@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="grix" style="height: 100vh">
-      <form style="margin: 10%">
+      <form style="margin: 10%" v-on:submit.prevent="onSubmit">
         <div class="grix xs1 sm2">
           <div class="form-field">
             <label for="newName">Name</label>
@@ -23,6 +23,39 @@
               class="form-control rounded-1 white"
               placeholder="Picture URL"
               v-model="newPictureUrl"
+            />
+          </div>
+          <div class="form-field">
+            <label for="newPictureUrl">Latitude</label>
+            <input
+              required="required"
+              type="text"
+              id="newPictureUrl"
+              class="form-control rounded-1 white"
+              placeholder="Picture URL"
+              v-model="newLat"
+            />
+          </div>
+          <div class="form-field">
+            <label for="newPictureUrl">Longitude</label>
+            <input
+              required="required"
+              type="text"
+              id="newPictureUrl"
+              class="form-control rounded-1 white"
+              placeholder="Picture URL"
+              v-model="newLng"
+            />
+          </div>
+          <div class="form-field">
+            <label for="newPictureUrl">User Id</label>
+            <input
+              required="required"
+              type="text"
+              id="newPictureUrl"
+              class="form-control rounded-1 white"
+              placeholder="Picture URL"
+              v-model="userId"
             />
           </div>
           <div class="form-field d-flex fx-col">
@@ -47,8 +80,7 @@
         <button
           style="margin-top: 10px; background-color: #ff364f"
           class="btn txt-white rounded-2"
-          type="button"
-          @click="editBike(bikeId)"
+          type="submit"
         >
           Edit Bike
         </button>
@@ -83,6 +115,9 @@ export default {
       newName: '',
       newPictureUrl: '',
       newStation: '',
+      newLat: '',
+      newLng: '',
+      userId: '',
     };
   },
   mounted() {
@@ -90,9 +125,30 @@ export default {
     this.getBike(this.bikeId);
   },
   methods: {
+      onSubmit () {
+      this.errors = [];
+
+      if (this.newName) {
+        this.errors.push('Name required.');
+        } else {
+          this.editBike(this.bikeId)
+          .catch((res) => {
+            console.error(res)
+          })
+      }
+      if (!this.password) {
+        this.errors.push('Password required.');
+      }
+    },
     getBike(id) {
       return axios.get(`/api/bikes/show/${id}`).then((res) => {
-        this.bike = res.data;
+        this.bike = res.data[0];
+        this.newName = res.data[0].name
+        this.newPictureUrl = res.data[0].pictureUrl
+        this.newStation = res.data[0].station
+        this.newLat = res.data[0].lat
+        this.newLng = res.data[0].lng
+        this.userId = res.data[0].user_id
       });
     },
     editBike(bikeId) {
@@ -116,4 +172,10 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+label {
+  visibility: visible;
+  display:  block;
+  color: black;
+}
+</style>

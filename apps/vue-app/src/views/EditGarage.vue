@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="grix" style="height: 100vh">
-      <form style="margin: 10%">
+      <form style="margin: 10%" v-on:submit.prevent="onSubmit">
         <div class="grix xs1 sm2">
           <div class="form-field">
             <label for="newName">Name</label>
@@ -11,7 +11,7 @@
               id="newName"
               class="form-control rounded-1 white"
               placeholder="Name"
-              v-model="newName"
+              v-model="name"
             />
           </div>
           <div class="form-field">
@@ -22,7 +22,7 @@
               id="newLat"
               class="form-control rounded-1 white"
               placeholder="Latitude"
-              v-model="newLat"
+              v-model="latitude"
             />
           </div>
           <div class="form-field">
@@ -33,15 +33,14 @@
               id="newLng"
               class="form-control rounded-1 white"
               placeholder="Longitude"
-              v-model="newLng"
+              v-model="longitude"
             />
           </div>
         </div>
         <button
           style="margin-top: 10px; background-color: #ff364f"
           class="btn txt-white rounded-2"
-          type="button"
-          @click="editGarage(garageId)"
+          type="submit"
         >
           Edit Garage
         </button>
@@ -72,9 +71,9 @@ export default {
     return {
       garageId: this.$route.params.id,
       garages: [],
-      newName: '',
-      newLat: '',
-      newLng: '',
+      name: '',
+      latitude: '',
+      longitude: '',
     };
   },
   mounted() {
@@ -83,15 +82,33 @@ export default {
   methods: {
     getGarage(id) {
       return axios.get(`/api/garage/show/${id}`).then((res) => {
-        this.garage = res.data;
+        this.garage = res.data[0]
+        this.name = res.data[0].name
+        this.latitude = res.data[0].lat
+        this.longitude = res.data[0].lng
+        this.id = res.data[0].id
       });
+    },
+      onSubmit () {
+      this.errors = [];
+
+      if (this.name) {
+      } else {
+        this.editGarage(this.id)
+        .catch((res) => {
+          console.error(res)
+        })
+      }
+      if (!this.password) {
+        this.errors.push('Password required.');
+      }
     },
     editGarage(garageId) {
       const garage = {
         id: garageId,
-        name: this.newName,
-        lat: this.newLat,
-        lng: this.newLng,
+        name: this.name,
+        lat: this.latitude,
+        lng: this.longitude,
       };
       return axios
         .post('/api/garage/editGarage', garage);

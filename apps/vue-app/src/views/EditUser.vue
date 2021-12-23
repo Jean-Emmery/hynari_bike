@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="grix" style="height: 100vh">
-      <form style="margin: 10%">
+      <form style="margin: 10%"  v-on:submit.prevent="onSubmit">
         <div class="grix xs1 sm2">
           <div class="form-field">
           <label for="firstname">Firstname</label>
@@ -11,7 +11,7 @@
             id="firstname"
             class="form-control rounded-1 white"
             placeholder=""
-            v-model="newFirstname"
+            v-model="firstname"
           />
         </div>
         <div class="form-field">
@@ -22,7 +22,7 @@
             id="lastname"
             class="form-control rounded-1 white"
             placeholder=""
-            v-model="newLastname"
+            v-model="lastname"
           />
         </div>
         <div class="form-field">
@@ -34,7 +34,7 @@
             id="email"
             class="form-control rounded-1 white"
             placeholder=""
-            v-model="newEmail"
+            v-model="email"
           />
         </div>
         <div class="form-field">
@@ -45,7 +45,7 @@
             id="password"
             class="form-control rounded-1 white"
             placeholder=""
-            v-model="newPassword"
+            v-model="password"
           />
         </div>
         <div v-if="my_role && my_role === '3'" class="form-field">
@@ -60,8 +60,7 @@
         <button
           style="margin-top: 10px; background-color: #ff364f"
           class="btn txt-white rounded-2"
-          type="button"
-          @click="editUser(userId)"
+          type="submit"
         >
           Edit User
         </button>
@@ -100,10 +99,6 @@ export default {
       userId: this.$route.params.id,
       user: [],
       garages: [],
-      newFirstname: '',
-      newLastname: '',
-      newPassword: '',
-      newEmail: '',
       newRole: '1',
     };
   },
@@ -114,17 +109,41 @@ export default {
     this.getUser(this.userId);
   },
   methods: {
+      onSubmit () {
+      this.errors = [];
+
+      if (this.email) {
+        this.errors.push('Email required.');
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
+          this.errors.push('Nicely formated email required.');
+        } else {
+          this.editUser(this.id)
+          .catch((res) => {
+            console.error(res)
+          })
+        }
+      }
+      if (!this.password) {
+        this.errors.push('Password required.');
+      }
+    },
     getUser(id) {
       return axios.get(`/api/user/show/${id}`).then((res) => {
         this.user = res.data[0];
+        this.email = res.data[0].email;
+        this.firstname = res.data[0].firstname;
+        this.lastname = res.data[0].lastname;
+        this.password = res.data[0].password,
+        this.id = res.data[0].userId;
       });
     },
     async editUser(userId) {
       const user = {
         id: this.userId,
-        lastname: this.newLastname,
-        password: this.newPassword,
-        email: this.newEmail,
+        firstname: this.firstname,
+        lastname: this.lastnme,
+        password: this.password,
+        email: this.email,
         role: this.newRole,
       };
       return axios

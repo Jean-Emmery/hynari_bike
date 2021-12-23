@@ -25,6 +25,28 @@
               v-model="newName"
             />
           </div>
+          <div class="form-field">
+            <label for="newName">Latitude</label>
+            <input
+              required="required"
+              type="text"
+              id="newName"
+              class="form-control rounded-1 white"
+              placeholder="Name"
+              v-model="newLat"
+            />
+          </div>
+          <div class="form-field">
+            <label for="newName">Longitude</label>
+            <input
+              required="required"
+              type="text"
+              id="newName"
+              class="form-control rounded-1 white"
+              placeholder="Name"
+              v-model="newLng"
+            />
+          </div>
           <div class="form-field d-flex fx-col">
             <label for="garage">Garage</label>
             <select
@@ -87,9 +109,32 @@ export default {
     this.getStation(this.stationId);
   },
   methods: {
+      onSubmit () {
+      this.errors = [];
+
+      if (this.email) {
+        this.errors.push('Email required.');
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
+          this.errors.push('Nicely formated email required.');
+        } else {
+          this.editUser(this.id)
+          .catch((res) => {
+            console.error(res)
+          })
+        }
+      }
+      if (!this.password) {
+        this.errors.push('Password required.');
+      }
+    },
     getStation(id) {
       return axios.get(`/api/station/show/${id}`).then((res) => {
-        this.station = res.data;
+        this.station = res.data[0];
+        console.log(res.data)
+        this.newCapacityMax = res.data[0].capacityMax
+        this.newName  = res.data[0].name
+        this.newLat = res.data[0].lat
+        this.newLng = res.data[0].lng
       });
     },
     async editStation(stationId) {
@@ -122,4 +167,7 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+label {
+  color: black;
+}</style>
